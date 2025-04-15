@@ -7,6 +7,7 @@ from .context import ContextManager
 from .tools import LLMTool
 from .agent import LLMAgent
 from .providers import LLMProvider, DummyLLMProvider
+from .utils import load_env_vars
 
 __all__ = [
     "LLMBehaviour", 
@@ -15,5 +16,6 @@ __all__ = [
     "LLMAgent", 
     "LLMProvider",
     "DummyLLMProvider",
+    "load_env_vars",
     "__version__"
 ]
