@@ -103,10 +103,16 @@ class ContextManager:
             
         # Add conversation history
         for msg in self._conversations[conv_id]:
-            prompt.append({
+            message_entry = {
                 "role": msg["role"],
                 "content": msg["content"]
-            })
+            }
+            
+            # Include name parameter for function messages as required by OpenAI
+            if msg["role"] == "function" and "name" in msg:
+                message_entry["name"] = msg["name"]
+                
+            prompt.append(message_entry)
             
         return prompt
         
