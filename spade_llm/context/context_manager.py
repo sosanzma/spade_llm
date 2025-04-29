@@ -50,9 +50,8 @@ class ContextManager:
         # Determine conversation ID (use thread if available)
         conversation_id = message.thread or f"{message.sender}_{message.to}"
 
-        # Set as current conversation if not already set
-        if not self._current_conversation_id:
-            self._current_conversation_id = conversation_id
+
+        self._current_conversation_id = conversation_id
             
         # Mark conversation as active
         self._active_conversations.add(conversation_id)
