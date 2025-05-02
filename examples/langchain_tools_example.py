@@ -114,35 +114,13 @@ async def main():
     )
 
     # Create tools
-    # 1. Native SPADE_LLM tool
-    calculator_tool = LLMTool(
-        name="calculator",
-        description="Perform simple arithmetic calculations",
-        parameters={
-            "type": "object",
-            "properties": {
-                "expression": {
-                    "type": "string",
-                    "description": "The arithmetic expression to calculate (e.g., '2 + 2 * 3')"
-                }
-            },
-            "required": ["expression"]
-        },
-        func=lambda expression: eval(expression)
-    )
-    
     # 2. LangChain tools through the adapter
     search_tool = LangChainToolAdapter(
         DuckDuckGoSearchRun()
     )
-    # Add more detailed description to help the LLM understand how to use it
-    search_tool.description = "Search the web for current information using DuckDuckGo. Use this tool when you need to find recent information or current events."
-    
     wikipedia_tool = LangChainToolAdapter(
         WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())
     )
-    # Add more detailed description to help the LLM understand how to use it
-    wikipedia_tool.description = "Search Wikipedia for information about a specific topic. This is useful for getting detailed factual information about people, places, events, concepts, etc."
 
     # Create LLM behavior with tools
     llm_behavior = LLMBehaviour(
@@ -150,7 +128,7 @@ async def main():
         termination_markers=["<TASK_COMPLETE>", "<END>", "<DONE>"],
         max_interactions_per_conversation=10,
         on_conversation_end=lambda conv_id, reason: print(f"Conversation {conv_id} ended: {reason}"),
-        tools=[calculator_tool, search_tool, wikipedia_tool]
+        tools=[search_tool, wikipedia_tool]
     )
 
     # Define a template for the SmartAgent
@@ -161,7 +139,6 @@ async def main():
     # Start the SmartAgent
     await smart_agent.start()
     print(f"Smart agent {smart_jid} is running with tools:")
-    print(f"- Calculator tool")
     print(f"- LangChain Search tool")
     print(f"- LangChain Wikipedia tool")
 
@@ -200,18 +177,10 @@ async def main():
             break
         human_agent.set("message_to_send", user_input)
         
-        # Dar más tiempo para procesar herramientas complejas
-        wait_time = 3.0  # 3 segundos para herramientas normales
+        # Dar  tiempo para procesar herramientas complejas
+        wait_time = 7.0
         
-        # Ajustar el tiempo de espera según la complejidad de la consulta
-        if any(keyword in user_input.lower() for keyword in ["busca", "búsqueda", "internet", "google", "noticias"]):
-            # Las búsquedas web pueden tardar significativamente más
-            wait_time = 8.0  # 8 segundos para búsquedas web
-            print(f"Esperando respuesta de búsqueda web (esto puede tardar hasta {wait_time} segundos)...")
-        elif any(keyword in user_input.lower() for keyword in ["wikipedia", "definición", "quien es", "qué es"]):
-            # Consultas de Wikipedia también pueden tardar
-            wait_time = 6.0  # 6 segundos para consultas de Wikipedia
-            print(f"Esperando respuesta de Wikipedia (esto puede tardar hasta {wait_time} segundos)...")
+
         
         await asyncio.sleep(wait_time)
 
