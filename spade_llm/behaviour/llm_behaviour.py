@@ -137,11 +137,11 @@ class LLMBehaviour(CyclicBehaviour):
             return
         
         # Update context with new message
-        self.context.add_message(msg)
+        self.context.add_message(msg,conversation_id)
         
         # Process the conversation with the LLM
         try:
-            await self._process_message_with_tools(msg, conversation_id)
+            await self._process_message_with_llm(msg, conversation_id)
         except Exception as e:
             logger.error(f"Error processing message: {e}")
             await self._end_conversation(conversation_id, ConversationState.ERROR)
@@ -151,7 +151,7 @@ class LLMBehaviour(CyclicBehaviour):
             reply.body = f"Error processing your message: {str(e)}"
             await self.send(reply)
     
-    async def _process_message_with_tools(self, msg: Message, conversation_id: str):
+    async def _process_message_with_llm(self, msg: Message, conversation_id: str):
         """
         Process a message with the LLM, handling any tool calls.
         
