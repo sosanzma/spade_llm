@@ -40,15 +40,14 @@ class ContextManager:
         # Current conversation ID (used when not explicitly specified)
         self._current_conversation_id: Optional[str] = None
         
-    def add_message(self, message: Message) -> None:
+    def add_message(self, message: Message, conversation_id: str) -> None:
         """
         Add a message to the context.
         
         Args:
             message: The SPADE message to add to the context
+            conversation_id: ID of the conversation
         """
-        # Determine conversation ID (use thread if available)
-        conversation_id = message.thread or f"{message.sender}_{message.to}"
 
 
         self._current_conversation_id = conversation_id
