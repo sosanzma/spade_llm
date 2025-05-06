@@ -154,28 +154,47 @@ class LangChainToolAdapter(LLMTool):
         """
         Transform parameters from OpenAI format to LangChain format.
         
-        For example, transforms {'query': 'something'} to {'input': 'something'}
-        if the LangChain tool expects an 'input' parameter.
-        
         Args:
             **kwargs: Parameters in OpenAI format.
             
         Returns:
             Parameters in LangChain format.
         """
-        # For DuckDuckGo search with 'query' parameter
-        if self.name == "duckduckgo-search" and "query" in kwargs:
-            return {self._expected_param: kwargs["query"]}
-        
-        # For Wikipedia with 'query' parameter
-        if self.name == "wikipedia-query" and "query" in kwargs:
-            return {self._expected_param: kwargs["query"]}
-        
         # For simple tools expecting just one parameter
         if len(kwargs) == 1 and len(self.parameters.get('properties', {})) == 1:
-            # Take whatever value is provided and use the expected parameter name
             return {self._expected_param: next(iter(kwargs.values()))}
+            
+        # Common parameter names that usually map to the expected parameter
+        common_input_params = ["query", "question", "search", "text", "input", "q"]
         
-        # For tools with complex parameter mapping, we'd need custom logic here
-        # For now, return as-is and hope parameter names match
+        # Check if any of the provided parameters need mapping to expected parameter
+        for param_name, value in kwargs.items():
+            if param_name in common_input_params:
+                # Create a new dict with the mapped parameter
+                result = {self._expected_param: value}
+                # Add any remaining parameters as-is
+                for k, v in kwargs.items():
+                    if k != param_name:
+                        result[k] = v
+                return result
+        
+        # Try to infer from schema if both schema and kwargs contain the same properties
+        # but with different names
+        if hasattr(self.lc_tool, 'args_schema') and hasattr(self.lc_tool.args_schema, 'schema'):
+            schema = self.lc_tool.args_schema.schema()
+            if 'properties' in schema and len(schema['properties']) == len(kwargs):
+                # Try to match parameters by position assuming they're ordered similarly
+                schema_props = list(schema['properties'].keys())
+                kwargs_props = list(kwargs.keys())
+                
+                if len(schema_props) == len(kwargs_props):
+                    result = {}
+                    for i, (schema_prop, kwarg_prop) in enumerate(zip(schema_props, kwargs_props)):
+                        if schema_prop != kwarg_prop:
+                            result[schema_prop] = kwargs[kwarg_prop]
+                        else:
+                            result[schema_prop] = kwargs[schema_prop]
+                    return result
+        
+        # Return as-is if no mapping is found
         return kwargs
