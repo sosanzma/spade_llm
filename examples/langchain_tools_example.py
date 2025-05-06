@@ -17,9 +17,9 @@ from spade.template import Template
 from spade.message import Message
 from spade.behaviour import CyclicBehaviour
 
+from spade_llm.agent import LLMAgent
 from spade_llm.providers.open_ai_provider import OpenAILLMProvider
-from spade_llm.behaviour import LLMBehaviour
-from spade_llm.tools import LLMTool, LangChainToolAdapter
+from spade_llm.tools import LangChainToolAdapter
 from spade_llm.utils import load_env_vars
 
 # Import LangChain tools
@@ -30,11 +30,6 @@ from langchain_community.utilities import WikipediaAPIWrapper
 # Enable detailed logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("example")
-
-
-class SmartAgent(Agent):
-    """An agent that uses LLMBehaviour with LangChain tools."""
-    # Behavior will be injected from main()
 
 
 class HumanAgent(Agent):
@@ -49,7 +44,7 @@ class HumanAgent(Agent):
                 smart_jid = self.get("smart_agent_jid")
                 msg = Message(to=smart_jid)
                 msg.body = message_to_send
-                msg.set_metadata("type", "chat")  # Metadata for routing
+                msg.set_metadata("performative", "request")  # Metadata for routing
                 print(f"Human sending: '{message_to_send}' to {smart_jid}")
                 await self.send(msg)
                 # Clear the message to avoid resending
@@ -105,16 +100,7 @@ async def main():
     smart_jid = await async_input("Enter Smart Agent JID: ")
     smart_password = getpass.getpass("Enter Smart Agent password: ")
 
-    smart_agent = SmartAgent(smart_jid, smart_password)
-
-    # Create OpenAI provider
-    openai_provider = OpenAILLMProvider(
-        api_key=openai_api_key,
-        model="gpt-4o-mini"  # Use an appropriate model that supports function calling
-    )
-
-    # Create tools
-    # 2. LangChain tools through the adapter
+    # Create LangChain tools
     search_tool = LangChainToolAdapter(
         DuckDuckGoSearchRun()
     )
@@ -122,21 +108,29 @@ async def main():
         WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())
     )
 
-    # Create LLM behavior with tools
-    llm_behavior = LLMBehaviour(
-        llm_provider=openai_provider,
-        termination_markers=["<TASK_COMPLETE>", "<END>", "<DONE>"],
-        max_interactions_per_conversation=10,
-        on_conversation_end=lambda conv_id, reason: print(f"Conversation {conv_id} ended: {reason}"),
-        tools=[search_tool, wikipedia_tool]
+    # Create OpenAI provider
+    openai_provider = OpenAILLMProvider(
+        api_key=openai_api_key,
+        model="gpt-4o-mini"  # Use an appropriate model that supports function calling
     )
 
-    # Define a template for the SmartAgent
-    smart_template = Template()
-    smart_template.set_metadata("type", "chat")
-    smart_agent.add_behaviour(llm_behavior, smart_template)
+    # Create LLM agent with all configuration in one step
+    smart_agent = LLMAgent(
+        jid=smart_jid,
+        password=smart_password,
+        provider=openai_provider,
+        system_prompt=(
+            "You are a helpful assistant with access to search tools. "
+            "When the user asks a question that requires current information or facts, "
+            "use the appropriate tool to find and provide accurate information."
+        ),
+        tools=[search_tool, wikipedia_tool],
+        termination_markers=["<TASK_COMPLETE>", "<END>", "<DONE>"],
+        max_interactions_per_conversation=10,
+        on_conversation_end=lambda conv_id, reason: print(f"Conversation {conv_id} ended: {reason}")
+    )
     
-    # Start the SmartAgent
+    # Start the LLMAgent
     await smart_agent.start()
     print(f"Smart agent {smart_jid} is running with tools:")
     print(f"- LangChain Search tool")
@@ -165,7 +159,6 @@ async def main():
     print(f"Human agent {human_jid} is running.")
 
     print("\nYou can now chat with the smart agent. It can use:")
-    print("- Calculator: For simple arithmetic")
     print("- Web Search: To search the internet")
     print("- Wikipedia: To query Wikipedia")
     print("\nType 'exit' to quit.\n")
@@ -177,11 +170,8 @@ async def main():
             break
         human_agent.set("message_to_send", user_input)
         
-        # Dar  tiempo para procesar herramientas complejas
-        wait_time = 7.0
-        
-
-        
+        # Dar tiempo para procesar herramientas complejas
+        wait_time = 0.5  # Reduced since we'll wait in the loop
         await asyncio.sleep(wait_time)
 
     # Stop the agents

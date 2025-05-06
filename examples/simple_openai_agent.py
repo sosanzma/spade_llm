@@ -13,17 +13,12 @@ from spade.template import Template
 from spade.message import Message
 from spade.behaviour import CyclicBehaviour
 
+from spade_llm.agent import LLMAgent
 from spade_llm.providers.open_ai_provider import OpenAILLMProvider
-from spade_llm.behaviour import LLMBehaviour
 from spade_llm.utils import load_env_vars
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("example")
-
-
-class SmartAgent(Agent):
-    """Agente que utiliza LLMBehaviour basado en OpenAI."""
-    # En este ejemplo, el comportamiento se inyecta desde main()
 
 
 class HumanAgent(Agent):
@@ -38,7 +33,7 @@ class HumanAgent(Agent):
                 smart_jid = self.get("smart_agent_jid")
                 msg = Message(to=smart_jid)
                 msg.body = message_to_send
-                msg.set_metadata("type", "chat")  # Metadata para el enrutamiento
+                msg.set_metadata("performative", "request")  # Metadata para el enrutamiento
                 print(f"Humano enviando: '{message_to_send}' a {smart_jid}")
                 await self.send(msg)
                 # Limpiar el mensaje para evitar reenvío
@@ -65,30 +60,33 @@ async def async_input(prompt: str = "") -> str:
 async def main():
     # Cargar variables de entorno desde el archivo .env
     env_vars = load_env_vars()
+    
     # Obtener la API key de OpenAI de las variables de entorno o pedir al usuario
     openai_api_key = os.environ.get("OPENAI_API_KEY")
     if not openai_api_key:
         openai_api_key = await async_input("Ingresa tu API key de OpenAI: ")
         os.environ["OPENAI_API_KEY"] = openai_api_key
 
+    # Creación del agente inteligente
     smart_jid = await async_input("Ingresa el JID del Agente Inteligente: ")
     smart_password = getpass.getpass("Ingresa la contraseña del Agente Inteligente: ")
 
-    smart_agent = SmartAgent(smart_jid, smart_password)
+    # Crear el proveedor OpenAI
+    openai_provider = OpenAILLMProvider(
+        api_key=openai_api_key,
+        model="gpt-4o-mini"  # O el modelo que prefieras
+    )
 
-    openai_provider = OpenAILLMProvider(api_key=openai_api_key)
-
-    llm_behavior = LLMBehaviour(
-        llm_provider=openai_provider,
+    # Crear el agente LLM con toda la configuración en un solo paso
+    smart_agent = LLMAgent(
+        jid=smart_jid, 
+        password=smart_password,
+        provider=openai_provider,
+        system_prompt="Eres un asistente útil y amigable. Responde de manera concisa y clara.",
         termination_markers=["<TASK_COMPLETE>", "<END>", "<DONE>"],
         max_interactions_per_conversation=10,
         on_conversation_end=lambda conv_id, reason: print(f"Conversación {conv_id} terminada: {reason}")
     )
-
-    # Definir una plantilla para enrutamiento (se filtra por metadata "type":"chat")
-    template = Template()
-    template.set_metadata("type", "chat")
-    smart_agent.add_behaviour(llm_behavior, template)
 
     # Iniciar el SmartAgent
     await smart_agent.start()
