@@ -5,16 +5,10 @@ Extension for SPADE (Smart Python Agent Development Environment) to integrate La
 ## Features
 
 - Specialized behaviour for LLM interaction
-- Context management with token awareness
 - Tool-calling framework
-- High-level API for creating LLM-capable agents
 - Provider abstraction for different LLM services
 
-## Installation
 
-```bash
-pip install spade_llm
-```
 
 ## Basic Usage
 
@@ -37,9 +31,7 @@ agent = LLMAgent(
 await agent.start()
 ```
 
-## Development Status
 
-This project is in early development. APIs may change significantly between versions.
 
 ## License
 
