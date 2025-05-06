@@ -2,7 +2,7 @@
 
 import asyncio
 import logging
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Callable
 
 from spade.agent import Agent
 from spade.message import Message
@@ -33,6 +33,10 @@ class LLMAgent(Agent):
                  provider: LLMProvider,
                  system_prompt: Optional[str] = None,
                  mcp_servers: Optional[List[MCPServerConfig]] = None,
+                 tools: Optional[List[LLMTool]] = None,
+                 termination_markers: Optional[List[str]] = None,
+                 max_interactions_per_conversation: Optional[int] = None,
+                 on_conversation_end: Optional[Callable[[str, str], None]] = None,
                  verify_security: bool = False):
         """
         Initialize an LLM-capable agent.
@@ -43,6 +47,10 @@ class LLMAgent(Agent):
             provider: The LLM provider to use
             system_prompt: Optional system instructions for the LLM
             mcp_servers: Optional list of MCP server configurations
+            tools: Optional list of tools the agent can use
+            termination_markers: List of strings that mark conversation completion
+            max_interactions_per_conversation: Maximum number of back-and-forth exchanges in a conversation
+            on_conversation_end: Callback function when a conversation ends (receives conversation_id and reason)
             verify_security: Whether to verify security certificates
         """
         super().__init__(jid, password, verify_security=verify_security)
@@ -54,15 +62,24 @@ class LLMAgent(Agent):
         self.provider = provider
 
         # Initialize tools collection
-        self.tools: List[LLMTool] = []
+        self.tools: List[LLMTool] = tools or []
 
         # Store MCP server configurations
         self.mcp_servers = mcp_servers or []
 
-        # Create LLM behaviour
+        # Store conversation configuration
+        self.termination_markers = termination_markers or ["<TASK_COMPLETE>", "<END>", "<DONE>"]
+        self.max_interactions_per_conversation = max_interactions_per_conversation
+        self.on_conversation_end = on_conversation_end
+
+        # Create LLM behaviour with all parameters
         self.llm_behaviour = LLMBehaviour(
             llm_provider=provider,
-            context_manager=self.context
+            context_manager=self.context,
+            termination_markers=self.termination_markers,
+            max_interactions_per_conversation=self.max_interactions_per_conversation,
+            on_conversation_end=self.on_conversation_end,
+            tools=self.tools
         )
 
     async def setup(self):
@@ -72,6 +89,10 @@ class LLMAgent(Agent):
         # Register MCP tools if MCP servers are configured
         if self.mcp_servers:
             await self._setup_mcp_tools()
+
+        # Register any tools directly with the provider
+        for tool in self.tools:
+            self.provider.register_tool(tool)
 
         # Add the LLM behaviour that will process messages
         template = Template()
@@ -102,3 +123,29 @@ class LLMAgent(Agent):
         self.tools.append(tool)
         # Notify the provider about the new tool
         self.provider.register_tool(tool)
+        # Also register with the behaviour
+        self.llm_behaviour.register_tool(tool)
+        
+    def reset_conversation(self, conversation_id: str) -> bool:
+        """
+        Reset a conversation to allow it to continue beyond its limits.
+        
+        Args:
+            conversation_id: The ID of the conversation to reset
+            
+        Returns:
+            bool: True if the conversation was reset, False if not found
+        """
+        return self.llm_behaviour.reset_conversation(conversation_id)
+    
+    def get_conversation_state(self, conversation_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Get the current state of a conversation.
+        
+        Args:
+            conversation_id: The ID of the conversation
+            
+        Returns:
+            Dict or None: The conversation state if found, None otherwise
+        """
+        return self.llm_behaviour.get_conversation_state(conversation_id)
