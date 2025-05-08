@@ -1,10 +1,9 @@
 """OpenAI provider for LLM integration."""
 
-import os
 import json
 import logging
 import asyncio
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 from openai import OpenAI, OpenAIError
 
@@ -40,18 +39,17 @@ class OpenAILLMProvider(LLMProvider):
         self.temperature = temperature
         self.client = OpenAI(api_key=self.api_key)
 
-    async def get_response(self, context: ContextManager) -> str:
+    async def get_llm_response(self, context: ContextManager) -> Dict[str, Any]:
         """
-        Get a response from the OpenAI model based on the current context.
+        Get complete response from the LLM including both text and tool calls.
         
         Args:
-            context: The conversation context manager.
+            context: The conversation context manager
             
         Returns:
-            The model's response as a string.
-            
-        Raises:
-            OpenAIError: If there's an issue with the OpenAI API call.
+            Dictionary containing:
+            - 'text': The text response (None if there are tool calls)
+            - 'tool_calls': List of tool calls (empty if there are none)
         """
         prompt = context.get_prompt()
         logger.info(f"Sending prompt to OpenAI: {prompt}")
@@ -69,53 +67,13 @@ class OpenAILLMProvider(LLMProvider):
                 tool_choice="auto" if tools else None
             )
             
-            # Check if there are tool calls in the response
             message = response.choices[0].message
+            result = {'tool_calls': [], 'text': None}
+            
+            # Process tool calls if present
             if hasattr(message, 'tool_calls') and message.tool_calls:
-                # Return empty content so that tool calls can be processed first
-                logger.info("OpenAI suggested tool calls, returning empty response")
-                return ""
-            
-            content = message.content or ""
-            logger.info(f"Received response from OpenAI: {content[:100]}...")
-            return content
-        except OpenAIError as e:
-            logger.error(f"Error calling OpenAI: {e}")
-            raise
-
-    async def get_tool_calls(self, context: ContextManager) -> List[Dict[str, Any]]:
-        """
-        Get tool calls from the OpenAI model based on the current context.
-        
-        Args:
-            context: The conversation context manager.
-            
-        Returns:
-            List of tool call specifications.
-        """
-        prompt = context.get_prompt()
-        
-        # Prepare tools
-        tools = [tool.to_openai_tool() for tool in self.tools] if self.tools else None
-        
-        # If no tools, return empty list
-        if not tools:
-            return []
-        
-        try:
-            response = await asyncio.to_thread(
-                self.client.chat.completions.create,
-                model=self.model,
-                messages=prompt,
-                temperature=self.temperature,
-                tools=tools,
-                tool_choice="auto"
-            )
-            
-            message = response.choices[0].message
-            
-            # Convert tool calls to the expected format
-            if hasattr(message, 'tool_calls') and message.tool_calls:
+                logger.info("OpenAI suggested tool calls")
+                
                 tool_calls = []
                 for tc in message.tool_calls:
                     try:
@@ -129,9 +87,16 @@ class OpenAILLMProvider(LLMProvider):
                         "name": tc.function.name,
                         "arguments": args
                     })
-                return tool_calls
+                
+                result['tool_calls'] = tool_calls
+            else:
+                # Process text response
+                content = message.content or ""
+                logger.info(f"Received text response from OpenAI: {content[:100]}...")
+                result['text'] = content
+                
+            return result
             
-            return []
         except OpenAIError as e:
-            logger.error(f"Error calling OpenAI for tools: {e}")
-            return []
+            logger.error(f"Error calling OpenAI: {e}")
+            raise
