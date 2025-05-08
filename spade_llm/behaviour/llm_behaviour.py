@@ -43,6 +43,7 @@ class LLMBehaviour(CyclicBehaviour):
     
     def __init__(self, 
                 llm_provider: LLMProvider,
+                reply_to: Optional[str] = None,
                 context_manager: Optional[ContextManager] = None,
                 termination_markers: Optional[List[str]] = None,
                 max_interactions_per_conversation: Optional[int] = None,
@@ -53,6 +54,7 @@ class LLMBehaviour(CyclicBehaviour):
         
         Args:
             llm_provider: Provider for LLM integration (OpenAI, Gemini, etc.)
+            reply_to: JID to send responses to. If None the reply is to the original sender
             context_manager: Manager for conversation context (optional, will create new if None)
             termination_markers: List of strings that indicate conversation completion when present in LLM responses
             max_interactions_per_conversation: Maximum number of back-and-forth exchanges in a conversation
@@ -62,7 +64,7 @@ class LLMBehaviour(CyclicBehaviour):
         super().__init__()
         self.provider = llm_provider
         self.context = context_manager or ContextManager()
-        
+        self.reply_to = reply_to
         # Conversation lifecycle management
         self.termination_markers = termination_markers or ["<TASK_COMPLETE>", "<END>", "<DONE>"]
         self.max_interactions_per_conversation = max_interactions_per_conversation
@@ -145,7 +147,7 @@ class LLMBehaviour(CyclicBehaviour):
         except Exception as e:
             logger.error(f"Error processing message: {e}")
             await self._end_conversation(conversation_id, ConversationState.ERROR)
-            
+
             # Send error message
             reply = msg.make_reply()
             reply.body = f"Error processing your message: {str(e)}"
@@ -153,23 +155,37 @@ class LLMBehaviour(CyclicBehaviour):
     
     async def _process_message_with_llm(self, msg: Message, conversation_id: str):
         """
-        Process a message with the LLM, handling any tool calls.
+        Process a message with the LLM, handling multiple sequential tool calls.
         
         Args:
             msg: The message to process
             conversation_id: The ID of the conversation
         """
-        response = None
-        handled_tool_calls = False
+        final_response = None
+        max_tool_iterations = 5  # Limit to prevent infinite loops
+        current_iteration = 0
         
         try:
-            # First get tool calls from the LLM
-            tool_calls = await self.provider.get_tool_calls(self.context)
-            
-            # If there are tool calls, process them
-            if tool_calls:
-                handled_tool_calls = True
-                logger.info(f"LLM requested {len(tool_calls)} tool calls")
+            # Tool processing loop until a final response is obtained
+            while final_response is None and current_iteration < max_tool_iterations:
+                current_iteration += 1
+                logger.info(f"Tool processing iteration {current_iteration}/{max_tool_iterations}")
+                
+                # Get complete response from LLM
+                llm_response = await self.provider.get_llm_response(self.context)
+                
+                # Extract parts
+                tool_calls = llm_response.get('tool_calls', [])
+                text_response = llm_response.get('text')
+                
+                # If no tool calls, use the text response as final response
+                if not tool_calls:
+                    final_response = text_response
+                    logger.info(f"LLM provided final response without tools: {final_response[:100] if final_response else '(empty)'}...")
+                    break
+                    
+                # Process each tool call
+                logger.info(f"LLM requested {len(tool_calls)} tool calls in iteration {current_iteration}")
                 
                 for tool_call in tool_calls:
                     tool_name = tool_call.get("name")
@@ -197,47 +213,38 @@ class LLMBehaviour(CyclicBehaviour):
                         error_msg = f"Tool {tool_name} not found"
                         logger.error(error_msg)
                         self.context.add_tool_result(tool_name, {"error": error_msg}, conversation_id)
-                
-                # Get a final response from the LLM with the tool results
-                try:
-                    response = await self.provider.get_response(self.context)
-                    logger.info(f"Got response from LLM after tool execution: {response[:100]}...")
-                except Exception as e:
-                    logger.error(f"Error getting response after tool execution: {e}")
-                    response = f"Error getting response after using {', '.join([tc.get('name') for tc in tool_calls])}: {str(e)}"
-            else:
-                # If no tool calls, just get a regular response
-                response = await self.provider.get_response(self.context)
-        except Exception as e:
-            logger.error(f"Error in tool processing: {e}")
-            response = f"Error processing your request: {str(e)}"
-        
-        # CRITICAL: Even if response is empty, send a default message for tool calls
-        if not response and handled_tool_calls:
-            logger.warning("Got empty response after tool execution, using default message")
-            response = "I've processed your request using the available tools, but couldn't generate a proper response. Please try again or rephrase your question."
             
-        # Skip sending only if response is still empty and we didn't handle any tools    
-        if not response and not handled_tool_calls:
-            logger.warning("Empty response and no tools were handled, skipping reply")
-            return
+            # Handle case where max iterations was reached
+            if final_response is None and current_iteration >= max_tool_iterations:
+                logger.warning(f"Reached maximum tool iterations ({max_tool_iterations}), forcing final response")
+                final_response = (await self.provider.get_llm_response(self.context)).get('text')
+                
+        except Exception as e:
+            logger.error(f"Error in tool processing loop: {e}")
+            final_response = f"Error processing your request: {str(e)}"
         
-        # Check for termination markers in the response
-        if response and any(marker in response for marker in self.termination_markers):
+        # Ensure we have a response even if everything fails
+        if not final_response:
+            final_response = "I'm sorry, I couldn't complete this request properly. Please try again or rephrase your query."
+                
+        # Check for termination markers
+        if final_response and any(marker in final_response for marker in self.termination_markers):
             # Remove the termination marker from the response
             for marker in self.termination_markers:
-                response = response.replace(marker, "")
+                final_response = final_response.replace(marker, "")
             
             # End the conversation
             await self._end_conversation(conversation_id, ConversationState.COMPLETED)
         
-        # Send response back
-        reply = msg.make_reply()
-        reply.body = response
-        # Preserve the conversation thread
+        # Determine recipient - original sender or specified reply_to
+        if self.reply_to:
+            reply = Message(to=self.reply_to)
+        else:
+            reply = msg.make_reply()
+            
+        reply.body = final_response
         reply.thread = conversation_id
         
-        # Log antes de enviar
         logger.info(f"Sending response to {reply.to} with thread: {reply.thread}")
         
         try:
@@ -245,11 +252,11 @@ class LLMBehaviour(CyclicBehaviour):
             logger.info(f"Response sent successfully to {reply.to}")
         except Exception as e:
             logger.error(f"Error sending response: {e}")
-            # Intentar nuevamente con un mensaje directo si falla
-            direct_msg = Message(to=str(msg.sender))
-            direct_msg.body = response
-            direct_msg.thread = conversation_id
+            # Fallback attempt with direct message
             try:
+                direct_msg = Message(to=str(reply.to))
+                direct_msg.body = final_response
+                direct_msg.thread = conversation_id
                 await self.send(direct_msg)
                 logger.info(f"Sent fallback direct message to {direct_msg.to}")
             except Exception as e2:
