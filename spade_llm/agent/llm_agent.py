@@ -31,6 +31,7 @@ class LLMAgent(Agent):
                  jid: str,
                  password: str,
                  provider: LLMProvider,
+                 reply_to: Optional[str] = None,
                  system_prompt: Optional[str] = None,
                  mcp_servers: Optional[List[MCPServerConfig]] = None,
                  tools: Optional[List[LLMTool]] = None,
@@ -45,6 +46,7 @@ class LLMAgent(Agent):
             jid: The Jabber ID of the agent
             password: The password for the agent
             provider: The LLM provider to use
+            reply_to JID to send responses to. If None the reply is to the orginal sender
             system_prompt: Optional system instructions for the LLM
             mcp_servers: Optional list of MCP server configurations
             tools: Optional list of tools the agent can use
@@ -55,19 +57,15 @@ class LLMAgent(Agent):
         """
         super().__init__(jid, password, verify_security=verify_security)
 
-        # Create the context manager
         self.context = ContextManager(system_prompt=system_prompt)
 
-        # Store the LLM provider
-        self.provider = provider
 
-        # Initialize tools collection
+        self.provider = provider
+        self.reply_to = reply_to
         self.tools: List[LLMTool] = tools or []
 
-        # Store MCP server configurations
         self.mcp_servers = mcp_servers or []
 
-        # Store conversation configuration
         self.termination_markers = termination_markers or ["<TASK_COMPLETE>", "<END>", "<DONE>"]
         self.max_interactions_per_conversation = max_interactions_per_conversation
         self.on_conversation_end = on_conversation_end
@@ -75,6 +73,7 @@ class LLMAgent(Agent):
         # Create LLM behaviour with all parameters
         self.llm_behaviour = LLMBehaviour(
             llm_provider=provider,
+            reply_to = self.reply_to,
             context_manager=self.context,
             termination_markers=self.termination_markers,
             max_interactions_per_conversation=self.max_interactions_per_conversation,
@@ -96,7 +95,7 @@ class LLMAgent(Agent):
 
         # Add the LLM behaviour that will process messages
         template = Template()
-        template.set_metadata("performative", "request")
+        #template.set_metadata("performative", "request")
         self.add_behaviour(self.llm_behaviour, template)
 
     async def _setup_mcp_tools(self):
