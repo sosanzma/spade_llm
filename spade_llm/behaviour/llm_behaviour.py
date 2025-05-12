@@ -4,7 +4,7 @@ import asyncio
 import logging
 import time
 import json
-from typing import Optional, Any, Dict, List, Callable, Set
+from typing import Optional, Any, Dict, List, Callable, Set, Union
 
 from spade.behaviour import CyclicBehaviour
 from spade.message import Message
@@ -12,6 +12,7 @@ from spade.message import Message
 from ..context import ContextManager
 from ..providers.base_provider import LLMProvider
 from ..tools import LLMTool
+from ..routing import RoutingFunction, RoutingResponse
 
 logger = logging.getLogger("spade_llm.behaviour")
 
@@ -35,7 +36,7 @@ class LLMBehaviour(CyclicBehaviour):
     - Process and update the conversation context
     - Send prompts to LLM providers
     - Handle tool invocation
-    - Send responses back
+    - Send responses back with optional conditional routing
     
     The behaviour remains active throughout the agent's lifecycle,
     but individual conversations can be terminated based on conditions.
@@ -44,6 +45,7 @@ class LLMBehaviour(CyclicBehaviour):
     def __init__(self, 
                 llm_provider: LLMProvider,
                 reply_to: Optional[str] = None,
+                routing_function: Optional[RoutingFunction] = None,
                 context_manager: Optional[ContextManager] = None,
                 termination_markers: Optional[List[str]] = None,
                 max_interactions_per_conversation: Optional[int] = None,
@@ -55,6 +57,7 @@ class LLMBehaviour(CyclicBehaviour):
         Args:
             llm_provider: Provider for LLM integration (OpenAI, Gemini, etc.)
             reply_to: JID to send responses to. If None the reply is to the original sender
+            routing_function: Optional function for conditional routing based on response content
             context_manager: Manager for conversation context (optional, will create new if None)
             termination_markers: List of strings that indicate conversation completion when present in LLM responses
             max_interactions_per_conversation: Maximum number of back-and-forth exchanges in a conversation
@@ -65,6 +68,11 @@ class LLMBehaviour(CyclicBehaviour):
         self.provider = llm_provider
         self.context = context_manager or ContextManager()
         self.reply_to = reply_to
+        self.routing_function = routing_function
+        
+        if self.routing_function and self.reply_to:
+            logger.info("Both routing_function and reply_to provided. routing_function will take precedence.")
+        
         # Conversation lifecycle management
         self.termination_markers = termination_markers or ["<TASK_COMPLETE>", "<END>", "<DONE>"]
         self.max_interactions_per_conversation = max_interactions_per_conversation
@@ -229,38 +237,72 @@ class LLMBehaviour(CyclicBehaviour):
                 
         # Check for termination markers
         if final_response and any(marker in final_response for marker in self.termination_markers):
-            # Remove the termination marker from the response
-            for marker in self.termination_markers:
-                final_response = final_response.replace(marker, "")
-            
-            # End the conversation
             await self._end_conversation(conversation_id, ConversationState.COMPLETED)
         
-        # Determine recipient - original sender or specified reply_to
-        if self.reply_to:
-            reply = Message(to=self.reply_to)
-        else:
-            reply = msg.make_reply()
+        # Send response with conditional routing
+        await self._send_response(final_response, msg, conversation_id)
+    
+    async def _send_response(self, 
+                           response: str, 
+                           original_msg: Message,
+                           conversation_id: str) -> None:
+        """
+        Send response with optional conditional routing.
+        
+        Args:
+            response: The LLM's response text
+            original_msg: The original message received
+            conversation_id: The conversation identifier
+        """
+        context = {
+            "conversation_id": conversation_id,
+            "state": self._active_conversations.get(conversation_id, {})
+        }
+        
+        # Determine recipients and transformations
+        if self.routing_function:
+            routing_result = self.routing_function(original_msg, response, context)
             
-        reply.body = final_response
-        reply.thread = conversation_id
+            if isinstance(routing_result, str):
+                # Simple string routing
+                recipients = [routing_result]
+                transform = None
+                metadata = {}
+            elif isinstance(routing_result, RoutingResponse):
+                # Advanced routing with RoutingResponse
+                recipients = (routing_result.recipients 
+                            if isinstance(routing_result.recipients, list) 
+                            else [routing_result.recipients])
+                transform = routing_result.transform
+                metadata = routing_result.metadata or {}
+            else:
+                # Fallback to default behavior
+                recipients = [self.reply_to or str(original_msg.sender)]
+                transform = None
+                metadata = {}
+        else:
+            # Traditional behavior when no routing function
+            recipients = [self.reply_to or str(original_msg.sender)]
+            transform = None
+            metadata = {}
         
-        logger.info(f"Sending response to {reply.to} with thread: {reply.thread}")
-        
-        try:
-            await self.send(reply)
-            logger.info(f"Response sent successfully to {reply.to}")
-        except Exception as e:
-            logger.error(f"Error sending response: {e}")
-            # Fallback attempt with direct message
+        # Send message to each recipient
+        for recipient in recipients:
+            reply = Message(to=recipient)
+            reply.body = transform(response) if transform else response
+            reply.thread = conversation_id
+            
+            # Add any metadata
+            for key, value in metadata.items():
+                reply.set_metadata(key, value)
+            
+            logger.info(f"Sending response to {reply.to} with thread: {reply.thread}")
+            
             try:
-                direct_msg = Message(to=str(reply.to))
-                direct_msg.body = final_response
-                direct_msg.thread = conversation_id
-                await self.send(direct_msg)
-                logger.info(f"Sent fallback direct message to {direct_msg.to}")
-            except Exception as e2:
-                logger.error(f"Also failed to send direct message: {e2}")
+                await self.send(reply)
+                logger.info(f"Response sent successfully to {reply.to}")
+            except Exception as e:
+                logger.error(f"Error sending response to {recipient}: {e}")
     
     async def _end_conversation(self, conversation_id: str, reason: str) -> None:
         """

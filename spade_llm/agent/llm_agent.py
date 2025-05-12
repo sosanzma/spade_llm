@@ -13,6 +13,7 @@ from ..context import ContextManager
 from ..mcp import MCPServerConfig, get_all_mcp_tools
 from ..providers.base_provider import LLMProvider
 from ..tools import LLMTool
+from ..routing import RoutingFunction
 
 logger = logging.getLogger("spade_llm.agent")
 
@@ -25,6 +26,7 @@ class LLMAgent(Agent):
     - Context management
     - Tool execution framework
     - MCP server support
+    - Conditional routing based on LLM responses
     """
 
     def __init__(self,
@@ -32,6 +34,7 @@ class LLMAgent(Agent):
                  password: str,
                  provider: LLMProvider,
                  reply_to: Optional[str] = None,
+                 routing_function: Optional[RoutingFunction] = None,
                  system_prompt: Optional[str] = None,
                  mcp_servers: Optional[List[MCPServerConfig]] = None,
                  tools: Optional[List[LLMTool]] = None,
@@ -46,7 +49,8 @@ class LLMAgent(Agent):
             jid: The Jabber ID of the agent
             password: The password for the agent
             provider: The LLM provider to use
-            reply_to JID to send responses to. If None the reply is to the orginal sender
+            reply_to: JID to send responses to. If None the reply is to the original sender
+            routing_function: Optional function for conditional routing based on response content
             system_prompt: Optional system instructions for the LLM
             mcp_servers: Optional list of MCP server configurations
             tools: Optional list of tools the agent can use
@@ -62,6 +66,7 @@ class LLMAgent(Agent):
 
         self.provider = provider
         self.reply_to = reply_to
+        self.routing_function = routing_function
         self.tools: List[LLMTool] = tools or []
 
         self.mcp_servers = mcp_servers or []
@@ -73,7 +78,8 @@ class LLMAgent(Agent):
         # Create LLM behaviour with all parameters
         self.llm_behaviour = LLMBehaviour(
             llm_provider=provider,
-            reply_to = self.reply_to,
+            reply_to=self.reply_to,
+            routing_function=self.routing_function,
             context_manager=self.context,
             termination_markers=self.termination_markers,
             max_interactions_per_conversation=self.max_interactions_per_conversation,

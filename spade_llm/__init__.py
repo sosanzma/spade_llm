@@ -8,6 +8,7 @@ from .tools import LLMTool
 from .agent import LLMAgent
 from .providers import LLMProvider
 from .utils import load_env_vars
+from .routing import RoutingFunction, RoutingResponse
 
 __all__ = [
     "LLMBehaviour", 
@@ -16,5 +17,7 @@ __all__ = [
     "LLMAgent", 
     "LLMProvider",
     "load_env_vars",
+    "RoutingFunction",
+    "RoutingResponse",
     "__version__"
 ]
