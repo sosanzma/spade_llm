@@ -40,6 +40,24 @@ class ContextManager:
         # Current conversation ID (used when not explicitly specified)
         self._current_conversation_id: Optional[str] = None
         
+    def add_message_dict(self, message_dict: Dict[str, Any], conversation_id: str) -> None:
+        """
+        Add a message from a dictionary format (useful for testing and direct API usage).
+        
+        Args:
+            message_dict: Dictionary with 'role' and 'content' keys
+            conversation_id: ID of the conversation
+        """
+        self._current_conversation_id = conversation_id
+        self._active_conversations.add(conversation_id)
+        
+        # Initialize conversation if needed
+        if conversation_id not in self._conversations:
+            self._conversations[conversation_id] = []
+        
+        # Add message to the conversation
+        self._conversations[conversation_id].append(message_dict)
+        
     def add_message(self, message: Message, conversation_id: str) -> None:
         """
         Add a message to the context.
@@ -113,6 +131,34 @@ class ContextManager:
             prompt.append(message_entry)
             
         return prompt
+        
+    def add_assistant_message(self, content: str, conversation_id: Optional[str] = None) -> None:
+        """
+        Add an assistant (LLM) response to the context.
+        
+        Args:
+            content: The assistant's response content
+            conversation_id: ID of the conversation
+        """
+        # Determine which conversation to use
+        conv_id = conversation_id or self._current_conversation_id
+        
+        if not conv_id:
+            logger.warning("No conversation ID provided and no current conversation set")
+            return
+            
+        # Initialize conversation if needed
+        if conv_id not in self._conversations:
+            self._conversations[conv_id] = []
+        
+        # Add assistant response to the conversation
+        context_entry = {
+            "role": "assistant",
+            "content": content
+        }
+        
+        self._conversations[conv_id].append(context_entry)
+        logger.debug(f"Added assistant response to conversation {conv_id}: {content[:100]}...")
         
     def add_tool_result(self, tool_name: str, result: Any, conversation_id: Optional[str] = None) -> None:
         """

@@ -170,7 +170,7 @@ class LLMBehaviour(CyclicBehaviour):
             conversation_id: The ID of the conversation
         """
         final_response = None
-        max_tool_iterations = 5  # Limit to prevent infinite loops
+        max_tool_iterations = 5  # Limit to prevent infinite loops -- should be parametrized
         current_iteration = 0
         
         try:
@@ -179,20 +179,16 @@ class LLMBehaviour(CyclicBehaviour):
                 current_iteration += 1
                 logger.info(f"Tool processing iteration {current_iteration}/{max_tool_iterations}")
                 
-                # Get complete response from LLM
                 llm_response = await self.provider.get_llm_response(self.context)
                 
-                # Extract parts
                 tool_calls = llm_response.get('tool_calls', [])
                 text_response = llm_response.get('text')
                 
-                # If no tool calls, use the text response as final response
                 if not tool_calls:
                     final_response = text_response
                     logger.info(f"LLM provided final response without tools: {final_response[:100] if final_response else '(empty)'}...")
                     break
                     
-                # Process each tool call
                 logger.info(f"LLM requested {len(tool_calls)} tool calls in iteration {current_iteration}")
                 
                 for tool_call in tool_calls:
@@ -206,10 +202,8 @@ class LLMBehaviour(CyclicBehaviour):
                     
                     if tool:
                         try:
-                            # Execute the tool
                             result = await tool.execute(**tool_args)
                             
-                            # Add the result to the context
                             self.context.add_tool_result(tool_name, result, conversation_id)
                             
                             logger.info(f"Tool {tool_name} executed successfully")
@@ -229,17 +223,19 @@ class LLMBehaviour(CyclicBehaviour):
                 
         except Exception as e:
             logger.error(f"Error in tool processing loop: {e}")
-            final_response = f"Error processing your request: {str(e)}"
+            # Instead of setting generic error message, re-raise to see actual error
+            raise
         
-        # Ensure we have a response even if everything fails
         if not final_response:
             final_response = "I'm sorry, I couldn't complete this request properly. Please try again or rephrase your query."
+        
+        # Add assistant response to context before sending
+        self.context.add_assistant_message(final_response, conversation_id)
                 
         # Check for termination markers
         if final_response and any(marker in final_response for marker in self.termination_markers):
             await self._end_conversation(conversation_id, ConversationState.COMPLETED)
         
-        # Send response with conditional routing
         await self._send_response(final_response, msg, conversation_id)
     
     async def _send_response(self, 
