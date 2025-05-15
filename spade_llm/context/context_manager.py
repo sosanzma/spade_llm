@@ -45,7 +45,7 @@ class ContextManager:
         Add a message from a dictionary format (useful for testing and direct API usage).
         
         Args:
-            message_dict: Dictionary with 'role' and 'content' keys
+            message_dict: Dictionary with 'role' and 'content' keys (and optionally 'tool_calls')
             conversation_id: ID of the conversation
         """
         self._current_conversation_id = conversation_id
@@ -124,9 +124,13 @@ class ContextManager:
                 "content": msg["content"]
             }
             
-            # Include name parameter for function messages as required by OpenAI
-            if msg["role"] == "function" and "name" in msg:
-                message_entry["name"] = msg["name"]
+            # Include tool_call_id for tool messages
+            if msg["role"] == "tool" and "tool_call_id" in msg:
+                message_entry["tool_call_id"] = msg["tool_call_id"]
+            
+            # Include tool_calls if present (for assistant messages with tool calls)
+            if msg.get("tool_calls"):
+                message_entry["tool_calls"] = msg["tool_calls"]
                 
             prompt.append(message_entry)
             
@@ -160,13 +164,14 @@ class ContextManager:
         self._conversations[conv_id].append(context_entry)
         logger.debug(f"Added assistant response to conversation {conv_id}: {content[:100]}...")
         
-    def add_tool_result(self, tool_name: str, result: Any, conversation_id: Optional[str] = None) -> None:
+    def add_tool_result(self, tool_name: str, result: Any, tool_call_id: str, conversation_id: Optional[str] = None) -> None:
         """
         Add a tool execution result to the context.
         
         Args:
             tool_name: The name of the tool that was executed
             result: The result returned by the tool
+            tool_call_id: The ID of the tool call this result is for
             conversation_id: Optional ID of the conversation to add the result to
         """
         # Determine which conversation to use
@@ -177,10 +182,10 @@ class ContextManager:
             logger.warning(f"No active conversation found to add tool result for: {tool_name}")
             return
         
-        # This will be expanded in the tools implementation
+        # Use "tool" role as required by OpenAI's latest API
         self._conversations[conv_id].append({
-            "role": "function",
-            "name": tool_name,
+            "role": "tool",
+            "tool_call_id": tool_call_id,
             "content": str(result)
         })
         
@@ -231,3 +236,21 @@ class ContextManager:
             self._current_conversation_id = conversation_id
             return True
         return False
+    
+    def get_conversation_history(self, conversation_id: Optional[str] = None) -> List[Dict[str, Any]]:
+        """
+        Get the raw conversation history for a specific conversation.
+        
+        Args:
+            conversation_id: Optional ID of the conversation. If not provided,
+                          uses the current conversation.
+        
+        Returns:
+            List of message dictionaries in the conversation
+        """
+        conv_id = conversation_id or self._current_conversation_id
+        
+        if not conv_id or conv_id not in self._conversations:
+            return []
+            
+        return self._conversations[conv_id]

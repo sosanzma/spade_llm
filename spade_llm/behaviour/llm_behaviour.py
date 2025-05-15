@@ -191,9 +191,35 @@ class LLMBehaviour(CyclicBehaviour):
                     
                 logger.info(f"LLM requested {len(tool_calls)} tool calls in iteration {current_iteration}")
                 
+                # Format tool calls to match OpenAI's expected structure
+                formatted_tool_calls = []
+                for tc in tool_calls:
+                    formatted_tc = {
+                        "type": "function",
+                        "id": tc.get("id"),
+                        "function": {
+                            "name": tc.get("name"),
+                            "arguments": json.dumps(tc.get("arguments", {})) if isinstance(tc.get("arguments"), dict) else tc.get("arguments")
+                        }
+                    }
+                    formatted_tool_calls.append(formatted_tc)
+                
+                # Add assistant message with tool calls to context
+                # This is critical for maintaining conversation flow
+                assistant_msg = {
+                    "role": "assistant",
+                    "content": None,  # When there are tool calls, content is typically None
+                    "tool_calls": formatted_tool_calls
+                }
+                
+                # Add the formatted message to context
+                self.context.add_message_dict(assistant_msg, conversation_id)
+                
+                # Process each tool call
                 for tool_call in tool_calls:
                     tool_name = tool_call.get("name")
                     tool_args = tool_call.get("arguments", {})
+                    tool_id = tool_call.get("id", f"call_{tool_name}_{current_iteration}")
                     
                     logger.info(f"Processing tool call: {tool_name} with args: {tool_args}")
                     
@@ -204,17 +230,17 @@ class LLMBehaviour(CyclicBehaviour):
                         try:
                             result = await tool.execute(**tool_args)
                             
-                            self.context.add_tool_result(tool_name, result, conversation_id)
+                            self.context.add_tool_result(tool_name, result, tool_id, conversation_id)
                             
                             logger.info(f"Tool {tool_name} executed successfully")
                         except Exception as e:
                             error_msg = f"Error executing tool {tool_name}: {str(e)}"
                             logger.error(error_msg)
-                            self.context.add_tool_result(tool_name, {"error": error_msg}, conversation_id)
+                            self.context.add_tool_result(tool_name, {"error": error_msg}, tool_id, conversation_id)
                     else:
                         error_msg = f"Tool {tool_name} not found"
                         logger.error(error_msg)
-                        self.context.add_tool_result(tool_name, {"error": error_msg}, conversation_id)
+                        self.context.add_tool_result(tool_name, {"error": error_msg}, tool_id, conversation_id)
             
             # Handle case where max iterations was reached
             if final_response is None and current_iteration >= max_tool_iterations:
