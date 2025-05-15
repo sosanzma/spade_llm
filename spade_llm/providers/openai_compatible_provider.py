@@ -142,10 +142,7 @@ class OpenAICompatibleProvider(LLMProvider):
         tools = None
         if self.tools:
             tools = [tool.to_openai_tool() for tool in self.tools]
-            # Some providers don't support tools
-            if self.provider_name in ["Ollama", "Local OpenAI-compatible"]:
-                logger.info(f"{self.provider_name} may not support function calling. " +
-                          "Consider using the provider-specific implementation for better tool support.")
+            logger.debug(f"Available tools: {[tool['function']['name'] for tool in tools]}")
         
         try:
             # Prepare the completion kwargs
@@ -160,12 +157,14 @@ class OpenAICompatibleProvider(LLMProvider):
             if self.max_tokens:
                 completion_kwargs["max_tokens"] = self.max_tokens
             
-            # Add tools if they exist and we think the provider supports them
-            if tools and self.provider_name not in ["Ollama"]:
+            if tools:
                 completion_kwargs["tools"] = tools
                 completion_kwargs["tool_choice"] = "auto"
+                
+                # Note for Ollama users
+                if self.provider_name == "Ollama":
+                    logger.info("Using Ollama with tool support. Ensure you're using a tool-capable model (e.g., Llama 3.1+)")
             
-            # Make the API call
             response = await asyncio.to_thread(
                 self.client.chat.completions.create,
                 **completion_kwargs
@@ -176,36 +175,43 @@ class OpenAICompatibleProvider(LLMProvider):
             
             # Process tool calls if present
             if hasattr(message, 'tool_calls') and message.tool_calls:
-                logger.info(f"{self.provider_name} suggested tool calls")
+                logger.info(f"{self.provider_name} suggested {len(message.tool_calls)} tool calls")
                 
                 tool_calls = []
                 for tc in message.tool_calls:
                     try:
-                        args = json.loads(tc.function.arguments)
-                    except json.JSONDecodeError:
-                        logger.error(f"Failed to parse tool arguments: {tc.function.arguments}")
+                        if isinstance(tc.function.arguments, str):
+                            args = json.loads(tc.function.arguments)
+                        else:
+                            args = tc.function.arguments
+                    except json.JSONDecodeError as e:
+                        logger.error(f"Failed to parse tool arguments: {tc.function.arguments}, error: {e}")
                         args = {}
                     
-                    tool_calls.append({
+                    tool_call = {
                         "id": tc.id,
                         "name": tc.function.name,
                         "arguments": args
-                    })
+                    }
+                    tool_calls.append(tool_call)
+                    logger.debug(f"Tool call: {tool_call}")
                 
                 result['tool_calls'] = tool_calls
             else:
-                # Process text response
                 content = message.content or ""
-                logger.info(f"Received text response from {self.provider_name}: {content[:100]}...")
+                if content:
+                    logger.info(f"Received text response from {self.provider_name}: {content[:100]}...")
+                else:
+                    logger.warning(f"Received empty response from {self.provider_name}")
                 result['text'] = content
                 
             return result
             
         except OpenAIError as e:
-            logger.error(f"Error calling {self.provider_name}: {e}")
+            logger.error(f"OpenAI API error with {self.provider_name}: {e}")
             raise
         except Exception as e:
-            logger.error(f"Unexpected error with {self.provider_name}: {e}")
+            logger.error(f"Unexpected error with {self.provider_name}: {e}", exc_info=True)
             raise
 
     @classmethod
@@ -214,9 +220,19 @@ class OpenAICompatibleProvider(LLMProvider):
         return cls(api_key=api_key, model=model, provider_name="OpenAI", **kwargs)
 
     @classmethod
-    def create_ollama(cls, model: str = "llama3:latest", 
+    def create_ollama(cls, model: str = "llama3.1", 
                       base_url: str = "http://localhost:11434/v1", **kwargs):
-        """Factory method to create an Ollama provider."""
+        """
+        Factory method to create an Ollama provider.
+        
+        Note: Ollama now supports tool calling with compatible models (e.g., Llama 3.1+).
+        Ensure you're using a model that supports tools/function calling.
+        
+        Args:
+            model: The model to use (default: llama3.1 which supports tools)
+            base_url: Ollama's OpenAI-compatible endpoint (must include /v1)
+            **kwargs: Additional arguments passed to the provider
+        """
         if not model.startswith("ollama/"):
             model = f"ollama/{model}"
         return cls(
