@@ -6,7 +6,7 @@ from .behaviour import LLMBehaviour
 from .context import ContextManager
 from .tools import LLMTool
 from .agent import LLMAgent
-from .providers import LLMProvider
+from .providers import LLMProvider, OpenAILLMProvider
 from .utils import load_env_vars
 from .routing import RoutingFunction, RoutingResponse
 
@@ -16,6 +16,7 @@ __all__ = [
     "LLMTool", 
     "LLMAgent", 
     "LLMProvider",
+    "OpenAILLMProvider",
     "load_env_vars",
     "RoutingFunction",
     "RoutingResponse",
