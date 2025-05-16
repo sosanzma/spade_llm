@@ -25,6 +25,9 @@ async def main():
     # Load environment variables from .env file
     env_vars = load_env_vars()
 
+    # Ask for XMPP server
+    xmpp_server = input("Enter your XMPP server domain: ")
+
     # ==========================================
     # LLM PROVIDER CONFIGURATION
     # ==========================================
@@ -68,7 +71,7 @@ async def main():
     # ==========================================
 
     # Smart agent creation
-    smart_jid = "smart@sosanzma"
+    smart_jid = f"smart@{xmpp_server}"
     smart_password = getpass.getpass("Enter Smart Agent password: ")
 
     # Create the LLM agent with the selected provider
@@ -85,7 +88,7 @@ async def main():
     print(f"Smart agent {smart_jid} is running.")
 
     # ChatAgent
-    human_jid = "human@sosanzma"
+    human_jid = f"human@{xmpp_server}"
     human_password = getpass.getpass("Enter Human Agent password: ")
 
     # Define a custom function to display responses
