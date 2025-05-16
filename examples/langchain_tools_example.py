@@ -10,7 +10,7 @@ import os
 import spade
 
 from spade_llm.agent import LLMAgent, ChatAgent
-from spade_llm.providers.openai_compatible_provider import OpenAICompatibleProvider
+from spade_llm.providers import LLMProvider
 from spade_llm.tools import LangChainToolAdapter
 from spade_llm.utils import load_env_vars
 
@@ -36,13 +36,13 @@ async def main():
 
     # Create provider (choose one)
     # Option 1: OpenAI
-    provider = OpenAICompatibleProvider.create_openai(
+    provider = LLMProvider.create_openai(
         api_key=api_key,
         model="gpt-4o-mini"
     )
 
     # Option 2: Ollama (uncomment to use)
-    # provider = OpenAICompatibleProvider.create_ollama(
+    # provider = LLMProvider.create_ollama(
     #     model="qwen3:4b",
     #     base_url="http://localhost:11434/v1"
     # )

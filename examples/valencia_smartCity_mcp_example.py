@@ -10,7 +10,7 @@ import os
 import spade
 
 from spade_llm.agent import LLMAgent, ChatAgent
-from spade_llm.providers.openai_compatible_provider import OpenAICompatibleProvider
+from spade_llm.providers import LLMProvider
 from spade_llm.mcp import StdioServerConfig
 from spade_llm.utils import load_env_vars
 
@@ -33,7 +33,7 @@ async def main():
     )
 
     # Create provider
-    provider = OpenAICompatibleProvider.create_openai(
+    provider = LLMProvider.create_openai(
         api_key=api_key,
         model="gpt-4o-mini"
     )

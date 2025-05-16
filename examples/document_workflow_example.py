@@ -13,7 +13,7 @@ import spade
 
 from spade_llm.agent import LLMAgent, ChatAgent
 from spade_llm.routing import RoutingResponse
-from spade_llm.providers.openai_compatible_provider import OpenAICompatibleProvider
+from spade_llm.providers import LLMProvider
 from spade_llm.tools import LangChainToolAdapter
 from spade_llm.utils import load_env_vars
 
@@ -49,7 +49,7 @@ async def main():
     load_env_vars()
     api_key = os.environ.get("OPENAI_API_KEY") or input("OpenAI API key: ")
 
-    XMPP_SERVER = input("you XMPP_SERVER: ")
+    XMPP_SERVER = input("your XMPP_SERVER: ")
     # Agent credentials
     agents_config = {
         "researcher": (f"researcher@{XMPP_SERVER}", "Research Agent"),
@@ -65,7 +65,7 @@ async def main():
         passwords[role] = getpass.getpass(f"{label} password: ")
 
     # Create provider
-    provider = OpenAICompatibleProvider.create_openai(
+    provider = LLMProvider.create_openai(
         api_key=api_key,
         model="gpt-4o-mini"
     )

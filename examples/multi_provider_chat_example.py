@@ -14,7 +14,7 @@ import os
 import spade
 
 from spade_llm.agent import LLMAgent, ChatAgent
-from spade_llm.providers.openai_compatible_provider import OpenAICompatibleProvider
+from spade_llm.providers import LLMProvider
 from spade_llm.utils import load_env_vars
 
 logging.basicConfig(level=logging.WARNING)
@@ -37,7 +37,7 @@ async def main():
         openai_api_key = input("Enter your OpenAI API key: ")
         os.environ["OPENAI_API_KEY"] = openai_api_key
 
-    llm_provider_openai = OpenAICompatibleProvider.create_openai(
+    llm_provider_openai = LLMProvider.create_openai(
         api_key=openai_api_key,
         model="gpt-4o-mini",
         temperature=0.7
@@ -45,7 +45,7 @@ async def main():
     system_prompt = "You are a helpful AI assistant.  You should be concise but informative in your responses."
 
     # --- OPTION 2: Ollama with Gemma ---
-    llm_provider_ollama = OpenAICompatibleProvider.create_ollama(
+    llm_provider_ollama = LLMProvider.create_ollama(
         model="gemma3:1b",
         temperature=0.7,
         base_url="http://localhost:11434/v1",
@@ -57,7 +57,7 @@ async def main():
     LOCAL_BASE_URL = "http://localhost:1234/v1"
     LOCAL_MODEL = "llama-3.2-1b-instruct"
 
-    llm_provider_lm_studio = OpenAICompatibleProvider.create_lm_studio(
+    llm_provider_lm_studio = LLMProvider.create_lm_studio(
         model=LOCAL_MODEL,
         base_url=LOCAL_BASE_URL
     )

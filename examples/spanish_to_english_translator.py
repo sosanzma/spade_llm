@@ -10,7 +10,7 @@ import getpass
 import os
 import spade
 from spade_llm.agent import LLMAgent, ChatAgent
-from spade_llm.providers.openai_compatible_provider import OpenAICompatibleProvider
+from spade_llm.providers import LLMProvider
 from spade_llm.utils import load_env_vars
 
 TRANSLATOR_PROMPT = """
@@ -37,7 +37,7 @@ async def main():
     translator = LLMAgent(
         jid=translator_jid,
         password=translator_password,
-        provider=OpenAICompatibleProvider.create_openai(
+        provider=LLMProvider.create_openai(
             api_key=api_key,
             model="gpt-4o-mini",
             temperature=0.3
