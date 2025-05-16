@@ -204,11 +204,6 @@ provider_lm_studio = LLMProvider.create_lm_studio(
     base_url="http://localhost:1234/v1"
 )
 
-# vLLM (high-performance inference)
-provider_vllm = LLMProvider.create_vllm(
-    model="meta-llama/Llama-2-7b-chat-hf",
-    base_url="http://localhost:8000/v1"
-)
 ```
 
 ### Agent with Tools
