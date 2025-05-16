@@ -6,7 +6,7 @@ SPADE_LLM is an extension for [SPADE](https://github.com/javipalanca/spade) (Sma
 
 SPADE_LLM extends SPADE's multi-agent framework by providing:
 
-- Integration with multiple LLM providers (OpenAI, Google Gemini, Anthropic)
+- Integration with multiple LLM providers (OpenAI, Ollama, LM Studio, vLLM)
 - Tool-calling capabilities for agents
 - Context management for conversations
 - Model Context Protocol (MCP) support
@@ -23,7 +23,7 @@ SPADE_LLM extends SPADE's multi-agent framework by providing:
 │                                                                     │
 │  ┌─────────────┐    ┌──────────────┐    ┌───────────────┐         │
 │  │  LLMAgent   │───►│ LLMBehaviour │───►│ LLMProvider   │         │
-│  │             │    │              │    │ (OpenAI, etc) │         │
+│  │             │    │              │    │               │         │
 │  └─────┬───────┘    └──────┬───────┘    └───────────────┘         │
 │        │                   │                                       │
 │        │                   ▼                                       │
@@ -52,7 +52,7 @@ SPADE_LLM extends SPADE's multi-agent framework by providing:
 - **LLMAgent**: Enhanced SPADE agent with LLM capabilities
 - **LLMBehaviour**: Specialized behaviour for processing messages with LLMs
 - **ContextManager**: Manages conversation history and context
-- **LLMProvider**: Abstract interface for LLM service integration
+- **LLMProvider**: Unified interface for LLM service integration (OpenAI, Ollama, LM Studio, vLLM)
 - **LLMTool**: Framework for defining and executing tools
 - **MCPServerConfig**: Configuration for Model Context Protocol servers
 
@@ -61,7 +61,7 @@ SPADE_LLM extends SPADE's multi-agent framework by providing:
 SPADE_LLM follows a modular design where:
 
 1. Agents maintain SPADE's asynchronous communication model
-2. LLM interactions are abstracted through providers
+2. LLM interactions are abstracted through a unified provider
 3. Tools can be native or adapted from external frameworks
 4. Context management handles multi-conversation scenarios
 5. MCP integration enables connection to external services
@@ -159,11 +159,11 @@ pip install -e .
 ```python
 import spade
 from spade_llm import LLMAgent
-from spade_llm.providers.open_ai_provider import OpenAILLMProvider
+from spade_llm.providers import LLMProvider
 
 async def main():
-    # Configure provider
-    provider = OpenAILLMProvider(
+    # Configure provider using factory method
+    provider = LLMProvider.create_openai(
         api_key="your-api-key",
         model="gpt-4o-mini"
     )
@@ -180,6 +180,35 @@ async def main():
 
 if __name__ == "__main__":
     spade.run(main())
+```
+
+### Using Different LLM Providers
+
+```python
+# OpenAI
+provider_openai = LLMProvider.create_openai(
+    api_key="your-openai-api-key",
+    model="gpt-4o-mini"
+)
+
+# Ollama (local models)
+provider_ollama = LLMProvider.create_ollama(
+    model="llama3:8b",
+    base_url="http://localhost:11434/v1",
+    timeout=120.0
+)
+
+# LM Studio (local models)
+provider_lm_studio = LLMProvider.create_lm_studio(
+    model="mistral-7b",
+    base_url="http://localhost:1234/v1"
+)
+
+# vLLM (high-performance inference)
+provider_vllm = LLMProvider.create_vllm(
+    model="meta-llama/Llama-2-7b-chat-hf",
+    base_url="http://localhost:8000/v1"
+)
 ```
 
 ### Agent with Tools
@@ -297,20 +326,30 @@ agent = LLMAgent(
 
 ### Provider Abstraction
 
-- Unified interface for LLM providers
+- Unified interface for LLM providers (OpenAI, Ollama, LM Studio, vLLM)
+- Named factory methods for provider creation
 - Tool format translation
 - Response handling
+
+## Supported LLM Providers
+
+SPADE_LLM supports multiple LLM providers through a unified interface:
+
+- **OpenAI**: API access to GPT models
+- **Ollama**: Run local models like Llama, Mistral, Gemma, etc.
+- **LM Studio**: GUI tool for running local models
+- **vLLM**: High-performance inference engine
 
 ## Examples
 
 The `examples/` directory contains several demonstrations:
 
-- `simple_openai_agent.py`: Basic LLM agent with OpenAI
+- `multi_provider_chat_example.py`: Using different LLM providers
 - `langchain_tools_example.py`: LangChain tool integration
-- `multi_context_example.py`: Multi-conversation handling
+- `ollama_with_tools_example.py`: Using tools with Ollama models
+- `spanish_to_english_translator.py`: Simple translation agent
 - `valencia_smartCity_mcp_example.py`: MCP server integration
 - `document_workflow_example.py`: Multi-agent workflow
-
 
 ## License
 
