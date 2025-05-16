@@ -3,13 +3,16 @@
 import asyncio
 import logging
 import time
-import json
 from typing import Optional, Any, Dict, List, Callable, Set, Union
 
 from spade.behaviour import CyclicBehaviour
 from spade.message import Message
 
-from ..context import ContextManager
+from ..context import (
+    ContextManager, 
+    create_assistant_tool_call_message,
+    create_assistant_message
+)
 from ..providers.base_provider import LLMProvider
 from ..tools import LLMTool
 from ..routing import RoutingFunction, RoutingResponse
@@ -147,7 +150,7 @@ class LLMBehaviour(CyclicBehaviour):
             return
         
         # Update context with new message
-        self.context.add_message(msg,conversation_id)
+        self.context.add_message(msg, conversation_id)
         
         # Process the conversation with the LLM
         try:
@@ -191,26 +194,8 @@ class LLMBehaviour(CyclicBehaviour):
                     
                 logger.info(f"LLM requested {len(tool_calls)} tool calls in iteration {current_iteration}")
                 
-                # Format tool calls to match OpenAI's expected structure
-                formatted_tool_calls = []
-                for tc in tool_calls:
-                    formatted_tc = {
-                        "type": "function",
-                        "id": tc.get("id"),
-                        "function": {
-                            "name": tc.get("name"),
-                            "arguments": json.dumps(tc.get("arguments", {})) if isinstance(tc.get("arguments"), dict) else tc.get("arguments")
-                        }
-                    }
-                    formatted_tool_calls.append(formatted_tc)
-                
-                # Add assistant message with tool calls to context
-                # This is critical for maintaining conversation flow
-                assistant_msg = {
-                    "role": "assistant",
-                    "content": None,  # When there are tool calls, content is typically None
-                    "tool_calls": formatted_tool_calls
-                }
+                # Use our helper function to create the assistant message with tool calls
+                assistant_msg = create_assistant_tool_call_message(tool_calls)
                 
                 # Add the formatted message to context
                 self.context.add_message_dict(assistant_msg, conversation_id)
