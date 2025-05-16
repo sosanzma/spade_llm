@@ -3,13 +3,19 @@
 import asyncio
 import logging
 import time
-from typing import Optional, Any, Dict, List, Callable, Set
+from typing import Optional, Any, Dict, List, Callable, Set, Union
 
 from spade.behaviour import CyclicBehaviour
 from spade.message import Message
 
-from ..context import ContextManager
+from ..context import (
+    ContextManager, 
+    create_assistant_tool_call_message,
+    create_assistant_message
+)
 from ..providers.base_provider import LLMProvider
+from ..tools import LLMTool
+from ..routing import RoutingFunction, RoutingResponse
 
 logger = logging.getLogger("spade_llm.behaviour")
 
@@ -33,7 +39,7 @@ class LLMBehaviour(CyclicBehaviour):
     - Process and update the conversation context
     - Send prompts to LLM providers
     - Handle tool invocation
-    - Send responses back
+    - Send responses back with optional conditional routing
     
     The behaviour remains active throughout the agent's lifecycle,
     but individual conversations can be terminated based on conditions.
@@ -41,28 +47,44 @@ class LLMBehaviour(CyclicBehaviour):
     
     def __init__(self, 
                 llm_provider: LLMProvider,
+                reply_to: Optional[str] = None,
+                routing_function: Optional[RoutingFunction] = None,
                 context_manager: Optional[ContextManager] = None,
                 termination_markers: Optional[List[str]] = None,
                 max_interactions_per_conversation: Optional[int] = None,
-                on_conversation_end: Optional[Callable[[str, str], None]] = None):
+                on_conversation_end: Optional[Callable[[str, str], None]] = None,
+                tools: Optional[List[LLMTool]] = None):
         """
         Initialize the LLM behaviour.
         
         Args:
             llm_provider: Provider for LLM integration (OpenAI, Gemini, etc.)
+            reply_to: JID to send responses to. If None the reply is to the original sender
+            routing_function: Optional function for conditional routing based on response content
             context_manager: Manager for conversation context (optional, will create new if None)
             termination_markers: List of strings that indicate conversation completion when present in LLM responses
             max_interactions_per_conversation: Maximum number of back-and-forth exchanges in a conversation
             on_conversation_end: Callback function when a conversation ends (receives conversation_id and reason)
+            tools: Optional list of tools that can be used by the LLM
         """
         super().__init__()
         self.provider = llm_provider
         self.context = context_manager or ContextManager()
+        self.reply_to = reply_to
+        self.routing_function = routing_function
+        
+        if self.routing_function and self.reply_to:
+            logger.info("Both routing_function and reply_to provided. routing_function will take precedence.")
         
         # Conversation lifecycle management
         self.termination_markers = termination_markers or ["<TASK_COMPLETE>", "<END>", "<DONE>"]
         self.max_interactions_per_conversation = max_interactions_per_conversation
         self.on_conversation_end = on_conversation_end
+        
+        # Register tools with the provider
+        if tools:
+            for tool in tools:
+                self.provider.register_tool(tool)
         
         # Track active conversations
         self._active_conversations: Dict[str, Dict[str, Any]] = {}
@@ -92,7 +114,6 @@ class LLMBehaviour(CyclicBehaviour):
         
         # Determine conversation ID (use thread if available, otherwise create from message properties)
         conversation_id = msg.thread or f"{msg.sender}_{msg.to}"
-
         
         # Initialize or retrieve conversation state
         if conversation_id not in self._active_conversations:
@@ -129,37 +150,166 @@ class LLMBehaviour(CyclicBehaviour):
             return
         
         # Update context with new message
-        self.context.add_message(msg)
+        self.context.add_message(msg, conversation_id)
         
-        # Get response from LLM provider
+        # Process the conversation with the LLM
         try:
-            response = await self.provider.get_response(self.context)
+            await self._process_message_with_llm(msg, conversation_id)
         except Exception as e:
-            logger.error(f"Error getting response from LLM provider: {e}")
+            logger.error(f"Error processing message: {e}")
             await self._end_conversation(conversation_id, ConversationState.ERROR)
 
             # Send error message
             reply = msg.make_reply()
             reply.body = f"Error processing your message: {str(e)}"
             await self.send(reply)
-
-            return
+    
+    async def _process_message_with_llm(self, msg: Message, conversation_id: str):
+        """
+        Process a message with the LLM, handling multiple sequential tool calls.
         
-        # Check for termination markers in the response
-        if any(marker in response for marker in self.termination_markers):
-            # Remove the termination marker from the response
-            for marker in self.termination_markers:
-                response = response.replace(marker, "")
+        Args:
+            msg: The message to process
+            conversation_id: The ID of the conversation
+        """
+        final_response = None
+        max_tool_iterations = 5  # Limit to prevent infinite loops -- should be parametrized
+        current_iteration = 0
+        
+        try:
+            # Tool processing loop until a final response is obtained
+            while final_response is None and current_iteration < max_tool_iterations:
+                current_iteration += 1
+                logger.info(f"Tool processing iteration {current_iteration}/{max_tool_iterations}")
+                
+                llm_response = await self.provider.get_llm_response(self.context)
+                
+                tool_calls = llm_response.get('tool_calls', [])
+                text_response = llm_response.get('text')
+                
+                if not tool_calls:
+                    final_response = text_response
+                    logger.info(f"LLM provided final response without tools: {final_response[:100] if final_response else '(empty)'}...")
+                    break
+                    
+                logger.info(f"LLM requested {len(tool_calls)} tool calls in iteration {current_iteration}")
+                
+                # Use our helper function to create the assistant message with tool calls
+                assistant_msg = create_assistant_tool_call_message(tool_calls)
+                
+                # Add the formatted message to context
+                self.context.add_message_dict(assistant_msg, conversation_id)
+                
+                # Process each tool call
+                for tool_call in tool_calls:
+                    tool_name = tool_call.get("name")
+                    tool_args = tool_call.get("arguments", {})
+                    tool_id = tool_call.get("id", f"call_{tool_name}_{current_iteration}")
+                    
+                    logger.info(f"Processing tool call: {tool_name} with args: {tool_args}")
+                    
+                    # Find the tool by name
+                    tool = next((t for t in self.provider.tools if t.name == tool_name), None)
+                    
+                    if tool:
+                        try:
+                            result = await tool.execute(**tool_args)
+                            
+                            self.context.add_tool_result(tool_name, result, tool_id, conversation_id)
+                            
+                            logger.info(f"Tool {tool_name} executed successfully")
+                        except Exception as e:
+                            error_msg = f"Error executing tool {tool_name}: {str(e)}"
+                            logger.error(error_msg)
+                            self.context.add_tool_result(tool_name, {"error": error_msg}, tool_id, conversation_id)
+                    else:
+                        error_msg = f"Tool {tool_name} not found"
+                        logger.error(error_msg)
+                        self.context.add_tool_result(tool_name, {"error": error_msg}, tool_id, conversation_id)
             
-            # End the conversation
+            # Handle case where max iterations was reached
+            if final_response is None and current_iteration >= max_tool_iterations:
+                logger.warning(f"Reached maximum tool iterations ({max_tool_iterations}), forcing final response")
+                final_response = (await self.provider.get_llm_response(self.context)).get('text')
+                
+        except Exception as e:
+            logger.error(f"Error in tool processing loop: {e}")
+            # Instead of setting generic error message, re-raise to see actual error
+            raise
+        
+        if not final_response:
+            final_response = "I'm sorry, I couldn't complete this request properly. Please try again or rephrase your query."
+        
+        # Add assistant response to context before sending
+        self.context.add_assistant_message(final_response, conversation_id)
+                
+        # Check for termination markers
+        if final_response and any(marker in final_response for marker in self.termination_markers):
             await self._end_conversation(conversation_id, ConversationState.COMPLETED)
-
-            # Send response back
-        reply = msg.make_reply()
-        reply.body = response
-        # Preserve the conversation thread
-        reply.thread = conversation_id
-        await self.send(reply)
+        
+        await self._send_response(final_response, msg, conversation_id)
+    
+    async def _send_response(self, 
+                           response: str, 
+                           original_msg: Message,
+                           conversation_id: str) -> None:
+        """
+        Send response with optional conditional routing.
+        
+        Args:
+            response: The LLM's response text
+            original_msg: The original message received
+            conversation_id: The conversation identifier
+        """
+        context = {
+            "conversation_id": conversation_id,
+            "state": self._active_conversations.get(conversation_id, {})
+        }
+        
+        # Determine recipients and transformations
+        if self.routing_function:
+            routing_result = self.routing_function(original_msg, response, context)
+            
+            if isinstance(routing_result, str):
+                # Simple string routing
+                recipients = [routing_result]
+                transform = None
+                metadata = {}
+            elif isinstance(routing_result, RoutingResponse):
+                # Advanced routing with RoutingResponse
+                recipients = (routing_result.recipients 
+                            if isinstance(routing_result.recipients, list) 
+                            else [routing_result.recipients])
+                transform = routing_result.transform
+                metadata = routing_result.metadata or {}
+            else:
+                # Fallback to default behavior
+                recipients = [self.reply_to or str(original_msg.sender)]
+                transform = None
+                metadata = {}
+        else:
+            # Traditional behavior when no routing function
+            recipients = [self.reply_to or str(original_msg.sender)]
+            transform = None
+            metadata = {}
+        
+        # Send message to each recipient
+        for recipient in recipients:
+            reply = Message(to=recipient)
+            reply.body = transform(response) if transform else response
+            reply.thread = conversation_id
+            
+            # Add any metadata
+            for key, value in metadata.items():
+                reply.set_metadata(key, value)
+            
+            logger.info(f"Sending response to {reply.to} with thread: {reply.thread}")
+            
+            try:
+                await self.send(reply)
+                logger.info(f"Response sent successfully to {reply.to}")
+            except Exception as e:
+                logger.error(f"Error sending response to {recipient}: {e}")
     
     async def _end_conversation(self, conversation_id: str, reason: str) -> None:
         """
@@ -209,3 +359,12 @@ class LLMBehaviour(CyclicBehaviour):
             Dict or None: The conversation state if found, None otherwise
         """
         return self._active_conversations.get(conversation_id)
+        
+    def register_tool(self, tool: LLMTool) -> None:
+        """
+        Register a tool with the LLM provider.
+        
+        Args:
+            tool: The tool to register
+        """
+        self.provider.register_tool(tool)

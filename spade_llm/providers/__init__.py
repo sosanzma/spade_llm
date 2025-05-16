@@ -1,6 +1,5 @@
-"""LLM providers for SPADE-LLM."""
+"""LLM providers for SPADE_LLM."""
 
-from .base_provider import LLMProvider
-from .dummy_provider import DummyLLMProvider
+from .llm_provider import LLMProvider
 
-__all__ = ["LLMProvider", "DummyLLMProvider"]
+__all__ = ["LLMProvider"]

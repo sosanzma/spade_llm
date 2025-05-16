@@ -1,8 +1,14 @@
 """Context management for LLM conversations."""
 
 import logging
-from typing import Dict, List, Any, Optional, Set
+from typing import Dict, List, Any, Optional, Set, Union
 from spade.message import Message
+
+from ._types import (
+    ContextMessage, SystemMessage, UserMessage, AssistantMessage, ToolResultMessage,
+    create_system_message, create_user_message, spade_message_to_user_message,
+    create_assistant_message, create_tool_result_message
+)
 
 logger = logging.getLogger("spade_llm.context")
 
@@ -34,25 +40,39 @@ class ContextManager:
         self._values = {}
         
         # Store messages by conversation ID
-        self._conversations: Dict[str, List[Dict[str, Any]]] = {}
+        self._conversations: Dict[str, List[ContextMessage]] = {}
         # Set to track which conversation IDs are currently active
         self._active_conversations: Set[str] = set()
         # Current conversation ID (used when not explicitly specified)
         self._current_conversation_id: Optional[str] = None
         
-    def add_message(self, message: Message) -> None:
+    def add_message_dict(self, message_dict: ContextMessage, conversation_id: str) -> None:
+        """
+        Add a message from a dictionary format (useful for testing and direct API usage).
+        
+        Args:
+            message_dict: Dictionary with 'role' and 'content' keys (and optionally 'tool_calls')
+            conversation_id: ID of the conversation
+        """
+        self._current_conversation_id = conversation_id
+        self._active_conversations.add(conversation_id)
+        
+        # Initialize conversation if needed
+        if conversation_id not in self._conversations:
+            self._conversations[conversation_id] = []
+        
+        # Add message to the conversation
+        self._conversations[conversation_id].append(message_dict)
+        
+    def add_message(self, message: Message, conversation_id: str) -> None:
         """
         Add a message to the context.
         
         Args:
             message: The SPADE message to add to the context
+            conversation_id: ID of the conversation
         """
-        # Determine conversation ID (use thread if available)
-        conversation_id = message.thread or f"{message.sender}_{message.to}"
-
-        # Set as current conversation if not already set
-        if not self._current_conversation_id:
-            self._current_conversation_id = conversation_id
+        self._current_conversation_id = conversation_id
             
         # Mark conversation as active
         self._active_conversations.add(conversation_id)
@@ -61,21 +81,22 @@ class ContextManager:
         if conversation_id not in self._conversations:
             self._conversations[conversation_id] = []
         
-        # Convert SPADE message to a format suitable for LLM context
-        context_entry = {
-            "role": "user" if message.sender else "assistant",
-            "content": message.body,
-            "sender": str(message.sender),
-            "receiver": str(message.to),
-            "thread": message.thread
-        }
+        # Convert SPADE message to a format suitable for LLM context using our helper function
+        user_message = spade_message_to_user_message(message)
+        
+        # Store original SPADE metadata as additional fields (these won't be sent to the LLM)
+        # but are useful for debugging and advanced processing
+        user_message_with_metadata = dict(user_message)
+        user_message_with_metadata["sender"] = str(message.sender)
+        user_message_with_metadata["receiver"] = str(message.to)
+        user_message_with_metadata["thread"] = message.thread
         
         # Add message to the conversation
-        self._conversations[conversation_id].append(context_entry)
+        self._conversations[conversation_id].append(user_message_with_metadata)
         
         # TODO : Token counting and context windowing will be implemented later
         
-    def get_prompt(self, conversation_id: Optional[str] = None) -> List[Dict[str, Any]]:
+    def get_prompt(self, conversation_id: Optional[str] = None) -> List[ContextMessage]:
         """
         Get the current prompt including history formatted for LLM providers.
         
@@ -92,31 +113,72 @@ class ContextManager:
         # If no conversation is specified or found, return just the system prompt
         if not conv_id or conv_id not in self._conversations:
             if self._system_prompt:
-                return [{"role": "system", "content": self._system_prompt}]
+                return [create_system_message(self._system_prompt)]
             return []
             
         prompt = []
         
         # Add system prompt if available
         if self._system_prompt:
-            prompt.append({"role": "system", "content": self._system_prompt})
+            prompt.append(create_system_message(self._system_prompt))
             
-        # Add conversation history
+        # Add conversation history - filter out metadata fields when sending to LLM
         for msg in self._conversations[conv_id]:
-            prompt.append({
+            # Create a clean copy without internal metadata
+            message_entry = {
                 "role": msg["role"],
                 "content": msg["content"]
-            })
+            }
+            
+            # Include tool_call_id for tool messages
+            if msg["role"] == "tool" and "tool_call_id" in msg:
+                message_entry["tool_call_id"] = msg["tool_call_id"]
+            
+            # Include tool_calls if present (for assistant messages with tool calls)
+            if msg.get("tool_calls"):
+                message_entry["tool_calls"] = msg["tool_calls"]
+                
+            # Include name if present for user messages
+            if msg["role"] == "user" and "name" in msg:
+                message_entry["name"] = msg["name"]
+                
+            prompt.append(message_entry)
             
         return prompt
         
-    def add_tool_result(self, tool_name: str, result: Any, conversation_id: Optional[str] = None) -> None:
+    def add_assistant_message(self, content: str, conversation_id: Optional[str] = None) -> None:
+        """
+        Add an assistant (LLM) response to the context.
+        
+        Args:
+            content: The assistant's response content
+            conversation_id: ID of the conversation
+        """
+        # Determine which conversation to use
+        conv_id = conversation_id or self._current_conversation_id
+        
+        if not conv_id:
+            logger.warning("No conversation ID provided and no current conversation set")
+            return
+            
+        # Initialize conversation if needed
+        if conv_id not in self._conversations:
+            self._conversations[conv_id] = []
+        
+        # Add assistant response to the conversation using our helper function
+        assistant_message = create_assistant_message(content)
+        
+        self._conversations[conv_id].append(assistant_message)
+        logger.debug(f"Added assistant response to conversation {conv_id}: {content[:100]}...")
+        
+    def add_tool_result(self, tool_name: str, result: Any, tool_call_id: str, conversation_id: Optional[str] = None) -> None:
         """
         Add a tool execution result to the context.
         
         Args:
             tool_name: The name of the tool that was executed
             result: The result returned by the tool
+            tool_call_id: The ID of the tool call this result is for
             conversation_id: Optional ID of the conversation to add the result to
         """
         # Determine which conversation to use
@@ -127,12 +189,14 @@ class ContextManager:
             logger.warning(f"No active conversation found to add tool result for: {tool_name}")
             return
         
-        # This will be expanded in the tools implementation
-        self._conversations[conv_id].append({
-            "role": "function",
-            "name": tool_name,
-            "content": str(result)
-        })
+        # Use our helper function to create the tool result message
+        tool_result = create_tool_result_message(result, tool_call_id)
+        
+        # Add tool name as metadata (won't be sent to LLM but useful for debugging)
+        tool_result_with_metadata = dict(tool_result)
+        tool_result_with_metadata["tool_name"] = tool_name
+        
+        self._conversations[conv_id].append(tool_result_with_metadata)
         
     def clear(self, conversation_id: Optional[str] = None) -> None:
         """
@@ -181,3 +245,21 @@ class ContextManager:
             self._current_conversation_id = conversation_id
             return True
         return False
+    
+    def get_conversation_history(self, conversation_id: Optional[str] = None) -> List[ContextMessage]:
+        """
+        Get the raw conversation history for a specific conversation.
+        
+        Args:
+            conversation_id: Optional ID of the conversation. If not provided,
+                          uses the current conversation.
+        
+        Returns:
+            List of message dictionaries in the conversation
+        """
+        conv_id = conversation_id or self._current_conversation_id
+        
+        if not conv_id or conv_id not in self._conversations:
+            return []
+            
+        return self._conversations[conv_id]

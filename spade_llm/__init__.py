@@ -5,17 +5,20 @@ from .version import __version__
 from .behaviour import LLMBehaviour
 from .context import ContextManager
 from .tools import LLMTool
-from .agent import LLMAgent
-from .providers import LLMProvider, DummyLLMProvider
+from .agent import LLMAgent, ChatAgent
+from .providers import LLMProvider
 from .utils import load_env_vars
+from .routing import RoutingFunction, RoutingResponse
 
 __all__ = [
     "LLMBehaviour", 
     "ContextManager", 
     "LLMTool", 
-    "LLMAgent", 
+    "LLMAgent",
+    "ChatAgent", 
     "LLMProvider",
-    "DummyLLMProvider",
     "load_env_vars",
+    "RoutingFunction",
+    "RoutingResponse",
     "__version__"
 ]

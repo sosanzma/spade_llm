@@ -2,7 +2,8 @@
 
 import json
 import logging
-from typing import Dict, Any, Callable, Awaitable, Optional, List, Union
+import asyncio
+from typing import Dict, Any, Callable, Optional, List, Union
 
 logger = logging.getLogger("spade_llm.tools")
 
@@ -24,10 +25,10 @@ class LLMTool:
         Initialize a new LLM tool.
         
         Args:
-            name: The name of the tool
-            description: A description of what the tool does
-            parameters: JSON Schema definition of the tool's parameters
-            func: The function to execute when this tool is invoked
+            name: The name of the tool.
+            description: A description of what the tool does.
+            parameters: JSON Schema definition of the tool's parameters.
+            func: The function to execute when this tool is invoked.
         """
         self.name = name
         self.description = description
@@ -39,7 +40,7 @@ class LLMTool:
         Convert the tool to a dictionary representation suitable for LLM APIs.
         
         Returns:
-            A dictionary representation of the tool
+            A dictionary representation of the tool.
         """
         return {
             "name": self.name,
@@ -47,19 +48,35 @@ class LLMTool:
             "parameters": self.parameters
         }
         
+    def to_openai_tool(self) -> Dict[str, Any]:
+        """
+        Convert the tool to OpenAI's tool format.
+        
+        Returns:
+            A dictionary in OpenAI's tool format.
+        """
+        return {
+            "type": "function",
+            "function": {
+                "name": self.name,
+                "description": self.description,
+                "parameters": self.parameters
+            }
+        }
+        
     async def execute(self, **kwargs) -> Any:
         """
         Execute the tool with the provided arguments.
         
         Args:
-            **kwargs: Arguments to pass to the tool function
+            **kwargs: Arguments to pass to the tool function.
             
         Returns:
-            The result of the tool execution
+            The result of the tool execution.
         """
         # Check if function is async
-        if hasattr(self.func, "__await__"):
+        if asyncio.iscoroutinefunction(self.func):
             return await self.func(**kwargs)
         else:
-            # Run synchronous function
-            return self.func(**kwargs)
+            # Run synchronous function in a thread to avoid blocking
+            return await asyncio.to_thread(self.func, **kwargs)
