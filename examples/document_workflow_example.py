@@ -21,21 +21,27 @@ from spade_llm.utils import load_env_vars
 from langchain_community.tools import DuckDuckGoSearchRun
 from langchain_community.tools import WikipediaQueryRun
 from langchain_community.utilities import WikipediaAPIWrapper
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# Si quieres solo los logs de spade_llm (reduciendo otros logs del sistema)
+logging.getLogger("spade_llm").setLevel(logging.INFO)
 
 
 def review_router(msg, response, context):
-    """Routes reviewer decisions to publisher or back to editor."""
+    """Routes reviewer decisions to publisher, researcher, or editor."""
     response_lower = response.lower()
+
+    domain = str(msg.sender).split('@')[1]
 
     if "<task_complete>" in response_lower:
         return RoutingResponse(
-            recipients="publisher@sosanzma",
+            recipients=f"publisher@{domain}",
             transform=lambda x: x.replace("<TASK_COMPLETE>", "").strip()
         )
-    elif "major issues" in response_lower:
-        return RoutingResponse(recipients=["researcher@sosanzma"])
+    elif "<major_revision>" in response_lower:
+        return RoutingResponse(recipients=[f"researcher@{domain}"])
     else:
-        return RoutingResponse(recipients="editor@localhost")
+        return RoutingResponse(recipients=f"editor@{domain}")
 
 
 async def main():
@@ -67,7 +73,7 @@ async def main():
 
     # Create tools
     tools = [
-        LangChainToolAdapter(DuckDuckGoSearchRun()),
+        #LangChainToolAdapter(DuckDuckGoSearchRun()),
         LangChainToolAdapter(WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper()))
     ]
 
@@ -99,7 +105,22 @@ async def main():
         password=passwords["reviewer"],
         provider=provider,
         routing_function=review_router,
-        system_prompt="Review documents. If approved: include '<TASK_COMPLETE>'. If not: specify changes.",
+        system_prompt="""Review documents carefully but pragmatically. Each revision represents a cost in time and resources, so find a balance between quality and efficiency.
+
+        Choose one of these actions:
+        1. If the document is ready for publication (even with acceptable minor imperfections): 
+           - Include the ENTIRE DOCUMENT in your response
+           - Add '<TASK_COMPLETE>' at the very end of your message
+        
+        2. If there are SERIOUS issues requiring additional research: 
+           - Add '<MAJOR_REVISION>' and explain the problems
+           - Do NOT include the full document
+        
+        3. If there are minor issues that don't significantly affect content quality: 
+           - Briefly describe the necessary changes
+           - Do NOT include the full document
+
+        """,
         termination_markers=["<TASK_COMPLETE>"]
     )
 
