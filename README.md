@@ -52,7 +52,7 @@ SPADE_LLM extends SPADE's multi-agent framework by providing:
 - **LLMAgent**: Enhanced SPADE agent with LLM capabilities
 - **LLMBehaviour**: Specialized behaviour for processing messages with LLMs
 - **ContextManager**: Manages conversation history and context
-- **LLMProvider**: Unified interface for LLM service integration (OpenAI, Ollama, LM Studio, vLLM)
+- **LLMProvider**: Unified interface for LLM service integration (OpenAI, Ollama, LM Studio)
 - **LLMTool**: Framework for defining and executing tools
 - **MCPServerConfig**: Configuration for Model Context Protocol servers
 
@@ -333,7 +333,6 @@ SPADE_LLM supports multiple LLM providers through a unified interface:
 - **OpenAI**: API access to GPT models
 - **Ollama**: Run local models like Llama, Mistral, Gemma, etc.
 - **LM Studio**: GUI tool for running local models
-- **vLLM**: High-performance inference engine
 
 ## Examples
 
