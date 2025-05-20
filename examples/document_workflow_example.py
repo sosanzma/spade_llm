@@ -23,7 +23,6 @@ from langchain_community.tools import WikipediaQueryRun
 from langchain_community.utilities import WikipediaAPIWrapper
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-# Si quieres solo los logs de spade_llm (reduciendo otros logs del sistema)
 logging.getLogger("spade_llm").setLevel(logging.INFO)
 
 
