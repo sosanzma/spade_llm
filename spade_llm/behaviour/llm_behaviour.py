@@ -81,10 +81,8 @@ class LLMBehaviour(CyclicBehaviour):
         self.max_interactions_per_conversation = max_interactions_per_conversation
         self.on_conversation_end = on_conversation_end
         
-        # Register tools with the provider
-        if tools:
-            for tool in tools:
-                self.provider.register_tool(tool)
+        # Store tools at the behaviour level
+        self.tools: List[LLMTool] = tools or []
         
         # Track active conversations
         self._active_conversations: Dict[str, Dict[str, Any]] = {}
@@ -173,7 +171,7 @@ class LLMBehaviour(CyclicBehaviour):
             conversation_id: The ID of the conversation
         """
         final_response = None
-        max_tool_iterations = 5  # Limit to prevent infinite loops -- should be parametrized
+        max_tool_iterations = 20  # Limit to prevent infinite loops -- should be parametrized
         current_iteration = 0
         
         try:
@@ -182,7 +180,8 @@ class LLMBehaviour(CyclicBehaviour):
                 current_iteration += 1
                 logger.info(f"Tool processing iteration {current_iteration}/{max_tool_iterations}")
                 
-                llm_response = await self.provider.get_llm_response(self.context)
+                # Pass tools to provider for this specific call
+                llm_response = await self.provider.get_llm_response(self.context, self.tools)
                 
                 tool_calls = llm_response.get('tool_calls', [])
                 text_response = llm_response.get('text')
@@ -208,8 +207,8 @@ class LLMBehaviour(CyclicBehaviour):
                     
                     logger.info(f"Processing tool call: {tool_name} with args: {tool_args}")
                     
-                    # Find the tool by name
-                    tool = next((t for t in self.provider.tools if t.name == tool_name), None)
+                    # Find the tool by name in this behaviour's tools
+                    tool = next((t for t in self.tools if t.name == tool_name), None)
                     
                     if tool:
                         try:
@@ -230,7 +229,7 @@ class LLMBehaviour(CyclicBehaviour):
             # Handle case where max iterations was reached
             if final_response is None and current_iteration >= max_tool_iterations:
                 logger.warning(f"Reached maximum tool iterations ({max_tool_iterations}), forcing final response")
-                final_response = (await self.provider.get_llm_response(self.context)).get('text')
+                final_response = (await self.provider.get_llm_response(self.context, self.tools)).get('text')
                 
         except Exception as e:
             logger.error(f"Error in tool processing loop: {e}")
@@ -362,9 +361,19 @@ class LLMBehaviour(CyclicBehaviour):
         
     def register_tool(self, tool: LLMTool) -> None:
         """
-        Register a tool with the LLM provider.
+        Register a tool with this behaviour.
         
         Args:
             tool: The tool to register
         """
-        self.provider.register_tool(tool)
+        self.tools.append(tool)
+        logger.info(f"Registered tool '{tool.name}' with behaviour")
+        
+    def get_tools(self) -> List[LLMTool]:
+        """
+        Get the list of tools registered with this behaviour.
+        
+        Returns:
+            List of tools available to this behaviour
+        """
+        return self.tools

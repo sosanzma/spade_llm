@@ -62,13 +62,10 @@ class LLMAgent(Agent):
         super().__init__(jid, password, verify_security=verify_security)
 
         self.context = ContextManager(system_prompt=system_prompt)
-
-
         self.provider = provider
         self.reply_to = reply_to
         self.routing_function = routing_function
         self.tools: List[LLMTool] = tools or []
-
         self.mcp_servers = mcp_servers or []
 
         self.termination_markers = termination_markers or ["<TASK_COMPLETE>", "<END>", "<DONE>"]
@@ -95,13 +92,8 @@ class LLMAgent(Agent):
         if self.mcp_servers:
             await self._setup_mcp_tools()
 
-        # Register any tools directly with the provider
-        for tool in self.tools:
-            self.provider.register_tool(tool)
-
         # Add the LLM behaviour that will process messages
         template = Template()
-        #template.set_metadata("performative", "request")
         self.add_behaviour(self.llm_behaviour, template)
 
     async def _setup_mcp_tools(self):
@@ -110,7 +102,7 @@ class LLMAgent(Agent):
             # Get tools from all MCP servers
             mcp_tools = await get_all_mcp_tools(self.mcp_servers)
 
-            # Register each tool with the agent and provider
+            # Add each tool to the agent's tools list
             for tool in mcp_tools:
                 self.add_tool(tool)
 
@@ -126,8 +118,6 @@ class LLMAgent(Agent):
             tool: The tool to add
         """
         self.tools.append(tool)
-        # Notify the provider about the new tool
-        self.provider.register_tool(tool)
         # Also register with the behaviour
         self.llm_behaviour.register_tool(tool)
         
@@ -154,3 +144,12 @@ class LLMAgent(Agent):
             Dict or None: The conversation state if found, None otherwise
         """
         return self.llm_behaviour.get_conversation_state(conversation_id)
+    
+    def get_tools(self) -> List[LLMTool]:
+        """
+        Get the list of tools available to this agent.
+        
+        Returns:
+            List of tools
+        """
+        return self.tools
