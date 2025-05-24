@@ -31,7 +31,7 @@ async def main():
     # ==========================================
     # LLM PROVIDER CONFIGURATION
     # ==========================================
-    # Uncomment the provider you want to use
+
 
     # --- OPTION 1: OpenAI ---
     # Get OpenAI API key from environment variables or ask the user
