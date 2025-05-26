@@ -36,3 +36,20 @@ ENV/
 # OS specific files
 .DS_Store
 Thumbs.db
+
+# Testing and Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+*.cover
+.tox/
+
+# MyPy
+.mypy_cache/
+
+# Documentation
+docs/_build/
+
+# Logs
+*.log
