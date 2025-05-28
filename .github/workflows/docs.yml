@@ -3,19 +3,18 @@ name: Build and Deploy Documentation
 on:
   push:
     branches: [ main, dev ]
-    paths: 
+    paths:
       - 'docs/**'
       - 'spade_llm/**'
       - '.github/workflows/docs.yml'
   pull_request:
     branches: [ main ]
-    paths: 
+    paths:
       - 'docs/**'
       - 'spade_llm/**'
       - '.github/workflows/docs.yml'
-
-# Allow manual trigger from GitHub UI
-workflow_dispatch:
+  # Allow manual trigger from GitHub UI
+  workflow_dispatch:
 
 permissions:
   contents: read
