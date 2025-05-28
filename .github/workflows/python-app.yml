@@ -2,11 +2,11 @@ name: Python application
 
 on:
   push:
-    branches: [ "main", "dev" ]  # Temporalmente añadido dev para testing
+    branches: [ "main"]  # Temporalmente añadido dev para testing
     tags:
       - "*"
   pull_request:
-    branches: [ "main", "dev" ]  # Temporalmente añadido dev para testing
+    branches: [ "main"]  # Temporalmente añadido dev para testing
 
 permissions:
   contents: read
