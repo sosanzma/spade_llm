@@ -74,37 +74,6 @@ For new features, please:
 - **Propose implementation approach** if possible
 - **Consider backward compatibility**
 
-#### Documentation
-
-- **Document new features** in the appropriate guide
-- **Update API reference** for new classes/methods
-- **Add examples** for complex functionality
-- **Update changelog** for significant changes
-
-### Documentation Contributions
-
-#### Building Documentation
-
-```bash
-# Install documentation dependencies
-pip install -e ".[docs]"
-
-# Serve documentation locally
-cd docs
-mkdocs serve
-
-# Build documentation
-mkdocs build
-```
-
-#### Documentation Guidelines
-
-- **Use clear, concise language**
-- **Include working code examples**
-- **Follow existing structure**
-- **Link between related concepts**
-- **Test all code examples**
-
 ## Submitting Changes
 
 ### Pull Request Process
