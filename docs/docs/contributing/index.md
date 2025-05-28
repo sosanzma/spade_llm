@@ -74,32 +74,6 @@ For new features, please:
 - **Propose implementation approach** if possible
 - **Consider backward compatibility**
 
-### Code Contributions
-
-#### Code Style
-
-We use these tools for code quality:
-
-- **Black** - Code formatting
-- **Flake8** - Linting
-- **isort** - Import sorting
-- **mypy** - Type checking
-
-```bash
-# Format code
-black spade_llm tests
-
-# Check linting
-flake8 spade_llm tests
-
-# Sort imports
-isort spade_llm tests
-
-# Type checking
-mypy spade_llm
-```
-
-
 #### Documentation
 
 - **Document new features** in the appropriate guide
