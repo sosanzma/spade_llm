@@ -1,4 +1,4 @@
-# SPADE_LLM
+# SPADE_LLM : SPADE with Large Language Models 
 
 Extension for [SPADE](https://github.com/javipalanca/spade) that integrates Large Language Models into multi-agent systems.
 
