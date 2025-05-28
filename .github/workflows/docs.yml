@@ -53,6 +53,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r docs/requirements.txt
           pip install -e .
+          pip install --upgrade mkdocs-material
 
       - name: Configure Git for mkdocs
         run: |
