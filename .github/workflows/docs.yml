@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -99,6 +99,8 @@ jobs:
           publish_dir: docs/site
           destination_dir: dev
           cname: false
+          allow_empty_commit: true
+          keep_files: true          # Avoid overwriting existing files
 
   # Check job for PRs (build only, no deploy)
   check:
