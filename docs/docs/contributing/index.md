@@ -98,35 +98,6 @@ isort spade_llm tests
 mypy spade_llm
 ```
 
-#### Testing Guidelines
-
-- **Write tests** for new functionality
-- **Maintain test coverage** above 80%
-- **Use descriptive test names**
-- **Test error conditions**
-- **Mock external dependencies**
-
-Example test:
-
-```python
-import pytest
-from unittest.mock import AsyncMock
-from spade_llm import LLMAgent, LLMProvider
-
-@pytest.mark.asyncio
-async def test_agent_creation():
-    """Test basic agent creation and setup."""
-    provider = AsyncMock(spec=LLMProvider)
-    
-    agent = LLMAgent(
-        jid="test@example.com",
-        password="password",
-        provider=provider
-    )
-    
-    assert agent.jid == "test@example.com"
-    assert agent.provider == provider
-```
 
 #### Documentation
 
@@ -224,47 +195,6 @@ spade_llm/
 ├── mcp/           # MCP integration
 └── utils/         # Utility functions
 ```
-
-### Adding New Features
-
-#### New LLM Provider
-
-1. **Create provider class** inheriting from `LLMProvider`
-2. **Implement required methods**
-3. **Add factory method** to main `LLMProvider` class
-4. **Write tests**
-5. **Update documentation**
-
-Example:
-
-```python
-# In providers/llm_provider.py
-@classmethod
-def create_custom_provider(cls, **kwargs) -> 'LLMProvider':
-    """Create custom LLM provider."""
-    return cls(
-        base_url=kwargs.get('base_url'),
-        model=kwargs.get('model'),
-        provider_name="Custom"
-    )
-```
-
-#### New Tool Type
-
-1. **Identify common pattern**
-2. **Create base class** if needed
-3. **Implement specific tools**
-4. **Add to tools module**
-5. **Write comprehensive tests**
-6. **Document usage patterns**
-
-#### New Routing Strategy
-
-1. **Define routing interface**
-2. **Implement routing logic**
-3. **Add helper functions**
-4. **Create usage examples**
-5. **Test with different scenarios**
 
 ## Release Process
 
