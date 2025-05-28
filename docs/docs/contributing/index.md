@@ -17,6 +17,7 @@ We welcome contributions to SPADE_LLM! This guide will help you get started.
 - Python 3.10+
 - Git
 - Virtual environment tool (venv, conda, etc.)
+- A XMPP server connection 
 
 ### Installation
 
