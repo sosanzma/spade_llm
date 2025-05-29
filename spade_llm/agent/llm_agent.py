@@ -14,6 +14,7 @@ from ..mcp import MCPServerConfig, get_all_mcp_tools
 from ..providers.base_provider import LLMProvider
 from ..tools import LLMTool
 from ..routing import RoutingFunction
+from ..guardrails import InputGuardrail, OutputGuardrail, GuardrailResult
 
 logger = logging.getLogger("spade_llm.agent")
 
@@ -27,6 +28,7 @@ class LLMAgent(Agent):
     - Tool execution framework
     - MCP server support
     - Conditional routing based on LLM responses
+    - Input and output guardrails for content filtering
     """
 
     def __init__(self,
@@ -41,6 +43,9 @@ class LLMAgent(Agent):
                  termination_markers: Optional[List[str]] = None,
                  max_interactions_per_conversation: Optional[int] = None,
                  on_conversation_end: Optional[Callable[[str, str], None]] = None,
+                 input_guardrails: Optional[List[InputGuardrail]] = None,
+                 output_guardrails: Optional[List[OutputGuardrail]] = None,
+                 on_guardrail_trigger: Optional[Callable[[GuardrailResult], None]] = None,
                  verify_security: bool = False):
         """
         Initialize an LLM-capable agent.
@@ -57,6 +62,9 @@ class LLMAgent(Agent):
             termination_markers: List of strings that mark conversation completion
             max_interactions_per_conversation: Maximum number of back-and-forth exchanges in a conversation
             on_conversation_end: Callback function when a conversation ends (receives conversation_id and reason)
+            input_guardrails: List of guardrails to apply to incoming messages
+            output_guardrails: List of guardrails to apply to LLM responses
+            on_guardrail_trigger: Callback when a guardrail blocks/modifies content
             verify_security: Whether to verify security certificates
         """
         super().__init__(jid, password, verify_security=verify_security)
@@ -71,6 +79,11 @@ class LLMAgent(Agent):
         self.termination_markers = termination_markers or ["<TASK_COMPLETE>", "<END>", "<DONE>"]
         self.max_interactions_per_conversation = max_interactions_per_conversation
         self.on_conversation_end = on_conversation_end
+        
+        # Guardrails
+        self.input_guardrails = input_guardrails or []
+        self.output_guardrails = output_guardrails or []
+        self.on_guardrail_trigger = on_guardrail_trigger
 
         # Create LLM behaviour with all parameters
         self.llm_behaviour = LLMBehaviour(
@@ -81,7 +94,10 @@ class LLMAgent(Agent):
             termination_markers=self.termination_markers,
             max_interactions_per_conversation=self.max_interactions_per_conversation,
             on_conversation_end=self.on_conversation_end,
-            tools=self.tools
+            tools=self.tools,
+            input_guardrails=self.input_guardrails,
+            output_guardrails=self.output_guardrails,
+            on_guardrail_trigger=self.on_guardrail_trigger
         )
 
     async def setup(self):
@@ -153,3 +169,23 @@ class LLMAgent(Agent):
             List of tools
         """
         return self.tools
+    
+    def add_input_guardrail(self, guardrail: InputGuardrail):
+        """
+        Add an input guardrail to the agent.
+        
+        Args:
+            guardrail: The input guardrail to add
+        """
+        self.input_guardrails.append(guardrail)
+        self.llm_behaviour.add_input_guardrail(guardrail)
+    
+    def add_output_guardrail(self, guardrail: OutputGuardrail):
+        """
+        Add an output guardrail to the agent.
+        
+        Args:
+            guardrail: The output guardrail to add
+        """
+        self.output_guardrails.append(guardrail)
+        self.llm_behaviour.add_output_guardrail(guardrail)

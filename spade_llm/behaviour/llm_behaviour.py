@@ -16,6 +16,7 @@ from ..context import (
 from ..providers.base_provider import LLMProvider
 from ..tools import LLMTool
 from ..routing import RoutingFunction, RoutingResponse
+from ..guardrails import InputGuardrail, OutputGuardrail, GuardrailAction, GuardrailResult, apply_input_guardrails, apply_output_guardrails
 
 logger = logging.getLogger("spade_llm.behaviour")
 
@@ -40,6 +41,7 @@ class LLMBehaviour(CyclicBehaviour):
     - Send prompts to LLM providers
     - Handle tool invocation
     - Send responses back with optional conditional routing
+    - Apply input and output guardrails for content filtering
     
     The behaviour remains active throughout the agent's lifecycle,
     but individual conversations can be terminated based on conditions.
@@ -53,7 +55,10 @@ class LLMBehaviour(CyclicBehaviour):
                 termination_markers: Optional[List[str]] = None,
                 max_interactions_per_conversation: Optional[int] = None,
                 on_conversation_end: Optional[Callable[[str, str], None]] = None,
-                tools: Optional[List[LLMTool]] = None):
+                tools: Optional[List[LLMTool]] = None,
+                input_guardrails: Optional[List[InputGuardrail]] = None,
+                output_guardrails: Optional[List[OutputGuardrail]] = None,
+                on_guardrail_trigger: Optional[Callable[[GuardrailResult], None]] = None):
         """
         Initialize the LLM behaviour.
         
@@ -66,6 +71,9 @@ class LLMBehaviour(CyclicBehaviour):
             max_interactions_per_conversation: Maximum number of back-and-forth exchanges in a conversation
             on_conversation_end: Callback function when a conversation ends (receives conversation_id and reason)
             tools: Optional list of tools that can be used by the LLM
+            input_guardrails: List of guardrails to apply to incoming messages
+            output_guardrails: List of guardrails to apply to LLM responses
+            on_guardrail_trigger: Callback when a guardrail blocks/modifies content
         """
         super().__init__()
         self.provider = llm_provider
@@ -83,6 +91,11 @@ class LLMBehaviour(CyclicBehaviour):
         
         # Store tools at the behaviour level
         self.tools: List[LLMTool] = tools or []
+        
+        # Guardrails
+        self.input_guardrails: List[InputGuardrail] = input_guardrails or []
+        self.output_guardrails: List[OutputGuardrail] = output_guardrails or []
+        self.on_guardrail_trigger = on_guardrail_trigger
         
         # Track active conversations
         self._active_conversations: Dict[str, Dict[str, Any]] = {}
@@ -141,18 +154,34 @@ class LLMBehaviour(CyclicBehaviour):
                 ConversationState.MAX_INTERACTIONS_REACHED
             )
             
-            # Optional: Send a message indicating the conversation has reached its limit
+
             reply = msg.make_reply()
             reply.body = f"This conversation has reached the maximum limit of {self.max_interactions_per_conversation} interactions."
             await self.send(reply)
             return
         
-        # Update context with new message
-        self.context.add_message(msg, conversation_id)
+        # Apply input guardrails
+        processed_content = await apply_input_guardrails(
+            content=msg.body,
+            message=msg,
+            guardrails=self.input_guardrails,
+            on_trigger=self.on_guardrail_trigger,
+            send_reply=self.send
+        )
+        if processed_content is None:
+            # Message was blocked - the guardrail already sent a response
+            return
+        
+        # Create a copy of the message with processed content
+        processed_msg = Message(to=str(msg.to), sender=str(msg.sender), thread=msg.thread)
+        processed_msg.body = processed_content
+        
+        # Update context with processed message
+        self.context.add_message(processed_msg, conversation_id)
         
         # Process the conversation with the LLM
         try:
-            await self._process_message_with_llm(msg, conversation_id)
+            await self._process_message_with_llm(processed_msg, conversation_id)
         except Exception as e:
             logger.error(f"Error processing message: {e}")
             await self._end_conversation(conversation_id, ConversationState.ERROR)
@@ -238,6 +267,14 @@ class LLMBehaviour(CyclicBehaviour):
         
         if not final_response:
             final_response = "I'm sorry, I couldn't complete this request properly. Please try again or rephrase your query."
+        
+        # Apply output guardrails before sending
+        final_response = await apply_output_guardrails(
+            content=final_response,
+            original_message=msg,
+            guardrails=self.output_guardrails,
+            on_trigger=self.on_guardrail_trigger
+        )
         
         # Add assistant response to context before sending
         self.context.add_assistant_message(final_response, conversation_id)
@@ -377,3 +414,23 @@ class LLMBehaviour(CyclicBehaviour):
             List of tools available to this behaviour
         """
         return self.tools
+    
+    def add_input_guardrail(self, guardrail: InputGuardrail) -> None:
+        """
+        Add an input guardrail to this behaviour.
+        
+        Args:
+            guardrail: The input guardrail to add
+        """
+        self.input_guardrails.append(guardrail)
+        logger.info(f"Added input guardrail '{guardrail.name}' to behaviour")
+    
+    def add_output_guardrail(self, guardrail: OutputGuardrail) -> None:
+        """
+        Add an output guardrail to this behaviour.
+        
+        Args:
+            guardrail: The output guardrail to add
+        """
+        self.output_guardrails.append(guardrail)
+        logger.info(f"Added output guardrail '{guardrail.name}' to behaviour")
