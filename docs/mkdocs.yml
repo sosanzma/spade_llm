@@ -93,6 +93,7 @@ nav:
     - Architecture: guides/architecture.md
     - Providers: guides/providers.md
     - Tools System: guides/tools-system.md
+    - Guardrails: guides/guardrails.md
     - Conversations: guides/conversations.md
     - Routing: guides/routing.md
     - MCP: guides/mcp.md
@@ -102,6 +103,7 @@ nav:
     - Behaviour: reference/api/behaviour.md
     - Providers: reference/api/providers.md
     - Tools: reference/api/tools.md
+    - Guardrails: reference/api/guardrails.md  # ← NUEVO
     - Context: reference/api/context.md
     - Routing: reference/api/routing.md
   - Examples: reference/examples.md

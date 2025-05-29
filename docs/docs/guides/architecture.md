@@ -10,10 +10,13 @@ graph TB
     B --> C[ContextManager]
     B --> D[LLMProvider]
     B --> E[LLMTool]
+    B --> I[Guardrails System]
     
     D --> F[OpenAI/Ollama/etc]
     E --> G[Python Functions]
     E --> H[MCP Servers]
+    I --> J[Input Filters]
+    I --> K[Output Filters]
 ```
 
 ## **🏗️ Core Components**

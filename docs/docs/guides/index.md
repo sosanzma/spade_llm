@@ -8,6 +8,7 @@ Comprehensive guides for SPADE_LLM features and concepts.
 - **[Providers](providers/)** - LLM provider configuration and usage
 - **[Tools System](tools-system/)** - Function calling and tool integration
 - **[MCP](mcp/)** - Model context protocol integration
+- **[Guardrails](guardrails/)** - Content filtering and safety controls    # ← NUEVO
 - **[Conversations](conversations/)** - Context and conversation management
 - **[Routing](routing/)** - Message routing and multi-agent workflows
 

@@ -159,6 +159,57 @@ agent = LLMAgent(
 )
 ```
 
+## Step 6: Adding Safety with Guardrails
+
+Protect your agent with content filtering and safety controls:
+
+```python
+from spade_llm.guardrails import KeywordGuardrail, GuardrailAction
+
+# Create content filter
+safety_filter = KeywordGuardrail(
+    name="basic_safety",
+    blocked_keywords=["hack", "exploit", "malware", "virus"],
+    action=GuardrailAction.BLOCK,
+    blocked_message="I cannot help with potentially harmful activities."
+)
+
+# Profanity filter
+profanity_filter = KeywordGuardrail(
+    name="profanity_filter",
+    blocked_keywords=["damn", "hell", "stupid"],
+    action=GuardrailAction.MODIFY,
+    replacement="[FILTERED]"
+)
+
+# Add to your agent
+agent = LLMAgent(
+    jid="safe-assistant@jabber.at",
+    password="password",
+    provider=provider,
+    system_prompt="You are a helpful and safe assistant",
+    input_guardrails=[safety_filter, profanity_filter]  # Filter incoming messages
+)
+```
+
+**Guardrail monitoring**:
+```python
+def on_guardrail_trigger(result):
+    """Monitor guardrail activity."""
+    if result.action == GuardrailAction.BLOCK:
+        print(f"🚫 Blocked: {result.reason}")
+    elif result.action == GuardrailAction.MODIFY:
+        print(f"✏️ Modified: {result.reason}")
+
+agent = LLMAgent(
+    jid="monitored-assistant@jabber.at",
+    password="password",
+    provider=provider,
+    input_guardrails=[safety_filter],
+    on_guardrail_trigger=on_guardrail_trigger  # Monitor events
+)
+```
+
 ## Complete Example
 
 Here's a full-featured agent combining all concepts:

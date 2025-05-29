@@ -8,6 +8,7 @@ Complete API documentation for SPADE_LLM components.
 - **[Behaviour](api/behaviour/)** - LLMBehaviour implementation  
 - **[Providers](api/providers/)** - LLM provider interfaces
 - **[Tools](api/tools/)** - Tool system and LLMTool class
+- **[Guardrails](api/guardrails/)** - Content filtering and safety controls
 - **[Context](api/context/)** - Context and conversation management
 - **[Routing](api/routing/)** - Message routing system
 
