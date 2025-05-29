@@ -491,11 +491,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
+  <a href="#documentation-structure" class="md-nav__link">
     <span class="md-ellipsis">
-      Documentation
+      Documentation Structure
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Documentation Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting Started
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-guides" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core Guides
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -683,6 +716,8 @@
       
         
       
+        
+      
     
     
     
@@ -806,6 +841,29 @@
   
   
     <li class="md-nav__item">
+      <a href="guides/guardrails/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Guardrails
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="guides/conversations/" class="md-nav__link">
         
   
@@ -886,6 +944,8 @@
       
         
           
+        
+      
         
       
         
@@ -1029,6 +1089,29 @@
   
   <span class="md-ellipsis">
     Tools
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="reference/api/guardrails/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Guardrails
     
   </span>
   
@@ -1260,11 +1343,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
+  <a href="#documentation-structure" class="md-nav__link">
     <span class="md-ellipsis">
-      Documentation
+      Documentation Structure
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Documentation Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting Started
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-guides" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core Guides
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reference
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1304,6 +1420,7 @@
 <li><strong>Tool System</strong>: Function calling with async execution</li>
 <li><strong>Context Management</strong>: Multi-conversation support with automatic cleanup</li>
 <li><strong>Message Routing</strong>: Conditional routing based on LLM responses</li>
+<li><strong>Guardrails System</strong>: Content filtering and safety controls for input/output</li>
 <li><strong>MCP Integration</strong>: Model Context Protocol server support</li>
 <li><strong>Production Ready</strong>: Comprehensive error handling and logging</li>
 </ul>
@@ -1330,22 +1447,47 @@
 <a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    <span class="n">spade</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </code></pre></div>
 <h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>graph LR
+<pre class="mermaid"><code>graph TB
     A[LLMAgent] --&gt; B[LLMBehaviour]
     B --&gt; C[ContextManager]
     B --&gt; D[LLMProvider]
     B --&gt; E[LLMTool]
-    D --&gt; F[OpenAI/Ollama/etc]</code></pre>
-<h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
+    B --&gt; I[Guardrails System]
+
+    D --&gt; F[OpenAI/Ollama/etc]
+    E --&gt; G[Python Functions]
+    E --&gt; H[MCP Servers]
+    I --&gt; J[Input Filters]
+    I --&gt; K[Output Filters]</code></pre>
+<h2 id="documentation-structure">Documentation Structure<a class="headerlink" href="#documentation-structure" title="Permanent link">&para;</a></h2>
+<h3 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong><a href="getting-started/installation/">Installation</a></strong> - Setup and requirements</li>
 <li><strong><a href="getting-started/quickstart/">Quick Start</a></strong> - Basic usage examples</li>
+</ul>
+<h3 id="core-guides">Core Guides<a class="headerlink" href="#core-guides" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><a href="guides/architecture/">Architecture</a></strong> - SPADE_LLM general structure</li>
 <li><strong><a href="guides/providers/">Providers</a></strong> - LLM provider configuration</li>
-<li><strong><a href="guides/tools-system/">Tools</a></strong> - Tool system usage</li>
+<li><strong><a href="guides/tools-system/">Tools System</a></strong> - Function calling capabilities</li>
+<li><strong><a href="guides/guardrails/">Guardrails</a></strong> - Content filtering and safety controls</li>
+<li><strong><a href="guides/routing/">Message Routing</a></strong> - Conditional message routing</li>
+<li><strong><a href="guides/conversations/">Context Management</a></strong> - Conversation handling</li>
+</ul>
+<h3 id="reference">Reference<a class="headerlink" href="#reference" title="Permanent link">&para;</a></h3>
+<ul>
 <li><strong><a href="reference/">API Reference</a></strong> - Complete API documentation</li>
+<li><strong><a href="reference/examples/">Examples</a></strong> - Working code examples</li>
 </ul>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
-<p>See the <a href="https://github.com/sosanzma/spade_llm/tree/main/examples">examples</a> directory for complete working examples including chat agents, tool usage, and multi-agent systems.</p>
+<p>Explore the <a href="https://github.com/sosanzma/spade_llm/tree/main/examples">examples directory</a> for complete working examples:</p>
+<ul>
+<li><strong><code>multi_provider_chat_example.py</code></strong> - Chat with different LLM providers</li>
+<li><strong><code>ollama_with_tools_example.py</code></strong> - Local models with tool calling</li>
+<li><strong><code>guardrails_example.py</code></strong> - Content filtering and safety controls</li>
+<li><strong><code>langchain_tools_example.py</code></strong> - LangChain tool integration</li>
+<li><strong><code>valencia_multiagent_trip_planner.py</code></strong> - Multi-agent workflow</li>
+</ul>
 
 
 

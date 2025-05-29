@@ -600,6 +600,8 @@
       
         
       
+        
+      
     
     
     
@@ -871,6 +873,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../guardrails/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Guardrails
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../conversations/" class="md-nav__link">
         
   
@@ -951,6 +976,8 @@
       
         
           
+        
+      
         
       
         
@@ -1094,6 +1121,29 @@
   
   <span class="md-ellipsis">
     Tools
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/api/guardrails/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Guardrails
     
   </span>
   
@@ -1429,10 +1479,13 @@
     B --&gt; C[ContextManager]
     B --&gt; D[LLMProvider]
     B --&gt; E[LLMTool]
+    B --&gt; I[Guardrails System]
 
     D --&gt; F[OpenAI/Ollama/etc]
     E --&gt; G[Python Functions]
-    E --&gt; H[MCP Servers]</code></pre>
+    E --&gt; H[MCP Servers]
+    I --&gt; J[Input Filters]
+    I --&gt; K[Output Filters]</code></pre>
 <h2 id="core-components"><strong>🏗️ Core Components</strong><a class="headerlink" href="#core-components" title="Permanent link">&para;</a></h2>
 <h3 id="llmagent"><strong>🤖 LLMAgent</strong><a class="headerlink" href="#llmagent" title="Permanent link">&para;</a></h3>
 <p>The <strong>main agent class</strong> that extends SPADE's <code>Agent</code> with LLM capabilities:</p>
