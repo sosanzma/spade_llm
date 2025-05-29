@@ -8,6 +8,7 @@ Extension for [SPADE](https://github.com/javipalanca/spade) that integrates Larg
 - **Tool System**: Function calling with async execution
 - **Context Management**: Multi-conversation support with automatic cleanup
 - **Message Routing**: Conditional routing based on LLM responses
+- **Guardrails System**: Content filtering and safety controls for input/output
 - **MCP Integration**: Model Context Protocol server support
 - **Production Ready**: Comprehensive error handling and logging
 
@@ -84,6 +85,27 @@ agent = LLMAgent(
 )
 ```
 
+### Content Safety with Guardrails
+
+```python
+from spade_llm.guardrails import KeywordGuardrail, GuardrailAction
+
+# Block harmful content
+safety_filter = KeywordGuardrail(
+    name="safety_filter",
+    blocked_keywords=["hack", "exploit", "malware"],
+    action=GuardrailAction.BLOCK,
+    blocked_message="I cannot help with potentially harmful activities."
+)
+
+agent = LLMAgent(
+    jid="assistant@example.com",
+    password="password",
+    provider=provider,
+    input_guardrails=[safety_filter]  # Filter incoming messages
+)
+```
+
 ### Message Routing
 
 ```python
@@ -124,7 +146,9 @@ graph LR
     B --> C[ContextManager]
     B --> D[LLMProvider]
     B --> E[LLMTool]
+    B --> G[Guardrails]
     D --> F[OpenAI/Ollama/etc]
+    G --> H[Input/Output Filtering]
 ```
 
 ## Documentation
@@ -133,6 +157,7 @@ graph LR
 - **[Quick Start](https://sosanzma.github.io/spade_llm/getting-started/quickstart/)** - Basic usage examples
 - **[Providers](https://sosanzma.github.io/spade_llm/guides/providers/)** - LLM provider configuration
 - **[Tools](https://sosanzma.github.io/spade_llm/guides/tools-system/)** - Function calling system
+- **[Guardrails](https://sosanzma.github.io/spade_llm/guides/guardrails/)** - Content filtering and safety
 - **[API Reference](https://sosanzma.github.io/spade_llm/reference/)** - Complete API documentation
 
 ## Examples
@@ -142,6 +167,7 @@ The `/examples` directory contains complete working examples:
 - `multi_provider_chat_example.py` - Chat with different LLM providers
 - `ollama_with_tools_example.py` - Local models with tool calling
 - `langchain_tools_example.py` - LangChain tool integration
+- `guardrails_example.py` - Content filtering and safety controls
 - `valencia_multiagent_trip_planner.py` - Multi-agent workflow
 
 ## Requirements
