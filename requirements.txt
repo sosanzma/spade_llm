@@ -14,4 +14,4 @@ slixmpp==1.8.5
 langchain_community>=0.3.2
 
 # MCP support
-mcp>=1.2.0
+mcp>=1.8.0
