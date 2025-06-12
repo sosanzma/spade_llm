@@ -11,10 +11,18 @@ from anyio.streams.memory import MemoryObjectReceiveStream, MemoryObjectSendStre
 from mcp import ClientSession
 from mcp.client.sse import sse_client
 from mcp.client.stdio import StdioServerParameters, stdio_client
+
+# Try to import streamable_http, but don't fail if it's not available
+try:
+    from mcp.client.streamable_http import streamablehttp_client
+    HAS_STREAMABLE_HTTP = True
+except ImportError:
+    HAS_STREAMABLE_HTTP = False
+    
 from mcp.types import JSONRPCMessage
 
 import logging
-from .config import MCPServerConfig, SseServerConfig, StdioServerConfig
+from .config import MCPServerConfig, SseServerConfig, StdioServerConfig, StreamableHttpServerConfig
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +79,26 @@ async def create_mcp_session(
                     sse_read_timeout=config.sse_read_timeout,
             ) as (read, write):
                 async with ClientSession(read_stream=read, write_stream=write) as session:
+                    yield session
+        elif isinstance(config, StreamableHttpServerConfig):
+            if not HAS_STREAMABLE_HTTP:
+                raise RuntimeError(
+                    "Streamable HTTP transport is not available in the installed MCP version. "
+                    "Please upgrade MCP to use this transport: pip install --upgrade mcp"
+                )
+            async with streamablehttp_client(
+                    url=config.url,
+                    headers=config.headers,
+                    timeout=timedelta(seconds=config.timeout),
+                    sse_read_timeout=timedelta(seconds=config.sse_read_timeout),
+                    terminate_on_close=config.terminate_on_close,
+            ) as (read, write, session_id_callback):
+                # TODO: Handle session_id_callback if needed in the future
+                async with ClientSession(
+                        read_stream=read,
+                        write_stream=write,
+                        read_timeout_seconds=timedelta(seconds=config.sse_read_timeout),
+                ) as session:
                     yield session
         else:
             raise ValueError(f"Unsupported server configuration type: {type(config)}")
