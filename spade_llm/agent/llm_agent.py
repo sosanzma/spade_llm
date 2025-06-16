@@ -73,8 +73,13 @@ class LLMAgent(Agent):
         self.provider = provider
         self.reply_to = reply_to
         self.routing_function = routing_function
-        self.tools: List[LLMTool] = tools or []
+        self.tools: List[LLMTool] = []
         self.mcp_servers = mcp_servers or []
+        
+        # Process initial tools and bind HumanInTheLoopTools to this agent
+        if tools:
+            for tool in tools:
+                self._register_tool(tool)
 
         self.termination_markers = termination_markers or ["<TASK_COMPLETE>", "<END>", "<DONE>"]
         self.max_interactions_per_conversation = max_interactions_per_conversation
@@ -108,8 +113,9 @@ class LLMAgent(Agent):
         if self.mcp_servers:
             await self._setup_mcp_tools()
 
-        # Add the LLM behaviour that will process messages
+        # Add the LLM behaviour with template for LLM-targeted messages only
         template = Template()
+        template.set_metadata("message_type", "llm")
         self.add_behaviour(self.llm_behaviour, template)
 
     async def _setup_mcp_tools(self):
@@ -126,6 +132,19 @@ class LLMAgent(Agent):
         except Exception as e:
             logger.error(f"Error setting up MCP tools: {e}")
 
+    def _register_tool(self, tool: LLMTool):
+        """
+        Internal method to register a tool and handle special setup.
+        
+        Args:
+            tool: The tool to register
+        """
+        # Check if it's a HumanInTheLoopTool and bind it to this agent
+        if hasattr(tool, 'set_agent') and callable(getattr(tool, 'set_agent')):
+            tool.set_agent(self)
+            
+        self.tools.append(tool)
+
     def add_tool(self, tool: LLMTool):
         """
         Add a tool to the agent.
@@ -133,7 +152,7 @@ class LLMAgent(Agent):
         Args:
             tool: The tool to add
         """
-        self.tools.append(tool)
+        self._register_tool(tool)
         # Also register with the behaviour
         self.llm_behaviour.register_tool(tool)
         

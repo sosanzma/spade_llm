@@ -335,6 +335,9 @@ class LLMBehaviour(CyclicBehaviour):
             reply.body = transform(response) if transform else response
             reply.thread = conversation_id
             
+            # Mark as LLM message for proper template filtering
+            reply.set_metadata("message_type", "llm")
+            
             # Add any metadata
             for key, value in metadata.items():
                 reply.set_metadata(key, value)
