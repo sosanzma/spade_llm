@@ -74,6 +74,33 @@ def create_user_message(content: str, name: Optional[str] = None) -> UserMessage
     return message
 
 
+def _sanitize_jid_for_name(jid: str) -> str:
+    """
+    Sanitize an XMPP JID for use as an OpenAI message name field.
+    
+    OpenAI name fields cannot contain: whitespace, <, |, \, /, >
+    This function replaces these characters with underscores and removes the resource
+    part of the JID if present.
+    
+    Args:
+        jid: The XMPP JID to sanitize
+        
+    Returns:
+        Sanitized name suitable for OpenAI message name field
+    """
+    # Remove resource part (everything after /) if present
+    if "/" in jid:
+        jid = jid.split("/")[0]
+    
+    # Replace forbidden characters with underscores
+    forbidden_chars = [" ", "\t", "\n", "\r", "<", "|", "\\", "/", ">"]
+    sanitized = jid
+    for char in forbidden_chars:
+        sanitized = sanitized.replace(char, "_")
+    
+    return sanitized
+
+
 def spade_message_to_user_message(message: Message) -> UserMessage:
     """Convert a SPADE message to a UserMessage format."""
     user_message = {
@@ -83,7 +110,7 @@ def spade_message_to_user_message(message: Message) -> UserMessage:
     
     # Add name if we have sender information
     if message.sender:
-        user_message["name"] = str(message.sender)
+        user_message["name"] = _sanitize_jid_for_name(str(message.sender))
         
     return user_message
 
