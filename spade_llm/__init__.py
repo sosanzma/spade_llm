@@ -2,9 +2,9 @@
 
 from .version import __version__
 
-from .behaviour import LLMBehaviour
+from .behaviour import LLMBehaviour, HumanInteractionBehaviour
 from .context import ContextManager
-from .tools import LLMTool
+from .tools import LLMTool, HumanInTheLoopTool
 from .agent import LLMAgent, ChatAgent
 from .providers import LLMProvider
 from .utils import load_env_vars
@@ -17,8 +17,10 @@ from .guardrails import (
 
 __all__ = [
     "LLMBehaviour", 
+    "HumanInteractionBehaviour",
     "ContextManager", 
     "LLMTool", 
+    "HumanInTheLoopTool",
     "LLMAgent",
     "ChatAgent", 
     "LLMProvider",
