@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPADE LLM - Human Expert Interface</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Human Expert Interface</h1>
+            <div class="connection-status" id="connectionStatus">
+                <span class="status-indicator" id="statusIndicator"></span>
+                <span id="statusText">Disconnected</span>
+            </div>
+        </header>
+
+        <div class="login-form" id="loginForm">
+            <h2>Connect to XMPP Server</h2>
+            <form id="connectForm">
+                <div class="form-group">
+                    <label for="service">WebSocket Service URL:</label>
+                    <input type="text" id="service" name="service" 
+                           placeholder="ws://sosanzma:7070/ws/" 
+                           value="ws://sosanzma:7070/ws/" required>
+                </div>
+                <div class="form-group">
+                    <label for="jid">Expert JID:</label>
+                    <input type="text" id="jid" name="jid" 
+                           placeholder="expert@xmpp.server" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Connect</button>
+            </form>
+        </div>
+
+        <div class="main-interface" id="mainInterface" style="display: none;">
+            <div class="filters">
+                <label>
+                    <input type="checkbox" id="showAnswered" checked> 
+                    Show answered queries
+                </label>
+                <button class="btn btn-secondary" id="clearAnswered">
+                    Clear Answered
+                </button>
+            </div>
+
+            <div class="queries-container">
+                <h2>Incoming Queries</h2>
+                <div id="queriesList" class="queries-list">
+                    <p class="no-queries">No queries yet. Waiting for agents to ask questions...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="debug-section" id="debugSection" style="display: none;">
+            <h3>Debug Log</h3>
+            <div id="debugLog" class="debug-log"></div>
+        </div>
+    </div>
+
+    <!-- Query Template -->
+    <template id="queryTemplate">
+        <div class="query-card" data-query-id="">
+            <div class="query-header">
+                <span class="query-id"></span>
+                <span class="query-from"></span>
+                <span class="query-time"></span>
+                <span class="query-status"></span>
+            </div>
+            <div class="query-content">
+                <div class="query-question"></div>
+                <div class="query-context"></div>
+            </div>
+            <div class="query-response">
+                <textarea class="response-input" placeholder="Type your response here..." rows="3"></textarea>
+                <button class="btn btn-primary send-response">Send Response</button>
+            </div>
+            <div class="query-answered" style="display: none;">
+                <p class="answered-text">✓ Answered</p>
+                <div class="answered-response"></div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Load XMPP.js from CDN -->
+    <script src="https://unpkg.com/@xmpp/client@0.13.0/dist/xmpp.min.js" crossorigin onerror="console.error('Failed to load XMPP from unpkg, trying jsdelivr'); loadXMPPFallback()"></script>
+    <script>
+        function loadXMPPFallback() {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/@xmpp/client@0.13.0/dist/xmpp.min.js';
+            script.onload = () => console.log('XMPP loaded from jsdelivr fallback');
+            script.onerror = () => console.error('All XMPP CDN sources failed');
+            document.head.appendChild(script);
+        }
+    </script>
+    <script>
+        // Verificar que XMPP se cargó
+        console.log('XMPP library status:', window.XMPP ? 'loaded' : 'not loaded');
+        if (window.XMPP) {
+            console.log('XMPP client function:', typeof window.XMPP.client);
+        }
+    </script>
+    <!-- Load our application -->
+    <script src="expert-chat.js"></script>
+</body>
+</html>
