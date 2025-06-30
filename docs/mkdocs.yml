@@ -93,6 +93,7 @@ nav:
     - Architecture: guides/architecture.md
     - Providers: guides/providers.md
     - Tools System: guides/tools-system.md
+    - Human-in-the-Loop: guides/human-in-the-loop.md
     - Guardrails: guides/guardrails.md
     - Conversations: guides/conversations.md
     - Routing: guides/routing.md
@@ -103,7 +104,8 @@ nav:
     - Behaviour: reference/api/behaviour.md
     - Providers: reference/api/providers.md
     - Tools: reference/api/tools.md
-    - Guardrails: reference/api/guardrails.md  # ← NUEVO
+    - Human Interface: reference/api/human-interface.md
+    - Guardrails: reference/api/guardrails.md
     - Context: reference/api/context.md
     - Routing: reference/api/routing.md
   - Examples: reference/examples.md

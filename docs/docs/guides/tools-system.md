@@ -171,6 +171,65 @@ stats_tool = LLMTool(
 )
 ```
 
+### **🧠 Human Expert Consultation**
+Connect LLM agents with human experts for real-time guidance and decision support.
+
+```python
+from spade_llm.tools import HumanInTheLoopTool
+
+# Create human expert consultation tool
+human_expert = HumanInTheLoopTool(
+    human_expert_jid="expert@company.com",
+    timeout=300.0,  # 5 minutes
+    name="ask_human_expert",
+    description="""Ask a human expert for help when you need:
+    - Current information not in your training data
+    - Human judgment or subjective opinions
+    - Company-specific policies or procedures
+    - Clarification on ambiguous requests"""
+)
+
+# Use with agent
+agent = LLMAgent(
+    jid="assistant@company.com",
+    password="password",
+    provider=provider,
+    tools=[human_expert],
+    system_prompt="""You are an AI assistant with access to human experts.
+    When you encounter questions requiring human judgment, current information,
+    or company-specific knowledge, consult the human expert."""
+)
+```
+
+**Key Features:**
+
+- **⚡ Real-time consultation** via XMPP messaging
+- **🌐 Web interface** for human experts to respond
+- **🔄 Message correlation** using XMPP thread IDs
+- **⏱️ Configurable timeouts** with graceful error handling
+- **🔒 Template-based filtering** prevents message conflicts
+
+**When the LLM uses this tool:**
+
+1. **Question sent** to human expert via XMPP
+2. **Expert receives** notification in web interface  
+3. **Human provides** response through browser
+4. **Response returns** to LLM via XMPP
+5. **Agent continues** with human-informed answer
+
+**Example consultation flow:**
+```
+User: "What's our company policy on remote work?"
+Agent: [Uses ask_human_expert tool]
+→ Human Expert: "We allow 3 days remote per week with manager approval"
+Agent: "According to our HR expert, our policy allows up to 3 days 
+       remote work per week with manager approval."
+```
+
+!!! tip "Setup Required"
+    Human-in-the-loop requires XMPP server with WebSocket support and web interface.
+    See the working example in `examples/human_in_the_loop_example.py` for complete setup instructions.
+
 ## **LangChain Integration**
 
 _Seamlessly use existing LangChain tools_ with SPADE_LLM:

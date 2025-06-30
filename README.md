@@ -10,6 +10,7 @@ Extension for [SPADE](https://github.com/javipalanca/spade) that integrates Larg
 - **Message Routing**: Conditional routing based on LLM responses
 - **Guardrails System**: Content filtering and safety controls for input/output
 - **MCP Integration**: Model Context Protocol server support
+- **Human-in-the-Loop**: Web interface for human expert consultation
 - **Production Ready**: Comprehensive error handling and logging
 
 ## Quick Start
@@ -138,6 +139,29 @@ await chat_agent.start()
 await chat_agent.run_interactive()  # Start interactive chat
 ```
 
+### Human-in-the-Loop
+
+```python
+from spade_llm import HumanInTheLoopTool
+
+# Create tool for human consultation
+human_tool = HumanInTheLoopTool(
+    human_expert_jid="expert@example.com",
+    timeout=300.0  # 5 minutes
+)
+
+agent = LLMAgent(
+    jid="assistant@example.com",
+    password="password",
+    provider=provider,
+    tools=[human_tool]  # Pass tools in constructor
+)
+
+# Start web interface for human expert
+# python -m spade_llm.human_interface.web_server
+# Open http://localhost:8080 and connect as expert
+```
+
 ## Architecture
 
 ```mermaid
@@ -168,6 +192,7 @@ The `/examples` directory contains complete working examples:
 - `ollama_with_tools_example.py` - Local models with tool calling
 - `langchain_tools_example.py` - LangChain tool integration
 - `guardrails_example.py` - Content filtering and safety controls
+- `human_in_the_loop_example.py` - Human expert consultation via web interface
 - `valencia_multiagent_trip_planner.py` - Multi-agent workflow
 
 ## Requirements

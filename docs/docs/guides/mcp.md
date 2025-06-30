@@ -33,6 +33,11 @@ server_config = StdioServerConfig(
 
 ### SSE Servers
 
+!!! warning "SSE Transport Deprecated"
+    The SSE transport is deprecated in favor of the new Streamable HTTP transport. 
+    While SSE is still supported for backward compatibility, new implementations 
+    should use `StreamableHttpServerConfig` instead of `SseServerConfig`.
+
 Communicate via Server-Sent Events over HTTP:
 
 ```python
@@ -44,6 +49,30 @@ server_config = SseServerConfig(
     cache_tools=True
 )
 ```
+
+### Streamable HTTP Servers
+
+Communicate via the modern Streamable HTTP protocol (recommended for new implementations):
+
+```python
+from spade_llm.mcp import StreamableHttpServerConfig
+
+server_config = StreamableHttpServerConfig(
+    name="ModernWebService",
+    url="http://localhost:8080/mcp",
+    headers={"Authorization": "Bearer token"},
+    timeout=30.0,  # Connection timeout in seconds
+    sse_read_timeout=300.0,  # Read timeout for SSE stream in seconds
+    terminate_on_close=True,  # Terminate connection on close
+    cache_tools=True
+)
+```
+
+The Streamable HTTP transport provides:
+- Improved session management and stability
+- Better handling of long-running connections
+- Enhanced error recovery mechanisms
+- Full compatibility with the MCP specification
 
 ## Basic Usage
 
@@ -95,9 +124,12 @@ mcp_servers = [
         args=["weather_mcp_server.js"],
         env={"API_KEY": "your-weather-api-key"}
     ),
-    SseServerConfig(
-        name="CloudStorage",
-        url="http://localhost:9000/mcp"
+    StreamableHttpServerConfig(
+        name="AnalyticsService",
+        url="https://analytics.example.com/mcp",
+        headers={"X-API-Key": "your-api-key"},
+        terminate_on_close=True,
+        cache_tools=True
     )
 ]
 
@@ -317,7 +349,7 @@ stdio_config = StdioServerConfig(
     working_directory="/path/to/server"
 )
 
-# SSE Server with authentication
+# SSE Server with authentication (deprecated - use Streamable HTTP instead)
 sse_config = SseServerConfig(
     name="WebService",
     url="https://api.example.com/mcp",
@@ -325,6 +357,20 @@ sse_config = SseServerConfig(
         "Authorization": "Bearer your-token",
         "X-API-Version": "v1"
     },
+    cache_tools=True
+)
+
+# Streamable HTTP Server with advanced options (recommended)
+streamable_config = StreamableHttpServerConfig(
+    name="ModernService",
+    url="https://api.example.com/mcp",
+    headers={
+        "Authorization": "Bearer your-token",
+        "X-API-Version": "v2"
+    },
+    timeout=30.0,  # Connection timeout in seconds
+    sse_read_timeout=300.0,  # Read timeout for SSE stream (5 minutes)
+    terminate_on_close=True,  # Cleanly terminate connection on close
     cache_tools=True
 )
 ```
