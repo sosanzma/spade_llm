@@ -113,7 +113,7 @@ class LLMAgent(Agent):
         if self.mcp_servers:
             await self._setup_mcp_tools()
 
-        # Add the LLM behaviour with template for LLM-targeted messages only
+        # LLM-targeted messages only
         template = Template()
         template.set_metadata("message_type", "llm")
         self.add_behaviour(self.llm_behaviour, template)

@@ -102,7 +102,6 @@ class HumanInTheLoopTool(LLMTool):
         
         logger.info(f"Asking human expert: {question[:100]}...")
         
-        # Create a new behaviour instance for this specific interaction
         interaction = HumanInteractionBehaviour(
             human_jid=self.human_jid,
             question=question,
@@ -110,7 +109,6 @@ class HumanInTheLoopTool(LLMTool):
             timeout=self.timeout
         )
         
-        # Add the behaviour to the agent
         self._agent.add_behaviour(interaction)
         
         try:
