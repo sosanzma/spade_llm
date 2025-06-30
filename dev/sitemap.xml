@@ -45,6 +45,10 @@
          <lastmod>2025-06-30</lastmod>
     </url>
     <url>
+         <loc>https://sosanzma.github.io/spade_llm/guides/human-in-the-loop/</loc>
+         <lastmod>2025-06-30</lastmod>
+    </url>
+    <url>
          <loc>https://sosanzma.github.io/spade_llm/guides/mcp/</loc>
          <lastmod>2025-06-30</lastmod>
     </url>
@@ -86,6 +90,10 @@
     </url>
     <url>
          <loc>https://sosanzma.github.io/spade_llm/reference/api/guardrails/</loc>
+         <lastmod>2025-06-30</lastmod>
+    </url>
+    <url>
+         <loc>https://sosanzma.github.io/spade_llm/reference/api/human-interface/</loc>
          <lastmod>2025-06-30</lastmod>
     </url>
     <url>
