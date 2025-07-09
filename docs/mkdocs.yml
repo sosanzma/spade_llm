@@ -93,9 +93,11 @@ nav:
     - Architecture: guides/architecture.md
     - Providers: guides/providers.md
     - Tools System: guides/tools-system.md
+    - Context Management: guides/context-management.md
+    - Memory System: guides/memory.md
+    - Conversations: guides/conversations.md
     - Human-in-the-Loop: guides/human-in-the-loop.md
     - Guardrails: guides/guardrails.md
-    - Conversations: guides/conversations.md
     - Routing: guides/routing.md
     - MCP: guides/mcp.md
   - API Reference:
@@ -104,9 +106,10 @@ nav:
     - Behaviour: reference/api/behaviour.md
     - Providers: reference/api/providers.md
     - Tools: reference/api/tools.md
+    - Context: reference/api/context.md
+    - Memory: reference/api/memory.md
     - Human Interface: reference/api/human-interface.md
     - Guardrails: reference/api/guardrails.md
-    - Context: reference/api/context.md
     - Routing: reference/api/routing.md
   - Examples: reference/examples.md
   - Contributing:

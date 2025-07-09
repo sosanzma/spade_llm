@@ -1,6 +1,6 @@
 # Context API
 
-API reference for conversation context management.
+API reference for conversation context management and strategies.
 
 ## ContextManager
 
@@ -193,6 +193,93 @@ context.add_assistant_message(
 # Get formatted prompt
 prompt = context.get_prompt("coding_session")
 # Use with LLM provider
+```
+
+## Context Management Strategies
+
+### ContextManagement (Abstract Base)
+
+Base class for all context management strategies.
+
+```python
+from spade_llm.context.management import ContextManagement
+```
+
+#### apply_context_strategy()
+
+```python
+def apply_context_strategy(
+    self, 
+    messages: List[ContextMessage], 
+    system_prompt: Optional[str] = None
+) -> List[ContextMessage]
+```
+
+Apply the context management strategy to messages.
+
+#### get_stats()
+
+```python
+def get_stats(self, total_messages: int) -> Dict[str, Any]
+```
+
+Get statistics about context management.
+
+### NoContextManagement
+
+Preserves all messages without any filtering.
+
+```python
+from spade_llm.context import NoContextManagement
+
+context = NoContextManagement()
+```
+
+### WindowSizeContext
+
+Basic sliding window context management.
+
+```python
+from spade_llm.context import WindowSizeContext
+
+context = WindowSizeContext(max_messages=20)
+```
+
+**Parameters:**
+- `max_messages` (int): Maximum number of messages to keep
+
+### SmartWindowSizeContext
+
+Advanced context management with intelligent message selection.
+
+```python
+from spade_llm.context import SmartWindowSizeContext
+
+context = SmartWindowSizeContext(
+    max_messages=20,
+    preserve_initial=3,
+    prioritize_tools=True
+)
+```
+
+**Parameters:**
+- `max_messages` (int): Maximum number of messages to keep
+- `preserve_initial` (int, optional): Number of initial messages to always preserve
+- `prioritize_tools` (bool, optional): Whether to prioritize tool result messages
+
+**Example:**
+
+```python
+# Smart context with tool prioritization
+smart_context = SmartWindowSizeContext(
+    max_messages=25,
+    preserve_initial=3,
+    prioritize_tools=True
+)
+
+# Get statistics
+stats = smart_context.get_stats(total_messages=50)
+# Returns: {"strategy": "smart_window_size", "max_messages": 25, ...}
 ```
 
 ## Message Types

@@ -135,6 +135,8 @@ agent = LLMAgent(
 
 ## Context Management
 
+SPADE_LLM provides **sophisticated context management** to control conversation memory and optimize performance. See the **[Context Management Guide](context-management.md)** for detailed information.
+
 ### Accessing Conversation State
 
 **Programmatic access** to conversation information:
@@ -153,18 +155,18 @@ max_interactions = state.get("max_interactions", 10)
 success = agent.reset_conversation(conversation_id)
 ```
 
-### Custom Context Manager
+### Context Strategy Configuration
 
-**Advanced context control** for specialized use cases:
+**Configure different context management strategies**:
 
 ```python
-from spade_llm.context import ContextManager
+from spade_llm.context import SmartWindowSizeContext
 
-# Custom context with specific settings
-context = ContextManager(
-    system_prompt="You are a specialized coding assistant",
-    max_tokens=4000,
-    conversation_memory_limit=20  # Keep last 20 exchanges
+# Intelligent context management
+smart_context = SmartWindowSizeContext(
+    max_messages=20,
+    preserve_initial=3,
+    prioritize_tools=True
 )
 
 # Use with agent
@@ -172,7 +174,7 @@ agent = LLMAgent(
     jid="coder@example.com",
     password="password",
     provider=provider,
-    context_manager=context
+    context_management=smart_context
 )
 ```
 
@@ -228,6 +230,8 @@ agent = LLMAgent(
 
 ## Next Steps
 
+- **[Context Management](context-management.md)** - Advanced context control strategies
+- **[Memory System](memory.md)** - Agent memory and learning capabilities
 - **[Tools System](tools-system.md)** - Add capabilities to conversations
 - **[Message Routing](routing.md)** - Control conversation flow between agents
 - **[Architecture](architecture.md)** - Understanding conversation management internals
