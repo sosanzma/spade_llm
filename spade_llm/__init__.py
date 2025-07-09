@@ -9,6 +9,7 @@ from .agent import LLMAgent, ChatAgent
 from .providers import LLMProvider
 from .utils import load_env_vars
 from .routing import RoutingFunction, RoutingResponse
+from .memory import AgentInteractionMemory, AgentMemoryTool
 from .guardrails import (
     Guardrail, GuardrailAction, GuardrailResult,
     InputGuardrail, OutputGuardrail, CompositeGuardrail,
@@ -27,6 +28,9 @@ __all__ = [
     "load_env_vars",
     "RoutingFunction",
     "RoutingResponse",
+    # Memory
+    "AgentInteractionMemory",
+    "AgentMemoryTool",
     # Guardrails
     "Guardrail",
     "GuardrailAction", 

@@ -58,7 +58,8 @@ class LLMBehaviour(CyclicBehaviour):
                 tools: Optional[List[LLMTool]] = None,
                 input_guardrails: Optional[List[InputGuardrail]] = None,
                 output_guardrails: Optional[List[OutputGuardrail]] = None,
-                on_guardrail_trigger: Optional[Callable[[GuardrailResult], None]] = None):
+                on_guardrail_trigger: Optional[Callable[[GuardrailResult], None]] = None,
+                interaction_memory=None):
         """
         Initialize the LLM behaviour.
         
@@ -74,6 +75,7 @@ class LLMBehaviour(CyclicBehaviour):
             input_guardrails: List of guardrails to apply to incoming messages
             output_guardrails: List of guardrails to apply to LLM responses
             on_guardrail_trigger: Callback when a guardrail blocks/modifies content
+            interaction_memory: Optional AgentInteractionMemory instance for agent-to-agent memory
         """
         super().__init__()
         self.provider = llm_provider
@@ -96,6 +98,9 @@ class LLMBehaviour(CyclicBehaviour):
         self.input_guardrails: List[InputGuardrail] = input_guardrails or []
         self.output_guardrails: List[OutputGuardrail] = output_guardrails or []
         self.on_guardrail_trigger = on_guardrail_trigger
+        
+        # Interaction memory
+        self.interaction_memory = interaction_memory
         
         # Track active conversations
         self._active_conversations: Dict[str, Dict[str, Any]] = {}
@@ -179,6 +184,9 @@ class LLMBehaviour(CyclicBehaviour):
         # Update context with processed message
         self.context.add_message(processed_msg, conversation_id)
         
+        # Auto-inject interaction memory if available
+        await self._inject_interaction_memory(conversation_id)
+        
         # Process the conversation with the LLM
         try:
             await self._process_message_with_llm(processed_msg, conversation_id)
@@ -204,13 +212,16 @@ class LLMBehaviour(CyclicBehaviour):
         current_iteration = 0
         
         try:
+            # Prepare tools with conversation context
+            prepared_tools = self._prepare_tools_with_conversation_context(conversation_id)
+            
             # Tool processing loop until a final response is obtained
             while final_response is None and current_iteration < max_tool_iterations:
                 current_iteration += 1
                 logger.info(f"Tool processing iteration {current_iteration}/{max_tool_iterations}")
                 
-                # Pass tools to provider for this specific call
-                llm_response = await self.provider.get_llm_response(self.context, self.tools)
+                # Pass prepared tools to provider for this specific call
+                llm_response = await self.provider.get_llm_response(self.context, prepared_tools)
                 
                 tool_calls = llm_response.get('tool_calls', [])
                 text_response = llm_response.get('text')
@@ -236,8 +247,8 @@ class LLMBehaviour(CyclicBehaviour):
                     
                     logger.info(f"Processing tool call: {tool_name} with args: {tool_args}")
                     
-                    # Find the tool by name in this behaviour's tools
-                    tool = next((t for t in self.tools if t.name == tool_name), None)
+                    # Find the tool by name in the prepared tools
+                    tool = next((t for t in prepared_tools if t.name == tool_name), None)
                     
                     if tool:
                         try:
@@ -258,7 +269,7 @@ class LLMBehaviour(CyclicBehaviour):
             # Handle case where max iterations was reached
             if final_response is None and current_iteration >= max_tool_iterations:
                 logger.warning(f"Reached maximum tool iterations ({max_tool_iterations}), forcing final response")
-                final_response = (await self.provider.get_llm_response(self.context, self.tools)).get('text')
+                final_response = (await self.provider.get_llm_response(self.context, prepared_tools)).get('text')
                 
         except Exception as e:
             logger.error(f"Error in tool processing loop: {e}")
@@ -437,3 +448,61 @@ class LLMBehaviour(CyclicBehaviour):
         """
         self.output_guardrails.append(guardrail)
         logger.info(f"Added output guardrail '{guardrail.name}' to behaviour")
+    
+    async def _inject_interaction_memory(self, conversation_id: str):
+        """
+        Inject relevant interaction memory into the context automatically.
+        
+        This method checks if we have previous interaction memory for this conversation
+        and adds it to the context as a system message so the agent is aware of 
+        previous learned information without needing to explicitly recall it.
+        
+        Args:
+            conversation_id: The conversation ID to check for memory
+        """
+        if not self.interaction_memory:
+            return
+        
+        # Get memory summary for this conversation
+        memory_summary = self.interaction_memory.get_context_summary(conversation_id)
+        
+        if memory_summary:
+            # Check if we've already injected memory for this conversation
+            # to avoid duplicating it on every message
+            conversation_history = self.context.get_conversation_history(conversation_id)
+            
+            # Check if any existing message contains this memory summary
+            memory_already_injected = any(
+                msg.get("role") == "system" and "Previous interaction notes:" in msg.get("content", "")
+                for msg in conversation_history
+            )
+            
+            if not memory_already_injected:
+                # Inject memory as a system message
+                from ..context._types import create_system_message
+                memory_message = create_system_message(memory_summary)
+                self.context.add_message_dict(memory_message, conversation_id)
+                logger.info(f"Injected interaction memory for conversation {conversation_id}")
+    
+    def _prepare_tools_with_conversation_context(self, conversation_id: str):
+        """
+        Prepare tools with conversation context for execution.
+        
+        This ensures that memory tools have access to the current conversation_id
+        so they can store information correctly.
+        
+        Args:
+            conversation_id: The current conversation ID
+            
+        Returns:
+            List of tools prepared with conversation context
+        """
+        prepared_tools = []
+        
+        for tool in self.tools:
+            # Check if this is a memory tool that needs conversation context
+            if hasattr(tool, 'set_conversation_id'):
+                tool.set_conversation_id(conversation_id)
+            prepared_tools.append(tool)
+        
+        return prepared_tools

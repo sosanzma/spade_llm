@@ -10,11 +10,13 @@ from spade.template import Template
 
 from ..behaviour import LLMBehaviour
 from ..context import ContextManager
+from ..context.management import ContextManagement
 from ..mcp import MCPServerConfig, get_all_mcp_tools
 from ..providers.base_provider import LLMProvider
 from ..tools import LLMTool
 from ..routing import RoutingFunction
 from ..guardrails import InputGuardrail, OutputGuardrail, GuardrailResult
+from ..memory import AgentInteractionMemory, AgentMemoryTool
 
 logger = logging.getLogger("spade_llm.agent")
 
@@ -38,6 +40,7 @@ class LLMAgent(Agent):
                  reply_to: Optional[str] = None,
                  routing_function: Optional[RoutingFunction] = None,
                  system_prompt: Optional[str] = None,
+                 context_management: Optional[ContextManagement] = None,
                  mcp_servers: Optional[List[MCPServerConfig]] = None,
                  tools: Optional[List[LLMTool]] = None,
                  termination_markers: Optional[List[str]] = None,
@@ -46,6 +49,7 @@ class LLMAgent(Agent):
                  input_guardrails: Optional[List[InputGuardrail]] = None,
                  output_guardrails: Optional[List[OutputGuardrail]] = None,
                  on_guardrail_trigger: Optional[Callable[[GuardrailResult], None]] = None,
+                 interaction_memory: bool = False,
                  verify_security: bool = False):
         """
         Initialize an LLM-capable agent.
@@ -57,6 +61,7 @@ class LLMAgent(Agent):
             reply_to: JID to send responses to. If None the reply is to the original sender
             routing_function: Optional function for conditional routing based on response content
             system_prompt: Optional system instructions for the LLM
+            context_management: Optional context management strategy for controlling conversation history
             mcp_servers: Optional list of MCP server configurations
             tools: Optional list of tools the agent can use
             termination_markers: List of strings that mark conversation completion
@@ -65,12 +70,17 @@ class LLMAgent(Agent):
             input_guardrails: List of guardrails to apply to incoming messages
             output_guardrails: List of guardrails to apply to LLM responses
             on_guardrail_trigger: Callback when a guardrail blocks/modifies content
+            interaction_memory: Whether to enable agent interaction memory for learning about other agents
             verify_security: Whether to verify security certificates
         """
         super().__init__(jid, password, verify_security=verify_security)
 
-        self.context = ContextManager(system_prompt=system_prompt)
+        self.context = ContextManager(
+            system_prompt=system_prompt,
+            context_management=context_management
+        )
         self.provider = provider
+        self.context_management = context_management
         self.reply_to = reply_to
         self.routing_function = routing_function
         self.tools: List[LLMTool] = []
@@ -80,6 +90,14 @@ class LLMAgent(Agent):
         if tools:
             for tool in tools:
                 self._register_tool(tool)
+
+        # Setup interaction memory if enabled
+        self.interaction_memory = None
+        if interaction_memory:
+            self.interaction_memory = AgentInteractionMemory(jid)
+            memory_tool = AgentMemoryTool(self.interaction_memory)
+            self._register_tool(memory_tool)
+            logger.info(f"Enabled interaction memory for agent {jid}")
 
         self.termination_markers = termination_markers or ["<TASK_COMPLETE>", "<END>", "<DONE>"]
         self.max_interactions_per_conversation = max_interactions_per_conversation
@@ -102,7 +120,8 @@ class LLMAgent(Agent):
             tools=self.tools,
             input_guardrails=self.input_guardrails,
             output_guardrails=self.output_guardrails,
-            on_guardrail_trigger=self.on_guardrail_trigger
+            on_guardrail_trigger=self.on_guardrail_trigger,
+            interaction_memory=self.interaction_memory
         )
 
     async def setup(self):
@@ -208,3 +227,25 @@ class LLMAgent(Agent):
         """
         self.output_guardrails.append(guardrail)
         self.llm_behaviour.add_output_guardrail(guardrail)
+    
+    def get_context_stats(self, conversation_id: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Get context management statistics for a conversation.
+        
+        Args:
+            conversation_id: Optional ID of the conversation to get stats for
+            
+        Returns:
+            Dictionary with context management statistics
+        """
+        return self.context.get_context_stats(conversation_id)
+    
+    def update_context_management(self, new_context_management: ContextManagement) -> None:
+        """
+        Update the context management strategy.
+        
+        Args:
+            new_context_management: New context management strategy to use
+        """
+        self.context_management = new_context_management
+        self.context.update_context_management(new_context_management)
