@@ -2132,7 +2132,7 @@
 <li><strong>Remember Information</strong>: Store and retrieve interaction details</li>
 <li><strong>Learn from Conversations</strong>: Build knowledge base from agent interactions</li>
 <li><strong>Contextual Recall</strong>: Access relevant information in future conversations</li>
-<li><strong>Tool Integration</strong>: LLMs can autonomously store and retrieve memories</li>
+<li><strong>Tool Integration</strong>: LLMs can store and retrieve memories</li>
 </ul>
 <h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>graph TB
@@ -2465,9 +2465,9 @@
 <a id="__codelineno-17-23" name="__codelineno-17-23" href="#__codelineno-17-23"></a>        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
 <a id="__codelineno-17-24" name="__codelineno-17-24" href="#__codelineno-17-24"></a>        <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
 <a id="__codelineno-17-25" name="__codelineno-17-25" href="#__codelineno-17-25"></a>        <span class="n">interaction_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Enable memory</span>
-<a id="__codelineno-17-26" name="__codelineno-17-26" href="#__codelineno-17-26"></a>        <span class="n">context_management</span><span class="o">=</span><span class="n">smart_context</span><span class="p">,</span>  <span class="c1"># Smart context</span>
+<a id="__codelineno-17-26" name="__codelineno-17-26" href="#__codelineno-17-26"></a>        <span class="n">context_management</span><span class="o">=</span><span class="n">smart_context</span><span class="p">,</span>  <span class="c1"># Context management</span>
 <a id="__codelineno-17-27" name="__codelineno-17-27" href="#__codelineno-17-27"></a>        <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-17-28" name="__codelineno-17-28" href="#__codelineno-17-28"></a><span class="s2">        You are an intelligent assistant with memory capabilities.</span>
+<a id="__codelineno-17-28" name="__codelineno-17-28" href="#__codelineno-17-28"></a><span class="s2">        You are an assistant with memory capabilities.</span>
 <a id="__codelineno-17-29" name="__codelineno-17-29" href="#__codelineno-17-29"></a>
 <a id="__codelineno-17-30" name="__codelineno-17-30" href="#__codelineno-17-30"></a><span class="s2">        You can remember important information using the remember_interaction_info tool.</span>
 <a id="__codelineno-17-31" name="__codelineno-17-31" href="#__codelineno-17-31"></a><span class="s2">        This information will be available in future conversations.</span>
@@ -2480,7 +2480,7 @@
 <a id="__codelineno-17-38" name="__codelineno-17-38" href="#__codelineno-17-38"></a>
 <a id="__codelineno-17-39" name="__codelineno-17-39" href="#__codelineno-17-39"></a>    <span class="c1"># Agent now has:</span>
 <a id="__codelineno-17-40" name="__codelineno-17-40" href="#__codelineno-17-40"></a>    <span class="c1"># - Memory capabilities</span>
-<a id="__codelineno-17-41" name="__codelineno-17-41" href="#__codelineno-17-41"></a>    <span class="c1"># - Smart context management</span>
+<a id="__codelineno-17-41" name="__codelineno-17-41" href="#__codelineno-17-41"></a>    <span class="c1"># - Context management</span>
 <a id="__codelineno-17-42" name="__codelineno-17-42" href="#__codelineno-17-42"></a>    <span class="c1"># - Tool integration</span>
 <a id="__codelineno-17-43" name="__codelineno-17-43" href="#__codelineno-17-43"></a>    <span class="c1"># - Automatic context injection</span>
 <a id="__codelineno-17-44" name="__codelineno-17-44" href="#__codelineno-17-44"></a>
@@ -2496,7 +2496,7 @@
 </code></pre></div>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><a href="../context-management/">Context Management</a></strong> - Advanced context control strategies</li>
+<li><strong><a href="../context-management/">Context Management</a></strong> - Context control strategies</li>
 <li><strong><a href="../conversations/">Conversations</a></strong> - Conversation lifecycle management</li>
 <li><strong><a href="../tools-system/">Tools System</a></strong> - Tool integration and capabilities</li>
 <li><strong><a href="../../reference/api/memory/">API Reference</a></strong> - Detailed memory API documentation</li>

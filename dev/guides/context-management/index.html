@@ -847,9 +847,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#intelligent-retention-algorithm" class="md-nav__link">
+  <a href="#retention-algorithm" class="md-nav__link">
     <span class="md-ellipsis">
-      Intelligent Retention Algorithm
+      Retention Algorithm
     </span>
   </a>
   
@@ -1643,9 +1643,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#intelligent-retention-algorithm" class="md-nav__link">
+  <a href="#retention-algorithm" class="md-nav__link">
     <span class="md-ellipsis">
-      Intelligent Retention Algorithm
+      Retention Algorithm
     </span>
   </a>
   
@@ -1807,12 +1807,12 @@
 
 
 <h1 id="context-management">Context Management<a class="headerlink" href="#context-management" title="Permanent link">&para;</a></h1>
-<p>SPADE_LLM provides <strong>sophisticated context management</strong> to control conversation memory and optimize LLM performance across multi-turn interactions.</p>
+<p>SPADE_LLM provides <strong>context management</strong> to control conversation memory and optimize LLM performance across multi-turn interactions.</p>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
 <p>The <strong>context management system</strong> handles how conversation history is maintained and filtered:</p>
 <ul>
 <li><strong>Memory Control</strong>: Prevents token overflow while preserving important information</li>
-<li><strong>Multi-Strategy Support</strong>: Choose from basic, windowed, or intelligent strategies</li>
+<li><strong>Multi-Strategy Support</strong>: Choose from basic, windowed, or extended strategies</li>
 <li><strong>Tool-Aware</strong>: Maintains critical tool execution context</li>
 <li><strong>Conversation Isolation</strong>: Each conversation maintains separate context</li>
 </ul>
@@ -1867,7 +1867,7 @@
 - Resource-limited environments
 - Continuous monitoring sessions</p>
 <h3 id="smartwindowsizecontext-advanced">SmartWindowSizeContext (Advanced) 🆕<a class="headerlink" href="#smartwindowsizecontext-advanced" title="Permanent link">&para;</a></h3>
-<p><strong>Behavior</strong>: Intelligent management combining sliding window with selective retention of critical messages.</p>
+<p><strong>Behavior</strong>: Management combining sliding window with selective retention of critical messages.</p>
 <h4 id="basic-configuration">Basic Configuration<a class="headerlink" href="#basic-configuration" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">SmartWindowSizeContext</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
@@ -1924,8 +1924,8 @@
 </tr>
 </tbody>
 </table>
-<h4 id="intelligent-retention-algorithm">Intelligent Retention Algorithm<a class="headerlink" href="#intelligent-retention-algorithm" title="Permanent link">&para;</a></h4>
-<p>The SmartWindowSizeContext uses a sophisticated algorithm:</p>
+<h4 id="retention-algorithm">Retention Algorithm<a class="headerlink" href="#retention-algorithm" title="Permanent link">&para;</a></h4>
+<p>The SmartWindowSizeContext uses an algorithm:</p>
 <ol>
 <li><strong>If</strong> <code>total_messages ≤ max_messages</code> → Return all messages</li>
 <li><strong>If</strong> <code>preserve_initial = 0</code> and <code>prioritize_tools = False</code> → Basic sliding window</li>
@@ -1992,7 +1992,7 @@
 <a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
 <a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>    <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
 <a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>    <span class="n">context_management</span><span class="o">=</span><span class="n">smart_context</span><span class="p">,</span>
-<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>    <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;You are an assistant with intelligent context management...&quot;</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>    <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;You are an assistant with context management...&quot;</span>
 <a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="p">)</span>
 </code></pre></div>
 <h2 id="context-statistics">Context Statistics<a class="headerlink" href="#context-statistics" title="Permanent link">&para;</a></h2>
@@ -2073,7 +2073,7 @@
 <a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.providers</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLMProvider</span>
 <a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
 <a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>    <span class="c1"># Configure intelligent context management</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>    <span class="c1"># Configure context management</span>
 <a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>    <span class="n">smart_context</span> <span class="o">=</span> <span class="n">SmartWindowSizeContext</span><span class="p">(</span>
 <a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>        <span class="n">max_messages</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
 <a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>        <span class="n">preserve_initial</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
@@ -2086,13 +2086,13 @@
 <a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span>
 <a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>    <span class="p">)</span>
 <a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>
-<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>    <span class="c1"># Create agent with smart context</span>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>    <span class="c1"># Create agent with context management</span>
 <a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>    <span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
 <a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>        <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;smart_agent@example.com&quot;</span><span class="p">,</span>
 <a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
 <a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>        <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
 <a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>        <span class="n">context_management</span><span class="o">=</span><span class="n">smart_context</span><span class="p">,</span>
-<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>        <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;You are an intelligent assistant with context management.&quot;</span>
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>        <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;You are an assistant with context management.&quot;</span>
 <a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a>    <span class="p">)</span>
 <a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a>
 <a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a>    <span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>

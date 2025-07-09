@@ -1807,7 +1807,7 @@
 
 
 <h1 id="conversation-management">Conversation Management<a class="headerlink" href="#conversation-management" title="Permanent link">&para;</a></h1>
-<p>SPADE_LLM <strong>automatically manages conversation context</strong> across multi-turn interactions, enabling <em>intelligent, stateful dialogues</em> between agents.</p>
+<p>SPADE_LLM <strong>automatically manages conversation context</strong> across multi-turn interactions, enabling <em>stateful dialogues</em> between agents.</p>
 <h2 id="conversation-flow">Conversation Flow<a class="headerlink" href="#conversation-flow" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>graph TD
     A[New Message Arrives] --&gt; B{Conversation Exists?}
@@ -1920,7 +1920,7 @@
 <li><strong>Consistent Format</strong>: Use consistent marker syntax across your system</li>
 </ul>
 <h2 id="context-management">Context Management<a class="headerlink" href="#context-management" title="Permanent link">&para;</a></h2>
-<p>SPADE_LLM provides <strong>sophisticated context management</strong> to control conversation memory and optimize performance. See the <strong><a href="../context-management/">Context Management Guide</a></strong> for detailed information.</p>
+<p>SPADE_LLM provides <strong>context management</strong> to control conversation memory and optimize performance. See the <strong><a href="../context-management/">Context Management Guide</a></strong> for detailed information.</p>
 <h3 id="accessing-conversation-state">Accessing Conversation State<a class="headerlink" href="#accessing-conversation-state" title="Permanent link">&para;</a></h3>
 <p><strong>Programmatic access</strong> to conversation information:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Get conversation state</span>
@@ -1939,7 +1939,7 @@
 <p><strong>Configure different context management strategies</strong>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">SmartWindowSizeContext</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Intelligent context management</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Context management</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">smart_context</span> <span class="o">=</span> <span class="n">SmartWindowSizeContext</span><span class="p">(</span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="n">max_messages</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="n">preserve_initial</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
@@ -1997,12 +1997,12 @@
 <ul>
 <li><strong>Train LLMs</strong> to recognize natural conversation endings</li>
 <li><strong>Use multiple termination markers</strong> for different scenarios</li>
-<li><strong>Combine markers with interaction limits</strong> for robust termination</li>
+<li><strong>Combine markers with interaction limits</strong> for reliable termination</li>
 <li><strong>Test termination behavior</strong> thoroughly in different conversation contexts</li>
 </ul>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><a href="../context-management/">Context Management</a></strong> - Advanced context control strategies</li>
+<li><strong><a href="../context-management/">Context Management</a></strong> - Context control strategies</li>
 <li><strong><a href="../memory/">Memory System</a></strong> - Agent memory and learning capabilities</li>
 <li><strong><a href="../tools-system/">Tools System</a></strong> - Add capabilities to conversations</li>
 <li><strong><a href="../routing/">Message Routing</a></strong> - Control conversation flow between agents</li>

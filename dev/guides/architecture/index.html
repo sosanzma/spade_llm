@@ -1625,11 +1625,11 @@
 <ol>
 <li><strong>Receives XMPP messages</strong> from other agents</li>
 <li><strong>Updates conversation context</strong> with new information</li>
-<li><strong>Calls LLM provider</strong> for intelligent responses</li>
+<li><strong>Calls LLM provider</strong> for responses</li>
 <li><strong>Executes tools</strong> when requested by the LLM</li>
 <li><strong>Routes responses</strong> to appropriate recipients</li>
 </ol>
-<p>This is where the <em>magic happens</em> - transforming simple messages into intelligent interactions.</p>
+<p>This is where the main processing occurs - transforming simple messages into interactions.</p>
 <h3 id="contextmanager"><strong>🧠 ContextManager</strong><a class="headerlink" href="#contextmanager" title="Permanent link">&para;</a></h3>
 <p><strong>Manages conversation state</strong> across multiple concurrent discussions:</p>
 <ul>
@@ -1683,7 +1683,7 @@
 <li><strong>Termination</strong>: Ends via markers, limits, or manual control</li>
 <li><strong>Cleanup</strong>: Resources freed and callbacks executed</li>
 </ol>
-<p>Each stage is designed to be <strong>robust</strong> and <strong>efficient</strong>, ensuring conversations can handle complex, multi-turn interactions while maintaining system stability.</p>
+<p>Each stage ensures conversations can handle complex, multi-turn interactions while maintaining system stability.</p>
 <h2 id="integration-points"><strong>🔧 Integration Points</strong><a class="headerlink" href="#integration-points" title="Permanent link">&para;</a></h2>
 <p>The architecture provides multiple <strong>integration points</strong> for customization:</p>
 <ul>
