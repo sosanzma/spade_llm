@@ -250,7 +250,7 @@ context = WindowSizeContext(max_messages=20)
 
 ### SmartWindowSizeContext
 
-Advanced context management with intelligent message selection.
+Context management with message selection.
 
 ```python
 from spade_llm.context import SmartWindowSizeContext

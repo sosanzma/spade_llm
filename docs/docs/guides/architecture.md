@@ -34,11 +34,11 @@ The **core processing engine** that orchestrates the entire LLM workflow:
 
 1. **Receives XMPP messages** from other agents
 2. **Updates conversation context** with new information
-3. **Calls LLM provider** for intelligent responses
+3. **Calls LLM provider** for responses
 4. **Executes tools** when requested by the LLM
 5. **Routes responses** to appropriate recipients
 
-This is where the _magic happens_ - transforming simple messages into intelligent interactions.
+This is where the main processing occurs - transforming simple messages into interactions.
 
 ### **🧠 ContextManager**
 **Manages conversation state** across multiple concurrent discussions:
@@ -98,7 +98,7 @@ The conversation lifecycle follows a **well-defined process**:
 3. **Termination**: Ends via markers, limits, or manual control
 4. **Cleanup**: Resources freed and callbacks executed
 
-Each stage is designed to be **robust** and **efficient**, ensuring conversations can handle complex, multi-turn interactions while maintaining system stability.
+Each stage ensures conversations can handle complex, multi-turn interactions while maintaining system stability.
 
 
 

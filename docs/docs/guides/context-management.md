@@ -1,13 +1,13 @@
 # Context Management
 
-SPADE_LLM provides **sophisticated context management** to control conversation memory and optimize LLM performance across multi-turn interactions.
+SPADE_LLM provides **context management** to control conversation memory and optimize LLM performance across multi-turn interactions.
 
 ## Overview
 
 The **context management system** handles how conversation history is maintained and filtered:
 
 - **Memory Control**: Prevents token overflow while preserving important information
-- **Multi-Strategy Support**: Choose from basic, windowed, or intelligent strategies
+- **Multi-Strategy Support**: Choose from basic, windowed, or extended strategies
 - **Tool-Aware**: Maintains critical tool execution context
 - **Conversation Isolation**: Each conversation maintains separate context
 
@@ -79,7 +79,7 @@ agent = LLMAgent(
 
 ### SmartWindowSizeContext (Advanced) 🆕
 
-**Behavior**: Intelligent management combining sliding window with selective retention of critical messages.
+**Behavior**: Management combining sliding window with selective retention of critical messages.
 
 #### Basic Configuration
 
@@ -117,9 +117,9 @@ smart_context = SmartWindowSizeContext(
 | `preserve_initial` | `int` | 0 | Number of initial messages to always preserve |
 | `prioritize_tools` | `bool` | False | Whether to prioritize tool results |
 
-#### Intelligent Retention Algorithm
+#### Retention Algorithm
 
-The SmartWindowSizeContext uses a sophisticated algorithm:
+The SmartWindowSizeContext uses an algorithm:
 
 1. **If** `total_messages ≤ max_messages` → Return all messages
 2. **If** `preserve_initial = 0` and `prioritize_tools = False` → Basic sliding window
@@ -209,7 +209,7 @@ agent = LLMAgent(
     password="password",
     provider=provider,
     context_management=smart_context,
-    system_prompt="You are an assistant with intelligent context management..."
+    system_prompt="You are an assistant with context management..."
 )
 ```
 
@@ -264,7 +264,7 @@ from spade_llm.context import SmartWindowSizeContext
 from spade_llm.providers import LLMProvider
 
 async def main():
-    # Configure intelligent context management
+    # Configure context management
     smart_context = SmartWindowSizeContext(
         max_messages=20,
         preserve_initial=3,
@@ -277,13 +277,13 @@ async def main():
         model="gpt-4"
     )
     
-    # Create agent with smart context
+    # Create agent with context management
     agent = LLMAgent(
         jid="smart_agent@example.com",
         password="password",
         provider=provider,
         context_management=smart_context,
-        system_prompt="You are an intelligent assistant with context management."
+        system_prompt="You are an assistant with context management."
     )
     
     await agent.start()

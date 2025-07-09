@@ -1,6 +1,6 @@
 # Conversation Management
 
-SPADE_LLM **automatically manages conversation context** across multi-turn interactions, enabling _intelligent, stateful dialogues_ between agents.
+SPADE_LLM **automatically manages conversation context** across multi-turn interactions, enabling _stateful dialogues_ between agents.
 
 ## Conversation Flow
 
@@ -135,7 +135,7 @@ agent = LLMAgent(
 
 ## Context Management
 
-SPADE_LLM provides **sophisticated context management** to control conversation memory and optimize performance. See the **[Context Management Guide](context-management.md)** for detailed information.
+SPADE_LLM provides **context management** to control conversation memory and optimize performance. See the **[Context Management Guide](context-management.md)** for detailed information.
 
 ### Accessing Conversation State
 
@@ -162,7 +162,7 @@ success = agent.reset_conversation(conversation_id)
 ```python
 from spade_llm.context import SmartWindowSizeContext
 
-# Intelligent context management
+# Context management
 smart_context = SmartWindowSizeContext(
     max_messages=20,
     preserve_initial=3,
@@ -224,13 +224,13 @@ agent = LLMAgent(
 ### Termination Strategy
 - **Train LLMs** to recognize natural conversation endings
 - **Use multiple termination markers** for different scenarios
-- **Combine markers with interaction limits** for robust termination
+- **Combine markers with interaction limits** for reliable termination
 - **Test termination behavior** thoroughly in different conversation contexts
 
 
 ## Next Steps
 
-- **[Context Management](context-management.md)** - Advanced context control strategies
+- **[Context Management](context-management.md)** - Context control strategies
 - **[Memory System](memory.md)** - Agent memory and learning capabilities
 - **[Tools System](tools-system.md)** - Add capabilities to conversations
 - **[Message Routing](routing.md)** - Control conversation flow between agents

@@ -9,7 +9,7 @@ The **memory system** allows agents to:
 - **Remember Information**: Store and retrieve interaction details
 - **Learn from Conversations**: Build knowledge base from agent interactions
 - **Contextual Recall**: Access relevant information in future conversations
-- **Tool Integration**: LLMs can autonomously store and retrieve memories
+- **Tool Integration**: LLMs can store and retrieve memories
 
 ## Architecture
 
@@ -413,9 +413,9 @@ async def complete_memory_example():
         password="password",
         provider=provider,
         interaction_memory=True,  # Enable memory
-        context_management=smart_context,  # Smart context
+        context_management=smart_context,  # Context management
         system_prompt="""
-        You are an intelligent assistant with memory capabilities.
+        You are an assistant with memory capabilities.
         
         You can remember important information using the remember_interaction_info tool.
         This information will be available in future conversations.
@@ -428,7 +428,7 @@ async def complete_memory_example():
     
     # Agent now has:
     # - Memory capabilities
-    # - Smart context management
+    # - Context management
     # - Tool integration
     # - Automatic context injection
     
@@ -445,7 +445,7 @@ if __name__ == "__main__":
 
 ## Next Steps
 
-- **[Context Management](context-management.md)** - Advanced context control strategies
+- **[Context Management](context-management.md)** - Context control strategies
 - **[Conversations](conversations.md)** - Conversation lifecycle management
 - **[Tools System](tools-system.md)** - Tool integration and capabilities
 - **[API Reference](../reference/api/memory.md)** - Detailed memory API documentation
