@@ -1,6 +1,7 @@
 """SPADE_LLM context management module."""
 
 from .context_manager import ContextManager
+from .management import ContextManagement, NoContextManagement, WindowSizeContext, SmartWindowSizeContext
 from ._types import (
     # Message type definitions
     ContextMessage, SystemMessage, UserMessage, AssistantMessage, ToolResultMessage,
@@ -13,6 +14,8 @@ from ._types import (
 
 __all__ = [
     "ContextManager",
+    # Context management strategies
+    "ContextManagement", "NoContextManagement", "WindowSizeContext", "SmartWindowSizeContext",
     # Message types
     "ContextMessage", "SystemMessage", "UserMessage", "AssistantMessage", 
     "ToolResultMessage", "ToolCall", "ToolCallFunction",
