@@ -15,3 +15,6 @@ langchain_community>=0.3.2
 
 # MCP support
 mcp>=1.8.0
+
+# Agent base memory support
+aiosqlite>=0.17.0

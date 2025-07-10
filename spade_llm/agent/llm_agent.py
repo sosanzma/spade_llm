@@ -2,7 +2,7 @@
 
 import asyncio
 import logging
-from typing import List, Optional, Dict, Any, Callable
+from typing import List, Optional, Dict, Any, Callable, Union, Tuple
 
 from spade.agent import Agent
 from spade.message import Message
@@ -49,8 +49,8 @@ class LLMAgent(Agent):
                  input_guardrails: Optional[List[InputGuardrail]] = None,
                  output_guardrails: Optional[List[OutputGuardrail]] = None,
                  on_guardrail_trigger: Optional[Callable[[GuardrailResult], None]] = None,
-                 interaction_memory: bool = False,
-                 memory_path: Optional[str] = None,
+                 interaction_memory: Union[bool, Tuple[bool, str]] = False,
+                 agent_base_memory: Union[bool, Tuple[bool, str]] = False,
                  verify_security: bool = False):
         """
         Initialize an LLM-capable agent.
@@ -71,8 +71,12 @@ class LLMAgent(Agent):
             input_guardrails: List of guardrails to apply to incoming messages
             output_guardrails: List of guardrails to apply to LLM responses
             on_guardrail_trigger: Callback when a guardrail blocks/modifies content
-            interaction_memory: Whether to enable agent interaction memory for learning about other agents
-            memory_path: Optional custom path for memory storage. If None, uses SPADE_LLM_MEMORY_PATH environment variable or default.
+            interaction_memory: Enable interaction memory. Can be:
+                - bool: True/False (uses default path)
+                - tuple: (True, "/custom/path") for custom path
+            agent_base_memory: Enable agent base memory. Can be:
+                - bool: True/False (uses default path)  
+                - tuple: (True, "/custom/path") for custom path
             verify_security: Whether to verify security certificates
         """
         super().__init__(jid, password, verify_security=verify_security)
@@ -95,11 +99,27 @@ class LLMAgent(Agent):
 
         # Setup interaction memory if enabled
         self.interaction_memory = None
-        if interaction_memory:
-            self.interaction_memory = AgentInteractionMemory(jid, memory_path)
+        interaction_enabled, interaction_path = self._parse_memory_config(interaction_memory)
+        if interaction_enabled:
+            self.interaction_memory = AgentInteractionMemory(jid, interaction_path)
             memory_tool = AgentMemoryTool(self.interaction_memory)
             self._register_tool(memory_tool)
-            logger.info(f"Enabled interaction memory for agent {jid} with path: {memory_path or 'default'}")
+            logger.info(f"Enabled interaction memory for agent {jid} with path: {interaction_path or 'default'}")
+
+        # Setup agent base memory if enabled
+        self.agent_base_memory = None
+        base_memory_enabled, base_memory_path = self._parse_memory_config(agent_base_memory)
+        if base_memory_enabled:
+            from ..memory.agent_base_memory import AgentBaseMemory
+            from ..memory.agent_base_memory_tools import create_base_memory_tools
+            
+            self.agent_base_memory = AgentBaseMemory(jid, memory_path=base_memory_path)
+            base_memory_tools = create_base_memory_tools(self.agent_base_memory)
+            
+            for tool in base_memory_tools:
+                self._register_tool(tool)
+            
+            logger.info(f"Enabled agent base memory for agent {jid} with path: {base_memory_path or 'default'}")
 
         self.termination_markers = termination_markers or ["<TASK_COMPLETE>", "<END>", "<DONE>"]
         self.max_interactions_per_conversation = max_interactions_per_conversation
@@ -152,6 +172,31 @@ class LLMAgent(Agent):
             logger.info(f"Registered {len(mcp_tools)} MCP tools from {len(self.mcp_servers)} servers")
         except Exception as e:
             logger.error(f"Error setting up MCP tools: {e}")
+
+    def _parse_memory_config(self, memory_config: Union[bool, Tuple[bool, str]]) -> Tuple[bool, Optional[str]]:
+        """
+        Parse memory configuration parameter.
+        
+        Args:
+            memory_config: Can be:
+                - bool: True/False (uses default path)
+                - tuple: (enabled, custom_path)
+        
+        Returns:
+            Tuple of (enabled, path)
+        """
+        if isinstance(memory_config, bool):
+            return memory_config, None
+        elif isinstance(memory_config, tuple) and len(memory_config) == 2:
+            enabled, path = memory_config
+            if isinstance(enabled, bool) and isinstance(path, str):
+                return enabled, path
+            else:
+                logger.warning(f"Invalid memory config tuple format: {memory_config}. Using default.")
+                return False, None
+        else:
+            logger.warning(f"Invalid memory config type: {type(memory_config)}. Expected bool or tuple.")
+            return False, None
 
     def _register_tool(self, tool: LLMTool):
         """
