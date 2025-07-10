@@ -50,6 +50,7 @@ class LLMAgent(Agent):
                  output_guardrails: Optional[List[OutputGuardrail]] = None,
                  on_guardrail_trigger: Optional[Callable[[GuardrailResult], None]] = None,
                  interaction_memory: bool = False,
+                 memory_path: Optional[str] = None,
                  verify_security: bool = False):
         """
         Initialize an LLM-capable agent.
@@ -71,6 +72,7 @@ class LLMAgent(Agent):
             output_guardrails: List of guardrails to apply to LLM responses
             on_guardrail_trigger: Callback when a guardrail blocks/modifies content
             interaction_memory: Whether to enable agent interaction memory for learning about other agents
+            memory_path: Optional custom path for memory storage. If None, uses SPADE_LLM_MEMORY_PATH environment variable or default.
             verify_security: Whether to verify security certificates
         """
         super().__init__(jid, password, verify_security=verify_security)
@@ -94,10 +96,10 @@ class LLMAgent(Agent):
         # Setup interaction memory if enabled
         self.interaction_memory = None
         if interaction_memory:
-            self.interaction_memory = AgentInteractionMemory(jid)
+            self.interaction_memory = AgentInteractionMemory(jid, memory_path)
             memory_tool = AgentMemoryTool(self.interaction_memory)
             self._register_tool(memory_tool)
-            logger.info(f"Enabled interaction memory for agent {jid}")
+            logger.info(f"Enabled interaction memory for agent {jid} with path: {memory_path or 'default'}")
 
         self.termination_markers = termination_markers or ["<TASK_COMPLETE>", "<END>", "<DONE>"]
         self.max_interactions_per_conversation = max_interactions_per_conversation

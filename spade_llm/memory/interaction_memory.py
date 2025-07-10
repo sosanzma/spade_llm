@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from ..tools import LLMTool
+from ..utils.env_loader import get_memory_path
 
 logger = logging.getLogger("spade_llm.memory.interaction")
 
@@ -20,25 +21,25 @@ class AgentInteractionMemory:
     during interactions, such as APIs, preferences, capabilities, etc.
     """
     
-    def __init__(self, agent_id: str, storage_dir: Optional[str] = None):
+    def __init__(self, agent_id: str, memory_path: Optional[str] = None):
         """
         Initialize agent interaction memory.
         
         Args:
             agent_id: The JID of the agent owning this memory
-            storage_dir: Optional custom storage directory
+            memory_path: Optional custom memory storage path. If None, uses 
+                        environment variable SPADE_LLM_MEMORY_PATH or default path.
         """
         self.agent_id = agent_id
         
         # Set up storage directory and file path
-        if storage_dir is None:
-            # Default to spade_llm/data/agent_memory/
-            base_dir = Path(__file__).parent.parent / "data" / "agent_memory"
+        if memory_path is None:
+            # Use configurable path from environment variable or default
+            base_dir = get_memory_path()
         else:
-            base_dir = Path(storage_dir)
-        
-        # Create directory if it doesn't exist
-        base_dir.mkdir(parents=True, exist_ok=True)
+            base_dir = Path(memory_path)
+            # Create directory if it doesn't exist
+            base_dir.mkdir(parents=True, exist_ok=True)
         
         # Create filename from agent_id (sanitize for filesystem)
         safe_agent_id = agent_id.replace("@", "_").replace("/", "_")
