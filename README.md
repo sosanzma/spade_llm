@@ -6,12 +6,12 @@ Extension for [SPADE](https://github.com/javipalanca/spade) that integrates Larg
 
 - **Multi-Provider Support**: OpenAI, Ollama, LM Studio, vLLM
 - **Tool System**: Function calling with async execution
-- **Context Management**: Multi-conversation support with automatic cleanup
+- **Context Management**: Multi-conversation support. Automatic cleanup and smart managment
+- **Memory Extensions**: Agent-based and agent-thread memory for persistent state
 - **Message Routing**: Conditional routing based on LLM responses
 - **Guardrails System**: Content filtering and safety controls for input/output
 - **MCP Integration**: Model Context Protocol server support
 - **Human-in-the-Loop**: Web interface for human expert consultation
-- **Production Ready**: Comprehensive error handling and logging
 
 ## Quick Start
 
@@ -139,6 +139,60 @@ await chat_agent.start()
 await chat_agent.run_interactive()  # Start interactive chat
 ```
 
+### Memory Extensions
+
+```python
+# Agent-based memory: Single shared memory per agent
+agent = LLMAgent(
+    jid="assistant@example.com",
+    password="password",
+    provider=provider,
+    agent_base_memory=(True, "./memory.db")  # Enabled with custom path
+)
+
+# Agent-thread memory: Separate memory per conversation
+agent = LLMAgent(
+    jid="assistant@example.com",
+    password="password",
+    provider=provider,
+    agent_thread_memory=(True, "./thread_memory.db")  # Enabled with custom path
+)
+
+# Default memory paths (if path not specified)
+agent = LLMAgent(
+    jid="assistant@example.com",
+    password="password",
+    provider=provider,
+    agent_base_memory=(True, None)  # Uses default path
+)
+```
+
+### Context Management
+
+```python
+from spade_llm.context import SmartWindowSizeContext, FixedWindowSizeContext
+
+# Smart context: Dynamic window sizing based on content
+smart_context = SmartWindowSizeContext(
+    max_tokens=4000,
+    include_system_prompt=True,
+    preserve_last_k_messages=5
+)
+
+# Fixed context: Traditional sliding window
+fixed_context = FixedWindowSizeContext(
+    max_messages=20,
+    include_system_prompt=True
+)
+
+agent = LLMAgent(
+    jid="assistant@example.com",
+    password="password",
+    provider=provider,
+    context_manager=smart_context
+)
+```
+
 ### Human-in-the-Loop
 
 ```python
@@ -166,13 +220,20 @@ agent = LLMAgent(
 
 ```mermaid
 graph LR
-    A[LLMAgent] --> B[LLMBehaviour]
-    B --> C[ContextManager]
-    B --> D[LLMProvider]
-    B --> E[LLMTool]
-    B --> G[Guardrails]
+    A[LLMAgent] --> C[ContextManager]
+    A --> D[LLMProvider]
+    A --> E[LLMTool]
+    A --> G[Guardrails]
+    A --> M[Memory]
     D --> F[OpenAI/Ollama/etc]
     G --> H[Input/Output Filtering]
+    E --> I[Human-in-the-Loop]
+    E --> J[MCP]
+    E --> P[CustomTool/LangchainTool]
+    J --> K[STDIO]
+    J --> L[HTTP Streaming]
+    M --> N[Agent-based]
+    M --> O[Agent-thread]
 ```
 
 ## Documentation
