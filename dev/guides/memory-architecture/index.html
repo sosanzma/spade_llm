@@ -12,13 +12,13 @@
         <meta name="author" content="Manel Soler Sanz">
       
       
-        <link rel="canonical" href="https://sosanzma.github.io/spade_llm/guides/conversations/">
+        <link rel="canonical" href="https://sosanzma.github.io/spade_llm/guides/memory-architecture/">
       
       
-        <link rel="prev" href="../memory-architecture/">
+        <link rel="prev" href="../memory/">
       
       
-        <link rel="next" href="../human-in-the-loop/">
+        <link rel="next" href="../conversations/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -26,7 +26,7 @@
     
     
       
-        <title>Conversations - SPADE_LLM Documentation</title>
+        <title>Memory Architecture - SPADE_LLM Documentation</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#conversation-management" class="md-skip">
+        <a href="#memory-architecture" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Conversations
+              Memory Architecture
             
           </span>
         </div>
@@ -777,29 +777,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../memory-architecture/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Memory Architecture
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -817,7 +794,7 @@
   
   
   <span class="md-ellipsis">
-    Conversations
+    Memory Architecture
     
   </span>
   
@@ -830,7 +807,7 @@
   
   
   <span class="md-ellipsis">
-    Conversations
+    Memory Architecture
     
   </span>
   
@@ -853,46 +830,37 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#conversation-flow" class="md-nav__link">
+  <a href="#system-overview" class="md-nav__link">
     <span class="md-ellipsis">
-      Conversation Flow
+      System Overview
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
+  <a href="#memory-types-architecture" class="md-nav__link">
     <span class="md-ellipsis">
-      Overview
+      Memory Types Architecture
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#basic-configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      Basic Configuration
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#conversation-lifecycle" class="md-nav__link">
-    <span class="md-ellipsis">
-      Conversation Lifecycle
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Conversation Lifecycle">
+    <nav class="md-nav" aria-label="Memory Types Architecture">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#lifecycle-states" class="md-nav__link">
+  <a href="#interaction-memory-flow" class="md-nav__link">
     <span class="md-ellipsis">
-      Lifecycle States
+      Interaction Memory Flow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agent-base-memory-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Agent Base Memory Flow
     </span>
   </a>
   
@@ -904,46 +872,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#termination-markers" class="md-nav__link">
+  <a href="#data-storage-architecture" class="md-nav__link">
     <span class="md-ellipsis">
-      Termination Markers
+      Data Storage Architecture
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Termination Markers">
+    <nav class="md-nav" aria-label="Data Storage Architecture">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#how-termination-markers-work" class="md-nav__link">
+  <a href="#file-system-organization" class="md-nav__link">
     <span class="md-ellipsis">
-      How Termination Markers Work
+      File System Organization
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#configuration-examples" class="md-nav__link">
+  <a href="#database-schema-architecture" class="md-nav__link">
     <span class="md-ellipsis">
-      Configuration Examples
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#llm-integration" class="md-nav__link">
-    <span class="md-ellipsis">
-      LLM Integration
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#termination-marker-best-practices" class="md-nav__link">
-    <span class="md-ellipsis">
-      Termination Marker Best Practices
+      Database Schema Architecture
     </span>
   </a>
   
@@ -955,28 +905,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#context-management" class="md-nav__link">
+  <a href="#memory-tool-integration" class="md-nav__link">
     <span class="md-ellipsis">
-      Context Management
+      Memory Tool Integration
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Context Management">
+    <nav class="md-nav" aria-label="Memory Tool Integration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#accessing-conversation-state" class="md-nav__link">
+  <a href="#tool-registration-flow" class="md-nav__link">
     <span class="md-ellipsis">
-      Accessing Conversation State
+      Tool Registration Flow
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#context-strategy-configuration" class="md-nav__link">
+  <a href="#tool-call-processing" class="md-nav__link">
     <span class="md-ellipsis">
-      Context Strategy Configuration
+      Tool Call Processing
     </span>
   </a>
   
@@ -988,19 +938,19 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#conversation-control" class="md-nav__link">
+  <a href="#memory-categories-system" class="md-nav__link">
     <span class="md-ellipsis">
-      Conversation Control
+      Memory Categories System
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Conversation Control">
+    <nav class="md-nav" aria-label="Memory Categories System">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#termination-callbacks" class="md-nav__link">
+  <a href="#category-organization" class="md-nav__link">
     <span class="md-ellipsis">
-      Termination Callbacks
+      Category Organization
     </span>
   </a>
   
@@ -1012,37 +962,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#best-practices" class="md-nav__link">
+  <a href="#context-integration" class="md-nav__link">
     <span class="md-ellipsis">
-      Best Practices
+      Context Integration
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Best Practices">
+    <nav class="md-nav" aria-label="Context Integration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#context-design" class="md-nav__link">
+  <a href="#memory-context-injection" class="md-nav__link">
     <span class="md-ellipsis">
-      Context Design
+      Memory Context Injection
     </span>
   </a>
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#performance-optimization" class="md-nav__link">
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-agent-memory-architecture" class="md-nav__link">
     <span class="md-ellipsis">
-      Performance Optimization
+      Multi-Agent Memory Architecture
     </span>
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="Multi-Agent Memory Architecture">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#termination-strategy" class="md-nav__link">
+  <a href="#agent-memory-isolation" class="md-nav__link">
     <span class="md-ellipsis">
-      Termination Strategy
+      Agent Memory Isolation
     </span>
   </a>
   
@@ -1066,6 +1022,29 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../conversations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Conversations
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -1603,46 +1582,37 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#conversation-flow" class="md-nav__link">
+  <a href="#system-overview" class="md-nav__link">
     <span class="md-ellipsis">
-      Conversation Flow
+      System Overview
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
+  <a href="#memory-types-architecture" class="md-nav__link">
     <span class="md-ellipsis">
-      Overview
+      Memory Types Architecture
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#basic-configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      Basic Configuration
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#conversation-lifecycle" class="md-nav__link">
-    <span class="md-ellipsis">
-      Conversation Lifecycle
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Conversation Lifecycle">
+    <nav class="md-nav" aria-label="Memory Types Architecture">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#lifecycle-states" class="md-nav__link">
+  <a href="#interaction-memory-flow" class="md-nav__link">
     <span class="md-ellipsis">
-      Lifecycle States
+      Interaction Memory Flow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agent-base-memory-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Agent Base Memory Flow
     </span>
   </a>
   
@@ -1654,46 +1624,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#termination-markers" class="md-nav__link">
+  <a href="#data-storage-architecture" class="md-nav__link">
     <span class="md-ellipsis">
-      Termination Markers
+      Data Storage Architecture
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Termination Markers">
+    <nav class="md-nav" aria-label="Data Storage Architecture">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#how-termination-markers-work" class="md-nav__link">
+  <a href="#file-system-organization" class="md-nav__link">
     <span class="md-ellipsis">
-      How Termination Markers Work
+      File System Organization
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#configuration-examples" class="md-nav__link">
+  <a href="#database-schema-architecture" class="md-nav__link">
     <span class="md-ellipsis">
-      Configuration Examples
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#llm-integration" class="md-nav__link">
-    <span class="md-ellipsis">
-      LLM Integration
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#termination-marker-best-practices" class="md-nav__link">
-    <span class="md-ellipsis">
-      Termination Marker Best Practices
+      Database Schema Architecture
     </span>
   </a>
   
@@ -1705,28 +1657,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#context-management" class="md-nav__link">
+  <a href="#memory-tool-integration" class="md-nav__link">
     <span class="md-ellipsis">
-      Context Management
+      Memory Tool Integration
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Context Management">
+    <nav class="md-nav" aria-label="Memory Tool Integration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#accessing-conversation-state" class="md-nav__link">
+  <a href="#tool-registration-flow" class="md-nav__link">
     <span class="md-ellipsis">
-      Accessing Conversation State
+      Tool Registration Flow
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#context-strategy-configuration" class="md-nav__link">
+  <a href="#tool-call-processing" class="md-nav__link">
     <span class="md-ellipsis">
-      Context Strategy Configuration
+      Tool Call Processing
     </span>
   </a>
   
@@ -1738,19 +1690,19 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#conversation-control" class="md-nav__link">
+  <a href="#memory-categories-system" class="md-nav__link">
     <span class="md-ellipsis">
-      Conversation Control
+      Memory Categories System
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Conversation Control">
+    <nav class="md-nav" aria-label="Memory Categories System">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#termination-callbacks" class="md-nav__link">
+  <a href="#category-organization" class="md-nav__link">
     <span class="md-ellipsis">
-      Termination Callbacks
+      Category Organization
     </span>
   </a>
   
@@ -1762,37 +1714,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#best-practices" class="md-nav__link">
+  <a href="#context-integration" class="md-nav__link">
     <span class="md-ellipsis">
-      Best Practices
+      Context Integration
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Best Practices">
+    <nav class="md-nav" aria-label="Context Integration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#context-design" class="md-nav__link">
+  <a href="#memory-context-injection" class="md-nav__link">
     <span class="md-ellipsis">
-      Context Design
+      Memory Context Injection
     </span>
   </a>
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#performance-optimization" class="md-nav__link">
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-agent-memory-architecture" class="md-nav__link">
     <span class="md-ellipsis">
-      Performance Optimization
+      Multi-Agent Memory Architecture
     </span>
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="Multi-Agent Memory Architecture">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#termination-strategy" class="md-nav__link">
+  <a href="#agent-memory-isolation" class="md-nav__link">
     <span class="md-ellipsis">
-      Termination Strategy
+      Agent Memory Isolation
     </span>
   </a>
   
@@ -1831,208 +1789,294 @@
   
 
 
-<h1 id="conversation-management">Conversation Management<a class="headerlink" href="#conversation-management" title="Permanent link">&para;</a></h1>
-<p>SPADE_LLM <strong>automatically manages conversation context</strong> across multi-turn interactions, enabling <em>stateful dialogues</em> between agents.</p>
-<h2 id="conversation-flow">Conversation Flow<a class="headerlink" href="#conversation-flow" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>graph TD
-    A[New Message Arrives] --&gt; B{Conversation Exists?}
-    B --&gt;|No| C[Create New Conversation]
-    B --&gt;|Yes| D[Load Existing Context]
-    C --&gt; E[Initialize Context with System Prompt]
-    D --&gt; F[Add Message to Context]
-    E --&gt; F
-    F --&gt; G[Check Interaction Count]
-    G --&gt; H{Max Interactions Reached?}
-    H --&gt;|Yes| I[Mark for Termination]
-    H --&gt;|No| J[Process with LLM]
-    J --&gt; K[Check Response for Termination Markers]
-    K --&gt; L{Termination Marker Found?}
-    L --&gt;|Yes| M[End Conversation]
-    L --&gt;|No| N[Send Response]
-    I --&gt; M
-    M --&gt; O[Execute Cleanup Callbacks]
-    N --&gt; P[Update Context]
-    P --&gt; Q[Continue Conversation]</code></pre>
-<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>The <strong>conversation system</strong> provides comprehensive management for multi-agent interactions:</p>
-<ul>
-<li><strong>Multi-turn Context</strong>: Maintains <em>complete conversation history</em> across interactions</li>
-<li><strong>Concurrent Conversations</strong>: Supports <em>multiple simultaneous conversations</em> per agent  </li>
-<li><strong>Automatic Lifecycle</strong>: Manages <em>memory and conversation cleanup</em> efficiently</li>
-<li><strong>Flexible Termination</strong>: Controls <em>interaction limits and ending conditions</em></li>
-</ul>
-<h2 id="basic-configuration">Basic Configuration<a class="headerlink" href="#basic-configuration" title="Permanent link">&para;</a></h2>
-<p><strong>Conversation management is automatic</strong>. Each message thread creates a separate conversation with configurable parameters:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLMAgent</span><span class="p">,</span> <span class="n">LLMProvider</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;assistant@example.com&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;You are a helpful assistant&quot;</span><span class="p">,</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">max_interactions_per_conversation</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">termination_markers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;&lt;DONE&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;END&gt;&quot;</span><span class="p">]</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">)</span>
-</code></pre></div>
-<h2 id="conversation-lifecycle">Conversation Lifecycle<a class="headerlink" href="#conversation-lifecycle" title="Permanent link">&para;</a></h2>
-<p>The conversation lifecycle follows a <strong>structured process</strong>:</p>
-<ol>
-<li><strong>Initialization</strong>: New conversation created from message thread ID</li>
-<li><strong>Processing</strong>: Messages added to context, LLM generates responses</li>
-<li><strong>Monitoring</strong>: System tracks interactions and checks termination conditions</li>
-<li><strong>Termination</strong>: Conversation ends through various mechanisms</li>
-<li><strong>Cleanup</strong>: Resources freed and callbacks executed</li>
-</ol>
-<h3 id="lifecycle-states">Lifecycle States<a class="headerlink" href="#lifecycle-states" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>Active</strong>: Conversation is processing messages normally</li>
-<li><strong>Approaching Limit</strong>: Near maximum interaction count</li>
-<li><strong>Terminated</strong>: Conversation has ended and is being cleaned up</li>
-<li><strong>Cleanup Complete</strong>: All resources have been freed</li>
-</ul>
-<h2 id="termination-markers">Termination Markers<a class="headerlink" href="#termination-markers" title="Permanent link">&para;</a></h2>
-<p><strong>Termination markers</strong> provide a way for LLMs to <em>explicitly signal</em> when a conversation should end. This enables <strong>intelligent conversation closure</strong> based on content rather than just interaction counts.</p>
-<h3 id="how-termination-markers-work">How Termination Markers Work<a class="headerlink" href="#how-termination-markers-work" title="Permanent link">&para;</a></h3>
-<p>When the LLM includes a <strong>termination marker</strong> in its response:</p>
-<ol>
-<li><strong>Detection</strong>: The system scans the LLM response for configured markers</li>
-<li><strong>Immediate Termination</strong>: Conversation is marked for closure regardless of interaction count</li>
-<li><strong>Response Processing</strong>: The marker is typically <em>removed from the final response</em> sent to users</li>
-<li><strong>Cleanup Execution</strong>: Standard termination procedures are triggered</li>
-</ol>
-<h3 id="configuration-examples">Configuration Examples<a class="headerlink" href="#configuration-examples" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Single termination marker</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;assistant@example.com&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">termination_markers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;&lt;CONVERSATION_END&gt;&quot;</span><span class="p">]</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">)</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1"># Multiple termination markers</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;assistant@example.com&quot;</span><span class="p">,</span> 
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    <span class="n">termination_markers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;&lt;DONE&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;END&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;GOODBYE&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;TERMINATE&gt;&quot;</span><span class="p">]</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="p">)</span>
-</code></pre></div>
-<h3 id="llm-integration">LLM Integration<a class="headerlink" href="#llm-integration" title="Permanent link">&para;</a></h3>
-<p>Train your LLM to use termination markers appropriately:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">system_prompt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="s2">You are a helpful assistant. When a conversation naturally comes to an end </span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s2">or the user says goodbye, include &lt;DONE&gt; at the end of your response to </span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s2">properly close the conversation.</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s2">Example:</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s2">User: &quot;Thanks for your help, goodbye!&quot;</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s2">Assistant: &quot;You&#39;re welcome! Have a great day! &lt;DONE&gt;&quot;</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;assistant@example.com&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    <span class="n">system_prompt</span><span class="o">=</span><span class="n">system_prompt</span><span class="p">,</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    <span class="n">termination_markers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;&lt;DONE&gt;&quot;</span><span class="p">]</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="p">)</span>
-</code></pre></div>
-<h3 id="termination-marker-best-practices">Termination Marker Best Practices<a class="headerlink" href="#termination-marker-best-practices" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>Choose Unique Markers</strong>: Use markers unlikely to appear in normal conversation</li>
-<li><strong>Document for LLMs</strong>: Clearly instruct the LLM when and how to use markers</li>
-<li><strong>Multiple Options</strong>: Provide several markers for different termination scenarios</li>
-<li><strong>Consistent Format</strong>: Use consistent marker syntax across your system</li>
-</ul>
-<h2 id="context-management">Context Management<a class="headerlink" href="#context-management" title="Permanent link">&para;</a></h2>
-<p>SPADE_LLM provides <strong>context management</strong> to control conversation memory and optimize performance. See the <strong><a href="../context-management/">Context Management Guide</a></strong> for detailed information.</p>
-<h3 id="accessing-conversation-state">Accessing Conversation State<a class="headerlink" href="#accessing-conversation-state" title="Permanent link">&para;</a></h3>
-<p><strong>Programmatic access</strong> to conversation information:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Get conversation state</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">conversation_id</span> <span class="o">=</span> <span class="s2">&quot;user1_session&quot;</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">state</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">get_conversation_state</span><span class="p">(</span><span class="n">conversation_id</span><span class="p">)</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1"># Check conversation status</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">is_active</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">interaction_count</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;interaction_count&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="n">max_interactions</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_interactions&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="c1"># Reset conversation (removes limits)</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="n">success</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">reset_conversation</span><span class="p">(</span><span class="n">conversation_id</span><span class="p">)</span>
-</code></pre></div>
-<h3 id="context-strategy-configuration">Context Strategy Configuration<a class="headerlink" href="#context-strategy-configuration" title="Permanent link">&para;</a></h3>
-<p><strong>Configure different context management strategies</strong>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">SmartWindowSizeContext</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># Context management</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">smart_context</span> <span class="o">=</span> <span class="n">SmartWindowSizeContext</span><span class="p">(</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="n">max_messages</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    <span class="n">preserve_initial</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    <span class="n">prioritize_tools</span><span class="o">=</span><span class="kc">True</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="p">)</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="c1"># Use with agent</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;coder@example.com&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>    <span class="n">context_management</span><span class="o">=</span><span class="n">smart_context</span>
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="p">)</span>
-</code></pre></div>
-<h2 id="conversation-control">Conversation Control<a class="headerlink" href="#conversation-control" title="Permanent link">&para;</a></h2>
-<h3 id="termination-callbacks">Termination Callbacks<a class="headerlink" href="#termination-callbacks" title="Permanent link">&para;</a></h3>
-<p><strong>Handle conversation endings</strong> with custom logic:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">on_conversation_end</span><span class="p">(</span><span class="n">conversation_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Called when conversation terminates.&quot;&quot;&quot;</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Conversation </span><span class="si">{</span><span class="n">conversation_id</span><span class="si">}</span><span class="s2"> ended: </span><span class="si">{</span><span class="n">reason</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="c1"># Possible reasons:</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="c1"># - &quot;max_interactions_reached&quot;</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="c1"># - &quot;termination_marker_found&quot; </span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="c1"># - &quot;manual_termination&quot;</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="c1"># Custom cleanup logic</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>    <span class="n">save_conversation_log</span><span class="p">(</span><span class="n">conversation_id</span><span class="p">)</span>
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>    <span class="n">send_completion_notification</span><span class="p">(</span><span class="n">conversation_id</span><span class="p">)</span>
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>
-<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
-<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;assistant@example.com&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span> 
-<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>    <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
-<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>    <span class="n">max_interactions_per_conversation</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>    <span class="n">on_conversation_end</span><span class="o">=</span><span class="n">on_conversation_end</span>
-<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="p">)</span>
-</code></pre></div>
-<h2 id="best-practices">Best Practices<a class="headerlink" href="#best-practices" title="Permanent link">&para;</a></h2>
-<h3 id="context-design">Context Design<a class="headerlink" href="#context-design" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Use <strong>clear, focused system prompts</strong> that explain the agent's role</li>
-<li>Set <strong>appropriate interaction limits</strong> based on expected conversation length</li>
-<li>Implement <strong>proper cleanup callbacks</strong> for resource management</li>
-<li><strong>Handle termination gracefully</strong> with user-friendly messages</li>
-</ul>
-<h3 id="performance-optimization">Performance Optimization<a class="headerlink" href="#performance-optimization" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>Monitor memory usage</strong> for long-running conversations</li>
-<li>Implement <strong>context compression</strong> when approaching token limits</li>
-<li>Use <strong>conversation limits</strong> to prevent runaway interactions</li>
-<li><strong>Clean up inactive conversations</strong> regularly to free resources</li>
-</ul>
-<h3 id="termination-strategy">Termination Strategy<a class="headerlink" href="#termination-strategy" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>Train LLMs</strong> to recognize natural conversation endings</li>
-<li><strong>Use multiple termination markers</strong> for different scenarios</li>
-<li><strong>Combine markers with interaction limits</strong> for reliable termination</li>
-<li><strong>Test termination behavior</strong> thoroughly in different conversation contexts</li>
-</ul>
+<h1 id="memory-architecture">Memory Architecture<a class="headerlink" href="#memory-architecture" title="Permanent link">&para;</a></h1>
+<p>This guide provides detailed architectural diagrams and explanations of SPADE_LLM's memory system components and their interactions.</p>
+<h2 id="system-overview">System Overview<a class="headerlink" href="#system-overview" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>graph TB
+    subgraph "SPADE_LLM Agent"
+        A[LLMAgent] --&gt; B[LLMBehaviour]
+        B --&gt; C[Memory Manager]
+    end
+
+    subgraph "Dual Memory System"
+        C --&gt; D[Interaction Memory]
+        C --&gt; E[Agent Base Memory]
+    end
+
+    subgraph "Storage Backends"
+        D --&gt; F[JSON Files]
+        E --&gt; G[SQLite Database]
+    end
+
+    subgraph "Memory Tools"
+        H[remember_interaction_info] --&gt; D
+        I[store_memory] --&gt; E
+        J[search_memories] --&gt; E
+        K[list_memories] --&gt; E
+    end
+
+    subgraph "Integration Points"
+        L[Context Manager] --&gt; D
+        M[LLM Provider] --&gt; H
+        M --&gt; I
+        M --&gt; J
+        M --&gt; K
+    end
+
+    style A fill:#e1f5fe
+    style D fill:#f3e5f5
+    style E fill:#e8f5e8
+    style F fill:#fff3e0
+    style G fill:#e8f5e8</code></pre>
+<h2 id="memory-types-architecture">Memory Types Architecture<a class="headerlink" href="#memory-types-architecture" title="Permanent link">&para;</a></h2>
+<h3 id="interaction-memory-flow">Interaction Memory Flow<a class="headerlink" href="#interaction-memory-flow" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant U as User
+    participant A as LLMAgent
+    participant IM as Interaction Memory
+    participant CM as Context Manager
+    participant LLM as LLM Provider
+
+    U-&gt;&gt;A: Send message
+    A-&gt;&gt;IM: Check existing memory
+    IM-&gt;&gt;CM: Inject memory context
+    CM-&gt;&gt;LLM: Send enriched context
+    LLM-&gt;&gt;A: Response + tool calls
+    A-&gt;&gt;IM: Store new information
+    IM-&gt;&gt;U: Enhanced response
+
+    Note over IM: JSON-based storage
+    Note over CM: Auto-injection</code></pre>
+<h3 id="agent-base-memory-flow">Agent Base Memory Flow<a class="headerlink" href="#agent-base-memory-flow" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant LLM as LLM Provider
+    participant ABM as Agent Base Memory
+    participant SB as SQLite Backend
+    participant FS as File System
+
+    LLM-&gt;&gt;ABM: store_memory(content, category)
+    ABM-&gt;&gt;SB: Execute INSERT query
+    SB-&gt;&gt;FS: Write to database
+    FS-&gt;&gt;SB: Confirm write
+    SB-&gt;&gt;ABM: Return memory ID
+    ABM-&gt;&gt;LLM: Confirmation message
+
+    LLM-&gt;&gt;ABM: search_memories(query)
+    ABM-&gt;&gt;SB: Execute SELECT query
+    SB-&gt;&gt;FS: Read from database
+    FS-&gt;&gt;SB: Return results
+    SB-&gt;&gt;ABM: Memory entries
+    ABM-&gt;&gt;LLM: Formatted results</code></pre>
+<h2 id="data-storage-architecture">Data Storage Architecture<a class="headerlink" href="#data-storage-architecture" title="Permanent link">&para;</a></h2>
+<h3 id="file-system-organization">File System Organization<a class="headerlink" href="#file-system-organization" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>graph LR
+    subgraph "Memory Root Path"
+        A[/memory/path/]
+    end
+
+    subgraph "Agent 1 Files"
+        A --&gt; B[agent1_example_com_interactions.json]
+        A --&gt; C[agent1_example_com_base_memory.db]
+    end
+
+    subgraph "Agent 2 Files"
+        A --&gt; D[agent2_example_com_interactions.json]
+        A --&gt; E[agent2_example_com_base_memory.db]
+    end
+
+    subgraph "Shared Resources"
+        A --&gt; F[.memory_metadata.json]
+        A --&gt; G[backup/]
+    end
+
+    style A fill:#fff3e0
+    style B fill:#f3e5f5
+    style C fill:#e8f5e8
+    style D fill:#f3e5f5
+    style E fill:#e8f5e8</code></pre>
+<h3 id="database-schema-architecture">Database Schema Architecture<a class="headerlink" href="#database-schema-architecture" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>erDiagram
+    AGENT_MEMORIES {
+        string id PK
+        string agent_id FK
+        string category
+        string content
+        string context
+        real confidence
+        timestamp created_at
+        timestamp last_accessed
+        integer access_count
+    }
+
+    MEMORY_CATEGORIES {
+        string category PK
+        string description
+        string usage_examples
+    }
+
+    MEMORY_STATS {
+        string agent_id PK
+        integer total_memories
+        real avg_confidence
+        timestamp last_update
+        json category_distribution
+    }
+
+    AGENT_MEMORIES ||--o{ MEMORY_CATEGORIES : belongs_to
+    AGENT_MEMORIES ||--o{ MEMORY_STATS : contributes_to</code></pre>
+<h2 id="memory-tool-integration">Memory Tool Integration<a class="headerlink" href="#memory-tool-integration" title="Permanent link">&para;</a></h2>
+<h3 id="tool-registration-flow">Tool Registration Flow<a class="headerlink" href="#tool-registration-flow" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>graph TB
+    subgraph "Agent Initialization"
+        A[LLMAgent.__init__] --&gt; B{Memory Config?}
+        B --&gt;|interaction_memory=True| C[Register interaction tools]
+        B --&gt;|agent_base_memory=True| D[Register base memory tools]
+        B --&gt;|Both enabled| E[Register all tools]
+    end
+
+    subgraph "Tool Registration"
+        C --&gt; F[remember_interaction_info]
+        D --&gt; G[store_memory]
+        D --&gt; H[search_memories]
+        D --&gt; I[list_memories]
+        E --&gt; F
+        E --&gt; G
+        E --&gt; H
+        E --&gt; I
+    end
+
+    subgraph "Tool Execution"
+        F --&gt; J[Interaction Memory API]
+        G --&gt; K[Base Memory API]
+        H --&gt; K
+        I --&gt; K
+    end
+
+    style A fill:#e1f5fe
+    style J fill:#f3e5f5
+    style K fill:#e8f5e8</code></pre>
+<h3 id="tool-call-processing">Tool Call Processing<a class="headerlink" href="#tool-call-processing" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant LLM as LLM Provider
+    participant TB as Tool Bridge
+    participant MT as Memory Tool
+    participant MS as Memory System
+
+    LLM-&gt;&gt;TB: Tool call request
+    TB-&gt;&gt;MT: Parse and validate
+    MT-&gt;&gt;MS: Execute memory operation
+    MS-&gt;&gt;MT: Return result
+    MT-&gt;&gt;TB: Formatted response
+    TB-&gt;&gt;LLM: Tool execution result
+
+    Note over MT: Handles validation
+    Note over MS: Performs storage/retrieval</code></pre>
+<h2 id="memory-categories-system">Memory Categories System<a class="headerlink" href="#memory-categories-system" title="Permanent link">&para;</a></h2>
+<h3 id="category-organization">Category Organization<a class="headerlink" href="#category-organization" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>graph TB
+    subgraph "Memory Categories"
+        A[Agent Base Memory] --&gt; B[Facts]
+        A --&gt; C[Patterns]
+        A --&gt; D[Preferences]
+        A --&gt; E[Capabilities]
+    end
+
+    subgraph "Fact Examples"
+        B --&gt; F["API endpoints"]
+        B --&gt; G["Configuration values"]
+        B --&gt; H["Database schemas"]
+    end
+
+    subgraph "Pattern Examples"
+        C --&gt; I["User behavior trends"]
+        C --&gt; J["Error patterns"]
+        C --&gt; K["Usage patterns"]
+    end
+
+    subgraph "Preference Examples"
+        D --&gt; L["Response formats"]
+        D --&gt; M["Communication styles"]
+        D --&gt; N["Tool preferences"]
+    end
+
+    subgraph "Capability Examples"
+        E --&gt; O["Skills and abilities"]
+        E --&gt; P["Limitations"]
+        E --&gt; Q["Specializations"]
+    end
+
+    style A fill:#e8f5e8
+    style B fill:#e3f2fd
+    style C fill:#f3e5f5
+    style D fill:#fff3e0
+    style E fill:#e8f5e8</code></pre>
+<h2 id="context-integration">Context Integration<a class="headerlink" href="#context-integration" title="Permanent link">&para;</a></h2>
+<h3 id="memory-context-injection">Memory Context Injection<a class="headerlink" href="#memory-context-injection" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>graph TB
+    subgraph "Conversation Processing"
+        A[New Message] --&gt; B[Context Manager]
+        B --&gt; C{Memory Available?}
+    end
+
+    subgraph "Memory Injection"
+        C --&gt;|Yes| D[Retrieve Memories]
+        D --&gt; E[Format Context]
+        E --&gt; F[Inject into Prompt]
+        C --&gt;|No| G[Standard Context]
+    end
+
+    subgraph "Context Types"
+        F --&gt; H[System Message]
+        F --&gt; I[User Context]
+        F --&gt; J[Tool Context]
+        G --&gt; K[Basic Context]
+    end
+
+    subgraph "LLM Processing"
+        H --&gt; L[LLM Provider]
+        I --&gt; L
+        J --&gt; L
+        K --&gt; L
+    end
+
+    style A fill:#e1f5fe
+    style D fill:#e8f5e8
+    style L fill:#fff3e0</code></pre>
+<h2 id="multi-agent-memory-architecture">Multi-Agent Memory Architecture<a class="headerlink" href="#multi-agent-memory-architecture" title="Permanent link">&para;</a></h2>
+<h3 id="agent-memory-isolation">Agent Memory Isolation<a class="headerlink" href="#agent-memory-isolation" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>graph TB
+    subgraph "Agent 1"
+        A1[LLMAgent 1] --&gt; B1[Memory Manager 1]
+        B1 --&gt; C1[Interaction Memory 1]
+        B1 --&gt; D1[Base Memory 1]
+    end
+
+    subgraph "Agent 2"
+        A2[LLMAgent 2] --&gt; B2[Memory Manager 2]
+        B2 --&gt; C2[Interaction Memory 2]
+        B2 --&gt; D2[Base Memory 2]
+    end
+
+    subgraph "Shared Infrastructure"
+        E[Memory Backend Pool] --&gt; F[SQLite Connections]
+        E --&gt; G[File System Access]
+        E --&gt; H[Configuration Manager]
+    end
+
+    subgraph "Isolation Boundaries"
+        C1 -.-&gt; I[Conversation Isolation]
+        C2 -.-&gt; I
+        D1 -.-&gt; J[Agent Data Isolation]
+        D2 -.-&gt; J
+    end
+
+    style I fill:#ffebee
+    style J fill:#ffebee
+    style E fill:#e8f5e8</code></pre>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><a href="../context-management/">Context Management</a></strong> - Context control strategies</li>
-<li><strong><a href="../memory/">Memory System</a></strong> - Agent memory and learning capabilities</li>
-<li><strong><a href="../tools-system/">Tools System</a></strong> - Add capabilities to conversations</li>
-<li><strong><a href="../routing/">Message Routing</a></strong> - Control conversation flow between agents</li>
-<li><strong><a href="../architecture/">Architecture</a></strong> - Understanding conversation management internals</li>
-<li><strong><a href="../providers/">Providers</a></strong> - Configure LLM providers for conversations</li>
+<li><strong><a href="../memory/">Memory System Guide</a></strong> - Complete memory system documentation</li>
+<li><strong><a href="../../reference/api/memory/">API Reference</a></strong> - Detailed API documentation</li>
 </ul>
 
 

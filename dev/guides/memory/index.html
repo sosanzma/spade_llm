@@ -18,7 +18,7 @@
         <link rel="prev" href="../context-management/">
       
       
-        <link rel="next" href="../conversations/">
+        <link rel="next" href="../memory-architecture/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -608,6 +608,8 @@
       
         
       
+        
+      
     
     
     
@@ -823,37 +825,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#agent-interaction-memory" class="md-nav__link">
+  <a href="#memory-types" class="md-nav__link">
     <span class="md-ellipsis">
-      Agent Interaction Memory
+      Memory Types
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Agent Interaction Memory">
+    <nav class="md-nav" aria-label="Memory Types">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#key-features" class="md-nav__link">
+  <a href="#1-interaction-memory" class="md-nav__link">
     <span class="md-ellipsis">
-      Key Features
+      1. Interaction Memory
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#basic-configuration" class="md-nav__link">
+  <a href="#2-agent-base-memory" class="md-nav__link">
     <span class="md-ellipsis">
-      Basic Configuration
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#storage-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
-      Storage Architecture
+      2. Agent Base Memory
     </span>
   </a>
   
@@ -865,23 +858,65 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#memory-tools-integration" class="md-nav__link">
+  <a href="#configuration" class="md-nav__link">
     <span class="md-ellipsis">
-      Memory Tools Integration
+      Configuration
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Memory Tools Integration">
+    <nav class="md-nav" aria-label="Configuration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#available-tools" class="md-nav__link">
+  <a href="#basic-setup" class="md-nav__link">
     <span class="md-ellipsis">
-      Available Tools
+      Basic Setup
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Available Tools">
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-memory-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom Memory Paths
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-path-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Memory Path Resolution
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      Memory Tools
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Memory Tools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interaction-memory-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interaction Memory Tools
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Interaction Memory Tools">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -893,10 +928,43 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+        
           <li class="md-nav__item">
-  <a href="#get_interaction_history" class="md-nav__link">
+  <a href="#agent-base-memory-tools" class="md-nav__link">
     <span class="md-ellipsis">
-      get_interaction_history
+      Agent Base Memory Tools
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Agent Base Memory Tools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#store_memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      store_memory
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#search_memories" class="md-nav__link">
+    <span class="md-ellipsis">
+      search_memories
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list_memories" class="md-nav__link">
+    <span class="md-ellipsis">
+      list_memories
     </span>
   </a>
   
@@ -904,15 +972,6 @@
         
       </ul>
     </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#automatic-context-injection" class="md-nav__link">
-    <span class="md-ellipsis">
-      Automatic Context Injection
-    </span>
-  </a>
   
 </li>
         
@@ -922,37 +981,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#conversation-threading" class="md-nav__link">
+  <a href="#storage-architecture" class="md-nav__link">
     <span class="md-ellipsis">
-      Conversation Threading
+      Storage Architecture
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Conversation Threading">
+    <nav class="md-nav" aria-label="Storage Architecture">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#thread-id-generation" class="md-nav__link">
+  <a href="#interaction-memory-storage" class="md-nav__link">
     <span class="md-ellipsis">
-      Thread ID Generation
+      Interaction Memory Storage
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#conversation-states" class="md-nav__link">
+  <a href="#agent-base-memory-storage" class="md-nav__link">
     <span class="md-ellipsis">
-      Conversation States
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#lifecycle-management" class="md-nav__link">
-    <span class="md-ellipsis">
-      Lifecycle Management
+      Agent Base Memory Storage
     </span>
   </a>
   
@@ -983,18 +1033,69 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#memory-with-routing" class="md-nav__link">
+  <a href="#dual-memory-configuration" class="md-nav__link">
     <span class="md-ellipsis">
-      Memory with Routing
+      Dual Memory Configuration
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#memory-flow-example" class="md-nav__link">
+  <a href="#memory-enabled-multi-agent-system" class="md-nav__link">
     <span class="md-ellipsis">
-      Memory Flow Example
+      Memory-Enabled Multi-Agent System
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory-categories-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      Memory Categories Guide
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Memory Categories Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fact-category" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fact Category
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-category" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pattern Category
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preference-category" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preference Category
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#capability-category" class="md-nav__link">
+    <span class="md-ellipsis">
+      Capability Category
     </span>
   </a>
   
@@ -1016,27 +1117,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#custom-memory-directory" class="md-nav__link">
+  <a href="#context-management-integration" class="md-nav__link">
     <span class="md-ellipsis">
-      Custom Memory Directory
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#memory-operations" class="md-nav__link">
-    <span class="md-ellipsis">
-      Memory Operations
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#integration-with-context-management" class="md-nav__link">
-    <span class="md-ellipsis">
-      Integration with Context Management
+      Context Management Integration
     </span>
   </a>
   
@@ -1048,37 +1131,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#memory-patterns" class="md-nav__link">
+  <a href="#performance-considerations" class="md-nav__link">
     <span class="md-ellipsis">
-      Memory Patterns
+      Performance Considerations
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Memory Patterns">
+    <nav class="md-nav" aria-label="Performance Considerations">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#learning-agent-pattern" class="md-nav__link">
+  <a href="#interaction-memory" class="md-nav__link">
     <span class="md-ellipsis">
-      Learning Agent Pattern
+      Interaction Memory
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#knowledge-base-pattern" class="md-nav__link">
+  <a href="#agent-base-memory" class="md-nav__link">
     <span class="md-ellipsis">
-      Knowledge Base Pattern
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#multi-agent-memory-sharing" class="md-nav__link">
-    <span class="md-ellipsis">
-      Multi-Agent Memory Sharing
+      Agent Base Memory
     </span>
   </a>
   
@@ -1086,81 +1160,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
-    <span class="md-ellipsis">
-      Troubleshooting
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Troubleshooting">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#common-issues" class="md-nav__link">
-    <span class="md-ellipsis">
-      Common Issues
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Common Issues">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#memory-not-persisting" class="md-nav__link">
-    <span class="md-ellipsis">
-      Memory Not Persisting
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#memory-not-loading" class="md-nav__link">
-    <span class="md-ellipsis">
-      Memory Not Loading
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#performance-issues" class="md-nav__link">
-    <span class="md-ellipsis">
-      Performance Issues
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#debug-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      Debug Mode
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#complete-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      Complete Example
-    </span>
-  </a>
   
 </li>
       
@@ -1177,6 +1176,29 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memory-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Memory Architecture
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -1755,37 +1777,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#agent-interaction-memory" class="md-nav__link">
+  <a href="#memory-types" class="md-nav__link">
     <span class="md-ellipsis">
-      Agent Interaction Memory
+      Memory Types
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Agent Interaction Memory">
+    <nav class="md-nav" aria-label="Memory Types">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#key-features" class="md-nav__link">
+  <a href="#1-interaction-memory" class="md-nav__link">
     <span class="md-ellipsis">
-      Key Features
+      1. Interaction Memory
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#basic-configuration" class="md-nav__link">
+  <a href="#2-agent-base-memory" class="md-nav__link">
     <span class="md-ellipsis">
-      Basic Configuration
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#storage-architecture" class="md-nav__link">
-    <span class="md-ellipsis">
-      Storage Architecture
+      2. Agent Base Memory
     </span>
   </a>
   
@@ -1797,23 +1810,65 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#memory-tools-integration" class="md-nav__link">
+  <a href="#configuration" class="md-nav__link">
     <span class="md-ellipsis">
-      Memory Tools Integration
+      Configuration
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Memory Tools Integration">
+    <nav class="md-nav" aria-label="Configuration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#available-tools" class="md-nav__link">
+  <a href="#basic-setup" class="md-nav__link">
     <span class="md-ellipsis">
-      Available Tools
+      Basic Setup
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Available Tools">
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-memory-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom Memory Paths
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-path-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Memory Path Resolution
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      Memory Tools
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Memory Tools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interaction-memory-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interaction Memory Tools
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Interaction Memory Tools">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1825,10 +1880,43 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+        
           <li class="md-nav__item">
-  <a href="#get_interaction_history" class="md-nav__link">
+  <a href="#agent-base-memory-tools" class="md-nav__link">
     <span class="md-ellipsis">
-      get_interaction_history
+      Agent Base Memory Tools
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Agent Base Memory Tools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#store_memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      store_memory
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#search_memories" class="md-nav__link">
+    <span class="md-ellipsis">
+      search_memories
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#list_memories" class="md-nav__link">
+    <span class="md-ellipsis">
+      list_memories
     </span>
   </a>
   
@@ -1836,15 +1924,6 @@
         
       </ul>
     </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#automatic-context-injection" class="md-nav__link">
-    <span class="md-ellipsis">
-      Automatic Context Injection
-    </span>
-  </a>
   
 </li>
         
@@ -1854,37 +1933,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#conversation-threading" class="md-nav__link">
+  <a href="#storage-architecture" class="md-nav__link">
     <span class="md-ellipsis">
-      Conversation Threading
+      Storage Architecture
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Conversation Threading">
+    <nav class="md-nav" aria-label="Storage Architecture">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#thread-id-generation" class="md-nav__link">
+  <a href="#interaction-memory-storage" class="md-nav__link">
     <span class="md-ellipsis">
-      Thread ID Generation
+      Interaction Memory Storage
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#conversation-states" class="md-nav__link">
+  <a href="#agent-base-memory-storage" class="md-nav__link">
     <span class="md-ellipsis">
-      Conversation States
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#lifecycle-management" class="md-nav__link">
-    <span class="md-ellipsis">
-      Lifecycle Management
+      Agent Base Memory Storage
     </span>
   </a>
   
@@ -1915,18 +1985,69 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#memory-with-routing" class="md-nav__link">
+  <a href="#dual-memory-configuration" class="md-nav__link">
     <span class="md-ellipsis">
-      Memory with Routing
+      Dual Memory Configuration
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#memory-flow-example" class="md-nav__link">
+  <a href="#memory-enabled-multi-agent-system" class="md-nav__link">
     <span class="md-ellipsis">
-      Memory Flow Example
+      Memory-Enabled Multi-Agent System
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory-categories-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      Memory Categories Guide
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Memory Categories Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fact-category" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fact Category
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-category" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pattern Category
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#preference-category" class="md-nav__link">
+    <span class="md-ellipsis">
+      Preference Category
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#capability-category" class="md-nav__link">
+    <span class="md-ellipsis">
+      Capability Category
     </span>
   </a>
   
@@ -1948,27 +2069,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#custom-memory-directory" class="md-nav__link">
+  <a href="#context-management-integration" class="md-nav__link">
     <span class="md-ellipsis">
-      Custom Memory Directory
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#memory-operations" class="md-nav__link">
-    <span class="md-ellipsis">
-      Memory Operations
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#integration-with-context-management" class="md-nav__link">
-    <span class="md-ellipsis">
-      Integration with Context Management
+      Context Management Integration
     </span>
   </a>
   
@@ -1980,37 +2083,28 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#memory-patterns" class="md-nav__link">
+  <a href="#performance-considerations" class="md-nav__link">
     <span class="md-ellipsis">
-      Memory Patterns
+      Performance Considerations
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Memory Patterns">
+    <nav class="md-nav" aria-label="Performance Considerations">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#learning-agent-pattern" class="md-nav__link">
+  <a href="#interaction-memory" class="md-nav__link">
     <span class="md-ellipsis">
-      Learning Agent Pattern
+      Interaction Memory
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#knowledge-base-pattern" class="md-nav__link">
+  <a href="#agent-base-memory" class="md-nav__link">
     <span class="md-ellipsis">
-      Knowledge Base Pattern
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#multi-agent-memory-sharing" class="md-nav__link">
-    <span class="md-ellipsis">
-      Multi-Agent Memory Sharing
+      Agent Base Memory
     </span>
   </a>
   
@@ -2018,81 +2112,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
-    <span class="md-ellipsis">
-      Troubleshooting
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Troubleshooting">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#common-issues" class="md-nav__link">
-    <span class="md-ellipsis">
-      Common Issues
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Common Issues">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#memory-not-persisting" class="md-nav__link">
-    <span class="md-ellipsis">
-      Memory Not Persisting
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#memory-not-loading" class="md-nav__link">
-    <span class="md-ellipsis">
-      Memory Not Loading
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#performance-issues" class="md-nav__link">
-    <span class="md-ellipsis">
-      Performance Issues
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#debug-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      Debug Mode
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#complete-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      Complete Example
-    </span>
-  </a>
   
 </li>
       
@@ -2125,375 +2144,396 @@
 
 
 <h1 id="memory-system">Memory System<a class="headerlink" href="#memory-system" title="Permanent link">&para;</a></h1>
-<p>SPADE_LLM provides <strong>agent memory capabilities</strong> that enable agents to learn from interactions and maintain knowledge across conversations.</p>
+<p>SPADE_LLM provides a dual memory architecture that enables agents to learn from interactions and maintain knowledge across conversations.</p>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>The <strong>memory system</strong> allows agents to:</p>
+<p>The memory system allows agents to:</p>
 <ul>
-<li><strong>Remember Information</strong>: Store and retrieve interaction details</li>
-<li><strong>Learn from Conversations</strong>: Build knowledge base from agent interactions</li>
-<li><strong>Contextual Recall</strong>: Access relevant information in future conversations</li>
-<li><strong>Tool Integration</strong>: LLMs can store and retrieve memories</li>
+<li><strong>Store Information</strong>: Persist data across conversations and agent restarts</li>
+<li><strong>Learn from Experience</strong>: Build knowledge from interactions over time</li>
+<li><strong>Categorize Knowledge</strong>: Organize information into facts, patterns, preferences, and capabilities</li>
+<li><strong>Search Memories</strong>: Find relevant information using search capabilities</li>
+<li><strong>Tool Integration</strong>: LLMs can store and retrieve memories using built-in tools</li>
 </ul>
 <h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>graph TB
-    A[LLM Agent] --&gt; B[Memory System]
+    A[LLM Agent] --&gt; B[Dual Memory System]
     B --&gt; C[Interaction Memory]
-    C --&gt; D[File Storage]
-    B --&gt; E[Memory Tools]
-    E --&gt; F[LLM Tool Integration]
-    B --&gt; G[Context Injection]
-    G --&gt; H[Conversation Context]</code></pre>
-<h2 id="agent-interaction-memory">Agent Interaction Memory<a class="headerlink" href="#agent-interaction-memory" title="Permanent link">&para;</a></h2>
-<p>The <strong>AgentInteractionMemory</strong> system provides basic memory capabilities for agent-to-agent interactions.</p>
-<h3 id="key-features">Key Features<a class="headerlink" href="#key-features" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>Conversation-Specific</strong>: Memory isolated by conversation ID</li>
-<li><strong>JSON Storage</strong>: File-based storage for persistence</li>
-<li><strong>Auto-Injection</strong>: Memory automatically added to conversation context</li>
-<li><strong>Tool Integration</strong>: LLMs can store information using tools</li>
-</ul>
-<h3 id="basic-configuration">Basic Configuration<a class="headerlink" href="#basic-configuration" title="Permanent link">&para;</a></h3>
+    B --&gt; D[Agent Base Memory]
+
+    C --&gt; E[JSON Storage]
+    C --&gt; F[Conversation-Specific]
+    C --&gt; G[Auto-Injection]
+
+    D --&gt; H[SQLite Backend]
+    D --&gt; I[Agent-Wide Learning]
+    D --&gt; J[Categorized Storage]
+
+    K[Memory Tools] --&gt; C
+    K --&gt; D
+    L[LLM Integration] --&gt; K
+
+    M[Context Manager] --&gt; G
+    N[Search Engine] --&gt; J
+
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style D fill:#e8f5e8
+    style K fill:#fff8e1</code></pre>
+<h2 id="memory-types">Memory Types<a class="headerlink" href="#memory-types" title="Permanent link">&para;</a></h2>
+<h3 id="1-interaction-memory">1. Interaction Memory<a class="headerlink" href="#1-interaction-memory" title="Permanent link">&para;</a></h3>
+<p><strong>Purpose</strong>: Stores conversation-specific information for immediate context enhancement.</p>
+<p><strong>Key Features</strong>:
+- <strong>Conversation-scoped</strong>: Memory isolated by conversation ID
+- <strong>JSON-based</strong>: Simple file-based storage
+- <strong>Auto-injection</strong>: Automatically added to conversation context
+- <strong>Temporary</strong>: Designed for conversation-specific details</p>
+<p><strong>Use Cases</strong>:
+- User preferences within a conversation
+- API tokens or configuration details
+- Conversation-specific settings
+- Contextual information for current session</p>
+<h3 id="2-agent-base-memory">2. Agent Base Memory<a class="headerlink" href="#2-agent-base-memory" title="Permanent link">&para;</a></h3>
+<p><strong>Purpose</strong>: Provides long-term learning capabilities across all conversations.</p>
+<p><strong>Key Features</strong>:
+- <strong>Agent-scoped</strong>: Memory persists across all conversations
+- <strong>SQLite backend</strong>: Reliable database storage with search capabilities
+- <strong>Categorized</strong>: Organized into four memory categories
+- <strong>Persistent</strong>: Survives agent restarts and system reboots
+- <strong>Tool integration</strong>: Three auto-registered tools for LLM access</p>
+<p><strong>Memory Categories</strong>:
+- <strong><code>fact</code></strong>: Concrete information (APIs, data formats, configurations)
+- <strong><code>pattern</code></strong>: Behavioral patterns or trends observed
+- <strong><code>preference</code></strong>: User preferences or system settings learned
+- <strong><code>capability</code></strong>: Agent's abilities or limitations discovered</p>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<h3 id="basic-setup">Basic Setup<a class="headerlink" href="#basic-setup" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLMAgent</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.providers</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLMProvider</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Enable interaction memory</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Interaction memory only</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;memory_agent@example.com&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;agent@example.com&quot;</span><span class="p">,</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">interaction_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Enable memory</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;You are an assistant with memory capabilities.&quot;</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">)</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">interaction_memory</span><span class="o">=</span><span class="kc">True</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">)</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="c1"># Agent base memory only</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;agent@example.com&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    <span class="n">agent_base_memory</span><span class="o">=</span><span class="kc">True</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="p">)</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="c1"># Both memory types (recommended)</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;agent@example.com&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    <span class="n">interaction_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    <span class="n">agent_base_memory</span><span class="o">=</span><span class="kc">True</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="p">)</span>
 </code></pre></div>
-<h3 id="storage-architecture">Storage Architecture<a class="headerlink" href="#storage-architecture" title="Permanent link">&para;</a></h3>
-<p><strong>File Location</strong>: <code>spade_llm/data/agent_memory/{agent_id}_interactions.json</code></p>
-<p><strong>Storage Format</strong>:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="nt">&quot;agent_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;memory_agent@example.com&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">&quot;interactions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">        </span><span class="nt">&quot;conversation_id_1&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">            </span><span class="p">{</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">                </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;User prefers API authentication with token db_token_123&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">                </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-09T10:30:00.000Z&quot;</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">            </span><span class="p">}</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="p">],</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">        </span><span class="nt">&quot;conversation_id_2&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">            </span><span class="p">{</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">                </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Database connection requires SSL enabled&quot;</span><span class="p">,</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">                </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-09T11:15:00.000Z&quot;</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">            </span><span class="p">}</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">        </span><span class="p">]</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="p">}</span>
-</code></pre></div></p>
-<h2 id="memory-tools-integration">Memory Tools Integration<a class="headerlink" href="#memory-tools-integration" title="Permanent link">&para;</a></h2>
-<p>The system includes <strong>memory tools</strong> that LLMs can use to store and retrieve information.</p>
-<h3 id="available-tools">Available Tools<a class="headerlink" href="#available-tools" title="Permanent link">&para;</a></h3>
+<h3 id="custom-memory-paths">Custom Memory Paths<a class="headerlink" href="#custom-memory-paths" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Environment variable (recommended)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;SPADE_LLM_MEMORY_PATH&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;/custom/memory/path&quot;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># Constructor parameters</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;agent@example.com&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="n">interaction_memory</span><span class="o">=</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;/custom/interaction/path&quot;</span><span class="p">),</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="n">agent_base_memory</span><span class="o">=</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;/custom/base/memory/path&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="p">)</span>
+</code></pre></div>
+<h3 id="memory-path-resolution">Memory Path Resolution<a class="headerlink" href="#memory-path-resolution" title="Permanent link">&para;</a></h3>
+<p>Memory paths are resolved in the following order:
+1. <strong>Constructor parameter</strong>: <code>(True, "/custom/path")</code>
+2. <strong>Environment variable</strong>: <code>SPADE_LLM_MEMORY_PATH</code>
+3. <strong>Default path</strong>: <code>spade_llm/data/agent_memory/</code></p>
+<h2 id="memory-tools">Memory Tools<a class="headerlink" href="#memory-tools" title="Permanent link">&para;</a></h2>
+<h3 id="interaction-memory-tools">Interaction Memory Tools<a class="headerlink" href="#interaction-memory-tools" title="Permanent link">&para;</a></h3>
 <h4 id="remember_interaction_info">remember_interaction_info<a class="headerlink" href="#remember_interaction_info" title="Permanent link">&para;</a></h4>
-<p><strong>Function</strong>: Store important information for future reference</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># LLM can call this tool</span>
+<p>Store information for the current conversation.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># LLM tool call</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="p">{</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;remember_interaction_info&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Store important information about this interaction&quot;</span><span class="p">,</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>        <span class="s2">&quot;information&quot;</span><span class="p">:</span> <span class="s2">&quot;API requires authentication token db_token_123&quot;</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="p">}</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">}</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>        <span class="s2">&quot;information&quot;</span><span class="p">:</span> <span class="s2">&quot;User prefers JSON responses over XML&quot;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="p">}</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">}</span>
 </code></pre></div>
-<h4 id="get_interaction_history">get_interaction_history<a class="headerlink" href="#get_interaction_history" title="Permanent link">&para;</a></h4>
-<p><strong>Function</strong>: Retrieve previous interaction information</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># LLM can call this tool</span>
+<h3 id="agent-base-memory-tools">Agent Base Memory Tools<a class="headerlink" href="#agent-base-memory-tools" title="Permanent link">&para;</a></h3>
+<h4 id="store_memory">store_memory<a class="headerlink" href="#store_memory" title="Permanent link">&para;</a></h4>
+<p>Store information in long-term memory with category classification.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># LLM tool call</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">{</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;get_interaction_history&quot;</span><span class="p">,</span> 
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Get previous interaction information&quot;</span><span class="p">,</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{}</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">}</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;store_memory&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>        <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;User authentication requires API key in header&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>        <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="s2">&quot;fact&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>        <span class="s2">&quot;context&quot;</span><span class="p">:</span> <span class="s2">&quot;API integration discussion&quot;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="p">}</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="p">}</span>
 </code></pre></div>
-<h3 id="automatic-context-injection">Automatic Context Injection<a class="headerlink" href="#automatic-context-injection" title="Permanent link">&para;</a></h3>
-<p>Memory is <strong>automatically injected</strong> into conversations as system messages:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Example injected system message</span>
+<h4 id="search_memories">search_memories<a class="headerlink" href="#search_memories" title="Permanent link">&para;</a></h4>
+<p>Search through stored memories for relevant information.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># LLM tool call</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="p">{</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Previous interactions with this user:</span><span class="se">\n</span><span class="s2">- API requires token db_token_123</span><span class="se">\n</span><span class="s2">- Database connection needs SSL enabled&quot;</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">}</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;search_memories&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>        <span class="s2">&quot;query&quot;</span><span class="p">:</span> <span class="s2">&quot;API authentication&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>        <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">5</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    <span class="p">}</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="p">}</span>
 </code></pre></div>
-<h2 id="conversation-threading">Conversation Threading<a class="headerlink" href="#conversation-threading" title="Permanent link">&para;</a></h2>
-<p>The memory system integrates with <strong>conversation threading</strong> to maintain context across sessions.</p>
-<h3 id="thread-id-generation">Thread ID Generation<a class="headerlink" href="#thread-id-generation" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Conversation ID determined from:</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">conversation_id</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">thread</span> <span class="ow">or</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">sender</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">to</span><span class="si">}</span><span class="s2">&quot;</span>
+<h4 id="list_memories">list_memories<a class="headerlink" href="#list_memories" title="Permanent link">&para;</a></h4>
+<p>List memories by category or view recent memories.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># LLM tool call</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="p">{</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;list_memories&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>        <span class="s2">&quot;category&quot;</span><span class="p">:</span> <span class="s2">&quot;fact&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>        <span class="s2">&quot;limit&quot;</span><span class="p">:</span> <span class="mi">10</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="p">}</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="p">}</span>
 </code></pre></div>
-<h3 id="conversation-states">Conversation States<a class="headerlink" href="#conversation-states" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>Active</strong>: Conversation is processing messages</li>
-<li><strong>Completed</strong>: Conversation ended normally</li>
-<li><strong>Error</strong>: Conversation terminated due to error</li>
-<li><strong>Timeout</strong>: Conversation exceeded time limits</li>
-<li><strong>Max Interactions Reached</strong>: Hit interaction limit</li>
-</ul>
-<h3 id="lifecycle-management">Lifecycle Management<a class="headerlink" href="#lifecycle-management" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Conversation state tracking</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p">{</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="s2">&quot;conversation_id&quot;</span><span class="p">:</span> <span class="s2">&quot;user1_session&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;active&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="s2">&quot;interaction_count&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    <span class="s2">&quot;max_interactions&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="s2">&quot;created_at&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-01-09T10:00:00Z&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    <span class="s2">&quot;last_interaction&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-01-09T10:30:00Z&quot;</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="p">}</span>
-</code></pre></div>
+<h2 id="storage-architecture">Storage Architecture<a class="headerlink" href="#storage-architecture" title="Permanent link">&para;</a></h2>
+<h3 id="interaction-memory-storage">Interaction Memory Storage<a class="headerlink" href="#interaction-memory-storage" title="Permanent link">&para;</a></h3>
+<p><strong>Location</strong>: <code>{memory_path}/{safe_agent_id}_interactions.json</code></p>
+<p><strong>Format</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="nt">&quot;agent_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;agent@example.com&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nt">&quot;interactions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">        </span><span class="nt">&quot;conversation_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">            </span><span class="p">{</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">                </span><span class="nt">&quot;content&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;User prefers JSON responses&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">                </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-10T10:30:00.000Z&quot;</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">            </span><span class="p">}</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">        </span><span class="p">]</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="p">}</span>
+</code></pre></div></p>
+<h3 id="agent-base-memory-storage">Agent Base Memory Storage<a class="headerlink" href="#agent-base-memory-storage" title="Permanent link">&para;</a></h3>
+<p><strong>Location</strong>: <code>{memory_path}/{safe_agent_id}_base_memory.db</code></p>
+<p><strong>SQLite Schema</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">agent_memories</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="n">agent_id</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="n">category</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="n">content</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="n">context</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="n">confidence</span><span class="w"> </span><span class="nb">REAL</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="n">created_at</span><span class="w"> </span><span class="k">TIMESTAMP</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">,</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="n">last_accessed</span><span class="w"> </span><span class="k">TIMESTAMP</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">,</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">    </span><span class="n">access_count</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">    </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_agent_category</span><span class="w"> </span><span class="p">(</span><span class="n">agent_id</span><span class="p">,</span><span class="w"> </span><span class="n">category</span><span class="p">),</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">    </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_content_search</span><span class="w"> </span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="p">);</span>
+</code></pre></div></p>
 <h2 id="usage-examples">Usage Examples<a class="headerlink" href="#usage-examples" title="Permanent link">&para;</a></h2>
 <h3 id="basic-memory-usage">Basic Memory Usage<a class="headerlink" href="#basic-memory-usage" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLMAgent</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.providers</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLMProvider</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">memory_example</span><span class="p">():</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="c1"># Create agent with memory</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>        <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;memory_agent@example.com&quot;</span><span class="p">,</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>        <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>        <span class="n">interaction_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>        <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;You can remember important information from our conversations.&quot;</span>
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    <span class="p">)</span>
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>    <span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>
-<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>    <span class="c1"># Memory is automatically used in conversations</span>
-<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>    <span class="c1"># LLM can call remember_interaction_info to store data</span>
-<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>    <span class="c1"># Memory is auto-injected in future conversations</span>
-<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>
-<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>    <span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-</code></pre></div>
-<h3 id="memory-with-routing">Memory with Routing<a class="headerlink" href="#memory-with-routing" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.routing</span><span class="w"> </span><span class="kn">import</span> <span class="n">conditional_routing</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">api_agent_router</span><span class="p">(</span><span class="n">message_content</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Route queries to appropriate agents&quot;&quot;&quot;</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="k">if</span> <span class="s2">&quot;database&quot;</span> <span class="ow">in</span> <span class="n">message_content</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>        <span class="k">return</span> <span class="s2">&quot;database_agent@example.com&quot;</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>    <span class="k">elif</span> <span class="s2">&quot;api&quot;</span> <span class="ow">in</span> <span class="n">message_content</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>        <span class="k">return</span> <span class="s2">&quot;api_agent@example.com&quot;</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>    <span class="k">return</span> <span class="s2">&quot;general_agent@example.com&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLMAgent</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.providers</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLMProvider</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">basic_memory_example</span><span class="p">():</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>    <span class="n">provider</span> <span class="o">=</span> <span class="n">LLMProvider</span><span class="o">.</span><span class="n">create_openai</span><span class="p">(</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>        <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>    <span class="p">)</span>
 <a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>
-<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="c1"># API agent with memory</span>
-<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="n">api_agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
-<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>    <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;api_agent@example.com&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
-<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>    <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
-<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>    <span class="n">interaction_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Memory enabled</span>
-<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>    <span class="n">routing_function</span><span class="o">=</span><span class="n">api_agent_router</span>
-<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="p">)</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>    <span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>        <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;learning_agent@example.com&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>        <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>        <span class="n">agent_base_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>        <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;You are a learning assistant with memory capabilities.</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="s2">        Use these tools to learn and remember:</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="s2">        - store_memory: Save important information for future use</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="s2">        - search_memories: Find relevant information from past conversations</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="s2">        - list_memories: Browse your stored knowledge by category</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>
+<a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="s2">        Remember facts, patterns, preferences, and capabilities you discover.&quot;&quot;&quot;</span>
+<a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a>    <span class="p">)</span>
+<a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a>
+<a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a>    <span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Agent started with memory capabilities&quot;</span><span class="p">)</span>
+<a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a>
+<a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a>    <span class="c1"># Agent will automatically use memory tools during conversations</span>
+<a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a>    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3600</span><span class="p">)</span>  <span class="c1"># Run for 1 hour</span>
+<a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a>    <span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+<a id="__codelineno-8-32" name="__codelineno-8-32" href="#__codelineno-8-32"></a>
+<a id="__codelineno-8-33" name="__codelineno-8-33" href="#__codelineno-8-33"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<a id="__codelineno-8-34" name="__codelineno-8-34" href="#__codelineno-8-34"></a>    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">basic_memory_example</span><span class="p">())</span>
 </code></pre></div>
-<h3 id="memory-flow-example">Memory Flow Example<a class="headerlink" href="#memory-flow-example" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># 1. User asks about database connection</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1"># 2. Agent routes to database specialist</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="c1"># 3. Database agent responds with config info</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># 4. Agent calls remember_interaction_info(&quot;Database uses SSL config X&quot;)</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="c1"># 5. Later conversation about database automatically includes stored info</span>
+<h3 id="dual-memory-configuration">Dual Memory Configuration<a class="headerlink" href="#dual-memory-configuration" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">dual_memory_example</span><span class="p">():</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="n">provider</span> <span class="o">=</span> <span class="n">LLMProvider</span><span class="o">.</span><span class="n">create_openai</span><span class="p">(</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>        <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="p">)</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>    <span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>        <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;advanced_agent@example.com&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>        <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>        <span class="n">interaction_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Conversation-specific memory</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>        <span class="n">agent_base_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>   <span class="c1"># Long-term learning memory</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>        <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;You are an advanced assistant with dual memory systems.</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="s2">        You have access to:</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="s2">        - Interaction memory: For conversation-specific details</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="s2">        - Base memory: For long-term learning across all conversations</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="s2">        Use remember_interaction_info for conversation-specific information.</span>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="s2">        Use store_memory, search_memories, and list_memories for long-term learning.&quot;&quot;&quot;</span>
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>    <span class="p">)</span>
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>    <span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Agent started with dual memory systems&quot;</span><span class="p">)</span>
+<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3600</span><span class="p">)</span>
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>    <span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
 </code></pre></div>
+<h3 id="memory-enabled-multi-agent-system">Memory-Enabled Multi-Agent System<a class="headerlink" href="#memory-enabled-multi-agent-system" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">multi_agent_memory_example</span><span class="p">():</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="n">provider</span> <span class="o">=</span> <span class="n">LLMProvider</span><span class="o">.</span><span class="n">create_openai</span><span class="p">(</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>        <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="p">)</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>    <span class="c1"># Database specialist with memory</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>    <span class="n">db_agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>        <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;db_specialist@example.com&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>        <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>        <span class="n">agent_base_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>        <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;You are a database specialist with memory capabilities.</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="s2">        Store database facts, patterns, and user preferences.</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="s2">        Search your memory for relevant database solutions.&quot;&quot;&quot;</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>    <span class="p">)</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>    <span class="c1"># API specialist with memory</span>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>    <span class="n">api_agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>        <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;api_specialist@example.com&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>        <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>        <span class="n">agent_base_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a>        <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;You are an API specialist with memory capabilities.</span>
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a>
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="s2">        Remember API patterns, authentication methods, and integration details.</span>
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a><span class="s2">        Use your memory to provide consistent API guidance.&quot;&quot;&quot;</span>
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>    <span class="p">)</span>
+<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a>
+<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a>    <span class="k">await</span> <span class="n">db_agent</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a>    <span class="k">await</span> <span class="n">api_agent</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a>
+<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Multi-agent system with individual memory systems started&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a>
+<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>    <span class="c1"># Each agent maintains its own memory</span>
+<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a>    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3600</span><span class="p">)</span>
+<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a>
+<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a>    <span class="k">await</span> <span class="n">db_agent</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a>    <span class="k">await</span> <span class="n">api_agent</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</code></pre></div>
+<h2 id="memory-categories-guide">Memory Categories Guide<a class="headerlink" href="#memory-categories-guide" title="Permanent link">&para;</a></h2>
+<h3 id="fact-category">Fact Category<a class="headerlink" href="#fact-category" title="Permanent link">&para;</a></h3>
+<p>Store concrete, verifiable information.</p>
+<p><strong>Examples</strong>:
+- "API endpoint: https://api.example.com/v1/users"
+- "Database connection requires SSL on port 5432"
+- "User authentication uses JWT tokens"</p>
+<p><strong>Usage</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">store_memory</span><span class="p">(</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    <span class="n">content</span><span class="o">=</span><span class="s2">&quot;API rate limit is 1000 requests per hour&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    <span class="n">category</span><span class="o">=</span><span class="s2">&quot;fact&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="n">context</span><span class="o">=</span><span class="s2">&quot;API integration requirements&quot;</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="p">)</span>
+</code></pre></div></p>
+<h3 id="pattern-category">Pattern Category<a class="headerlink" href="#pattern-category" title="Permanent link">&para;</a></h3>
+<p>Store behavioral patterns or trends observed.</p>
+<p><strong>Examples</strong>:
+- "Users typically request data in JSON format"
+- "Database queries perform better with indexed columns"
+- "API failures increase during peak hours"</p>
+<p><strong>Usage</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">store_memory</span><span class="p">(</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    <span class="n">content</span><span class="o">=</span><span class="s2">&quot;Users prefer batch operations over individual requests&quot;</span><span class="p">,</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    <span class="n">category</span><span class="o">=</span><span class="s2">&quot;pattern&quot;</span><span class="p">,</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    <span class="n">context</span><span class="o">=</span><span class="s2">&quot;API usage optimization&quot;</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="p">)</span>
+</code></pre></div></p>
+<h3 id="preference-category">Preference Category<a class="headerlink" href="#preference-category" title="Permanent link">&para;</a></h3>
+<p>Store user preferences and system settings.</p>
+<p><strong>Examples</strong>:
+- "User prefers verbose error messages"
+- "System should use UTC timezone"
+- "Responses should include example code"</p>
+<p><strong>Usage</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">store_memory</span><span class="p">(</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>    <span class="n">content</span><span class="o">=</span><span class="s2">&quot;User prefers Python examples over JavaScript&quot;</span><span class="p">,</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    <span class="n">category</span><span class="o">=</span><span class="s2">&quot;preference&quot;</span><span class="p">,</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    <span class="n">context</span><span class="o">=</span><span class="s2">&quot;Code example preferences&quot;</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="p">)</span>
+</code></pre></div></p>
+<h3 id="capability-category">Capability Category<a class="headerlink" href="#capability-category" title="Permanent link">&para;</a></h3>
+<p>Store agent abilities and limitations.</p>
+<p><strong>Examples</strong>:
+- "Can generate SQL queries for PostgreSQL"
+- "Cannot access external APIs without authentication"
+- "Specializes in REST API design patterns"</p>
+<p><strong>Usage</strong>:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">store_memory</span><span class="p">(</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>    <span class="n">content</span><span class="o">=</span><span class="s2">&quot;Can provide database schema optimization recommendations&quot;</span><span class="p">,</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>    <span class="n">category</span><span class="o">=</span><span class="s2">&quot;capability&quot;</span><span class="p">,</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>    <span class="n">context</span><span class="o">=</span><span class="s2">&quot;Agent specialization discovery&quot;</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="p">)</span>
+</code></pre></div></p>
 <h2 id="advanced-configuration">Advanced Configuration<a class="headerlink" href="#advanced-configuration" title="Permanent link">&para;</a></h2>
-<h3 id="custom-memory-directory">Custom Memory Directory<a class="headerlink" href="#custom-memory-directory" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.memory</span><span class="w"> </span><span class="kn">import</span> <span class="n">AgentInteractionMemory</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="c1"># Custom storage location</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">memory</span> <span class="o">=</span> <span class="n">AgentInteractionMemory</span><span class="p">(</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>    <span class="n">agent_id</span><span class="o">=</span><span class="s2">&quot;custom_agent@example.com&quot;</span><span class="p">,</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    <span class="n">storage_dir</span><span class="o">=</span><span class="s2">&quot;/custom/memory/path&quot;</span>
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="p">)</span>
+<h3 id="context-management-integration">Context Management Integration<a class="headerlink" href="#context-management-integration" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">SmartWindowSizeContext</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="c1"># Memory works with context management</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="n">smart_context</span> <span class="o">=</span> <span class="n">SmartWindowSizeContext</span><span class="p">(</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>    <span class="n">max_messages</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>    <span class="n">preserve_initial</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>    <span class="n">prioritize_tools</span><span class="o">=</span><span class="kc">True</span>  <span class="c1"># Prioritizes memory tool results</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="p">)</span>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>    <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;smart_memory_agent@example.com&quot;</span><span class="p">,</span>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>    <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>    <span class="n">agent_base_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a>    <span class="n">context_management</span><span class="o">=</span><span class="n">smart_context</span>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="p">)</span>
 </code></pre></div>
-<h3 id="memory-operations">Memory Operations<a class="headerlink" href="#memory-operations" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Direct memory operations</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">memory</span> <span class="o">=</span> <span class="n">AgentInteractionMemory</span><span class="p">(</span><span class="s2">&quot;agent@example.com&quot;</span><span class="p">)</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># Add information</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="n">memory</span><span class="o">.</span><span class="n">add_information</span><span class="p">(</span><span class="s2">&quot;conv_1&quot;</span><span class="p">,</span> <span class="s2">&quot;User prefers JSON responses&quot;</span><span class="p">)</span>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="c1"># Get information</span>
-<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="n">info_list</span> <span class="o">=</span> <span class="n">memory</span><span class="o">.</span><span class="n">get_information</span><span class="p">(</span><span class="s2">&quot;conv_1&quot;</span><span class="p">)</span>
-<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>
-<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="c1"># Get context summary</span>
-<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="n">summary</span> <span class="o">=</span> <span class="n">memory</span><span class="o">.</span><span class="n">get_context_summary</span><span class="p">(</span><span class="s2">&quot;conv_1&quot;</span><span class="p">)</span>
-<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>
-<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="c1"># Clear conversation memory</span>
-<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="n">success</span> <span class="o">=</span> <span class="n">memory</span><span class="o">.</span><span class="n">clear_conversation</span><span class="p">(</span><span class="s2">&quot;conv_1&quot;</span><span class="p">)</span>
-</code></pre></div>
-<h3 id="integration-with-context-management">Integration with Context Management<a class="headerlink" href="#integration-with-context-management" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">SmartWindowSizeContext</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1"># Memory works with context management</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="n">smart_context</span> <span class="o">=</span> <span class="n">SmartWindowSizeContext</span><span class="p">(</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>    <span class="n">max_messages</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    <span class="n">preserve_initial</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>  <span class="c1"># Preserves initial context</span>
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>    <span class="n">prioritize_tools</span><span class="o">=</span><span class="kc">True</span>  <span class="c1"># Prioritizes memory tool results</span>
-<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="p">)</span>
-<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>
-<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
-<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>    <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;smart_memory_agent@example.com&quot;</span><span class="p">,</span>
-<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
-<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>    <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
-<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>    <span class="n">interaction_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Memory enabled</span>
-<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>    <span class="n">context_management</span><span class="o">=</span><span class="n">smart_context</span>  <span class="c1"># Smart context management</span>
-<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="p">)</span>
-</code></pre></div>
-<h2 id="memory-patterns">Memory Patterns<a class="headerlink" href="#memory-patterns" title="Permanent link">&para;</a></h2>
-<h3 id="learning-agent-pattern">Learning Agent Pattern<a class="headerlink" href="#learning-agent-pattern" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">learning_agent_example</span><span class="p">():</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Agent that learns user preferences over time&quot;&quot;&quot;</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    <span class="n">learning_agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>        <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;learning_agent@example.com&quot;</span><span class="p">,</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>        <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
-<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>        <span class="n">interaction_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>        <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="s2">        You are a learning assistant. Remember important user preferences,</span>
-<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="s2">        settings, and information for future interactions. Use the</span>
-<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="s2">        remember_interaction_info tool to store key details.</span>
-<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="s2">        &quot;&quot;&quot;</span>
-<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>    <span class="p">)</span>
-<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>
-<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>    <span class="k">await</span> <span class="n">learning_agent</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>    <span class="c1"># Agent learns and remembers across conversations</span>
-<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>    <span class="k">await</span> <span class="n">learning_agent</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-</code></pre></div>
-<h3 id="knowledge-base-pattern">Knowledge Base Pattern<a class="headerlink" href="#knowledge-base-pattern" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">knowledge_base_example</span><span class="p">():</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Agent that builds domain-specific knowledge&quot;&quot;&quot;</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>    <span class="n">kb_agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
-<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>        <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;kb_agent@example.com&quot;</span><span class="p">,</span>
-<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
-<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>        <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
-<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>        <span class="n">interaction_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>        <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="s2">        You are a knowledge base agent. Store important facts,</span>
-<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="s2">        procedures, and domain knowledge using remember_interaction_info.</span>
-<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="s2">        Reference stored knowledge in future conversations.</span>
-<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="s2">        &quot;&quot;&quot;</span>
-<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>    <span class="p">)</span>
-<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>
-<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>    <span class="k">await</span> <span class="n">kb_agent</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>    <span class="c1"># Agent builds and uses knowledge base</span>
-<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>    <span class="k">await</span> <span class="n">kb_agent</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-</code></pre></div>
-<h3 id="multi-agent-memory-sharing">Multi-Agent Memory Sharing<a class="headerlink" href="#multi-agent-memory-sharing" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">shared_memory_example</span><span class="p">():</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Multiple agents sharing conversation context&quot;&quot;&quot;</span>
-<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
-<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>    <span class="c1"># Database specialist with memory</span>
-<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>    <span class="n">db_agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
-<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>        <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;db_agent@example.com&quot;</span><span class="p">,</span>
-<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
-<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>        <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
-<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>        <span class="n">interaction_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>        <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;Database specialist with memory&quot;</span>
-<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>    <span class="p">)</span>
-<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>
-<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>    <span class="c1"># API specialist with memory</span>
-<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>    <span class="n">api_agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
-<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a>        <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;api_agent@example.com&quot;</span><span class="p">,</span> 
-<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a>        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
-<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a>        <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
-<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a>        <span class="n">interaction_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a>        <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;API specialist with memory&quot;</span>
-<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a>    <span class="p">)</span>
-<a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a>
-<a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a>    <span class="c1"># Each agent maintains its own memory</span>
-<a id="__codelineno-15-23" name="__codelineno-15-23" href="#__codelineno-15-23"></a>    <span class="c1"># Memory is conversation-specific</span>
-<a id="__codelineno-15-24" name="__codelineno-15-24" href="#__codelineno-15-24"></a>    <span class="k">await</span> <span class="n">db_agent</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-<a id="__codelineno-15-25" name="__codelineno-15-25" href="#__codelineno-15-25"></a>    <span class="k">await</span> <span class="n">api_agent</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-</code></pre></div>
-<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
-<h3 id="common-issues">Common Issues<a class="headerlink" href="#common-issues" title="Permanent link">&para;</a></h3>
-<h4 id="memory-not-persisting">Memory Not Persisting<a class="headerlink" href="#memory-not-persisting" title="Permanent link">&para;</a></h4>
-<ul>
-<li>Check file permissions in <code>spade_llm/data/agent_memory/</code></li>
-<li>Verify <code>interaction_memory=True</code> in agent configuration</li>
-<li>Ensure proper conversation ID generation</li>
-</ul>
-<h4 id="memory-not-loading">Memory Not Loading<a class="headerlink" href="#memory-not-loading" title="Permanent link">&para;</a></h4>
-<ul>
-<li>Current implementation requires manual loading</li>
-<li>Check file existence and JSON format</li>
-<li>Verify agent ID matches filename</li>
-</ul>
-<h4 id="performance-issues">Performance Issues<a class="headerlink" href="#performance-issues" title="Permanent link">&para;</a></h4>
-<ul>
-<li>Monitor memory file sizes</li>
-<li>Implement periodic cleanup</li>
-<li>Consider moving to database backend</li>
-</ul>
-<h3 id="debug-mode">Debug Mode<a class="headerlink" href="#debug-mode" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="c1"># Enable debug logging</span>
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
-<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="c1"># Agent will log memory operations</span>
-<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
-<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>    <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;debug_agent@example.com&quot;</span><span class="p">,</span>
-<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
-<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>    <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
-<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>    <span class="n">interaction_memory</span><span class="o">=</span><span class="kc">True</span>
-<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="p">)</span>
-</code></pre></div>
-<h2 id="complete-example">Complete Example<a class="headerlink" href="#complete-example" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLMAgent</span>
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.providers</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLMProvider</span>
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">spade_llm.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">SmartWindowSizeContext</span>
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">complete_memory_example</span><span class="p">():</span>
-<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>    <span class="c1"># Configure context management</span>
-<a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>    <span class="n">smart_context</span> <span class="o">=</span> <span class="n">SmartWindowSizeContext</span><span class="p">(</span>
-<a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>        <span class="n">max_messages</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-<a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>        <span class="n">preserve_initial</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-<a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>        <span class="n">prioritize_tools</span><span class="o">=</span><span class="kc">True</span>
-<a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>    <span class="p">)</span>
-<a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>
-<a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>    <span class="c1"># Create provider</span>
-<a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>    <span class="n">provider</span> <span class="o">=</span> <span class="n">LLMProvider</span><span class="o">.</span><span class="n">create_openai</span><span class="p">(</span>
-<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a>        <span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span><span class="p">,</span>
-<a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a>        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span>
-<a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a>    <span class="p">)</span>
-<a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a>
-<a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a>    <span class="c1"># Create agent with memory and smart context</span>
-<a id="__codelineno-17-21" name="__codelineno-17-21" href="#__codelineno-17-21"></a>    <span class="n">agent</span> <span class="o">=</span> <span class="n">LLMAgent</span><span class="p">(</span>
-<a id="__codelineno-17-22" name="__codelineno-17-22" href="#__codelineno-17-22"></a>        <span class="n">jid</span><span class="o">=</span><span class="s2">&quot;memory_agent@example.com&quot;</span><span class="p">,</span>
-<a id="__codelineno-17-23" name="__codelineno-17-23" href="#__codelineno-17-23"></a>        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;password&quot;</span><span class="p">,</span>
-<a id="__codelineno-17-24" name="__codelineno-17-24" href="#__codelineno-17-24"></a>        <span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="p">,</span>
-<a id="__codelineno-17-25" name="__codelineno-17-25" href="#__codelineno-17-25"></a>        <span class="n">interaction_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Enable memory</span>
-<a id="__codelineno-17-26" name="__codelineno-17-26" href="#__codelineno-17-26"></a>        <span class="n">context_management</span><span class="o">=</span><span class="n">smart_context</span><span class="p">,</span>  <span class="c1"># Context management</span>
-<a id="__codelineno-17-27" name="__codelineno-17-27" href="#__codelineno-17-27"></a>        <span class="n">system_prompt</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-17-28" name="__codelineno-17-28" href="#__codelineno-17-28"></a><span class="s2">        You are an assistant with memory capabilities.</span>
-<a id="__codelineno-17-29" name="__codelineno-17-29" href="#__codelineno-17-29"></a>
-<a id="__codelineno-17-30" name="__codelineno-17-30" href="#__codelineno-17-30"></a><span class="s2">        You can remember important information using the remember_interaction_info tool.</span>
-<a id="__codelineno-17-31" name="__codelineno-17-31" href="#__codelineno-17-31"></a><span class="s2">        This information will be available in future conversations.</span>
-<a id="__codelineno-17-32" name="__codelineno-17-32" href="#__codelineno-17-32"></a>
-<a id="__codelineno-17-33" name="__codelineno-17-33" href="#__codelineno-17-33"></a><span class="s2">        Use memory to provide better, more personalized assistance.</span>
-<a id="__codelineno-17-34" name="__codelineno-17-34" href="#__codelineno-17-34"></a><span class="s2">        &quot;&quot;&quot;</span>
-<a id="__codelineno-17-35" name="__codelineno-17-35" href="#__codelineno-17-35"></a>    <span class="p">)</span>
-<a id="__codelineno-17-36" name="__codelineno-17-36" href="#__codelineno-17-36"></a>
-<a id="__codelineno-17-37" name="__codelineno-17-37" href="#__codelineno-17-37"></a>    <span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-<a id="__codelineno-17-38" name="__codelineno-17-38" href="#__codelineno-17-38"></a>
-<a id="__codelineno-17-39" name="__codelineno-17-39" href="#__codelineno-17-39"></a>    <span class="c1"># Agent now has:</span>
-<a id="__codelineno-17-40" name="__codelineno-17-40" href="#__codelineno-17-40"></a>    <span class="c1"># - Memory capabilities</span>
-<a id="__codelineno-17-41" name="__codelineno-17-41" href="#__codelineno-17-41"></a>    <span class="c1"># - Context management</span>
-<a id="__codelineno-17-42" name="__codelineno-17-42" href="#__codelineno-17-42"></a>    <span class="c1"># - Tool integration</span>
-<a id="__codelineno-17-43" name="__codelineno-17-43" href="#__codelineno-17-43"></a>    <span class="c1"># - Automatic context injection</span>
-<a id="__codelineno-17-44" name="__codelineno-17-44" href="#__codelineno-17-44"></a>
-<a id="__codelineno-17-45" name="__codelineno-17-45" href="#__codelineno-17-45"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Agent started with memory capabilities&quot;</span><span class="p">)</span>
-<a id="__codelineno-17-46" name="__codelineno-17-46" href="#__codelineno-17-46"></a>
-<a id="__codelineno-17-47" name="__codelineno-17-47" href="#__codelineno-17-47"></a>    <span class="c1"># Keep agent running</span>
-<a id="__codelineno-17-48" name="__codelineno-17-48" href="#__codelineno-17-48"></a>    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3600</span><span class="p">)</span>  <span class="c1"># Run for 1 hour</span>
-<a id="__codelineno-17-49" name="__codelineno-17-49" href="#__codelineno-17-49"></a>
-<a id="__codelineno-17-50" name="__codelineno-17-50" href="#__codelineno-17-50"></a>    <span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-<a id="__codelineno-17-51" name="__codelineno-17-51" href="#__codelineno-17-51"></a>
-<a id="__codelineno-17-52" name="__codelineno-17-52" href="#__codelineno-17-52"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-<a id="__codelineno-17-53" name="__codelineno-17-53" href="#__codelineno-17-53"></a>    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">complete_memory_example</span><span class="p">())</span>
-</code></pre></div>
+<h2 id="performance-considerations">Performance Considerations<a class="headerlink" href="#performance-considerations" title="Permanent link">&para;</a></h2>
+<h3 id="interaction-memory">Interaction Memory<a class="headerlink" href="#interaction-memory" title="Permanent link">&para;</a></h3>
+<p><strong>Advantages</strong>:
+- Fast file-based operations
+- Simple JSON format
+- Minimal overhead</p>
+<p><strong>Limitations</strong>:
+- File size grows with conversation length
+- No search capabilities
+- File locking issues with concurrent access</p>
+<h3 id="agent-base-memory">Agent Base Memory<a class="headerlink" href="#agent-base-memory" title="Permanent link">&para;</a></h3>
+<p><strong>Advantages</strong>:
+- Fast SQLite database operations
+- Full-text search capabilities
+- Concurrent access support
+- Structured data storage</p>
+<p><strong>Limitations</strong>:
+- Database file size growth
+- Memory queries add latency
+- Requires database maintenance</p>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong><a href="../context-management/">Context Management</a></strong> - Context control strategies</li>
