@@ -6,6 +6,7 @@ Extension for [SPADE](https://github.com/javipalanca/spade) that integrates Larg
 
 - **Multi-Provider Support**: OpenAI, Ollama, LM Studio, vLLM
 - **Tool System**: Function calling with async execution
+- **Memory System**: Dual memory architecture for agent learning and conversation continuity
 - **Context Management**: Multi-conversation support with automatic cleanup
 - **Message Routing**: Conditional routing based on LLM responses
 - **Guardrails System**: Content filtering and safety controls for input/output
@@ -64,9 +65,11 @@ graph TB
 - **[Architecture](guides/architecture.md)** - SPADE_LLM general structure
 - **[Providers](guides/providers.md)** - LLM provider configuration
 - **[Tools System](guides/tools-system.md)** - Function calling capabilities
+- **[Memory System](guides/memory.md)** - Agent learning and conversation continuity
+- **[Context Management](guides/context-management.md)** - Context control and message management
+- **[Conversations](guides/conversations.md)** - Conversation lifecycle and management
 - **[Guardrails](guides/guardrails.md)** - Content filtering and safety controls
 - **[Message Routing](guides/routing.md)** - Conditional message routing
-- **[Context Management](guides/conversations.md)** - Conversation handling
 
 
 

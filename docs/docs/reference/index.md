@@ -8,6 +8,7 @@ Complete API documentation for SPADE_LLM components.
 - **[Behaviour](api/behaviour/)** - LLMBehaviour implementation  
 - **[Providers](api/providers/)** - LLM provider interfaces
 - **[Tools](api/tools/)** - Tool system and LLMTool class
+- **[Memory](api/memory/)** - Memory system API for agent learning and persistence
 - **[Human Interface](api/human-interface/)** - Human-in-the-loop API and integration
 - **[Guardrails](api/guardrails/)** - Content filtering and safety controls
 - **[Context](api/context/)** - Context and conversation management

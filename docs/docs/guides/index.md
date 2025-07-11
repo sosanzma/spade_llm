@@ -7,8 +7,9 @@ Comprehensive guides for SPADE_LLM features and concepts.
 - **[Architecture](architecture/)** - System components and design
 - **[Providers](providers/)** - LLM provider configuration and usage
 - **[Tools System](tools-system/)** - Function calling and tool integration
-- **[Context Management](context-management/)** - Advanced context control and memory optimization
-- **[Memory System](memory/)** - Agent memory and learning capabilities
+- **[Context Management](context-management/)** - Advanced context control and message management
+- **[Memory System](memory/)** - Dual memory architecture for agent learning and conversation continuity
+- **[Memory Architecture](memory-architecture/)** - Detailed memory system architecture and diagrams
 - **[Conversations](conversations/)** - Conversation lifecycle and management
 - **[MCP](mcp/)** - Model context protocol integration
 - **[Human-in-the-Loop](human-in-the-loop/)** - Human expert consultation and workflows
