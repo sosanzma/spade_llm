@@ -54,7 +54,6 @@ class LLMProvider:
             model_format: Format convention for model names.
             provider_name: Name of the provider for logging purposes.
         """
-        self.tools: List[LLMTool] = []
         self.api_key = api_key
         self.model = model
         self.temperature = temperature
@@ -224,23 +223,14 @@ class LLMProvider:
             provider_name="vLLM",
             **kwargs
         )
-        
-    def register_tool(self, tool: LLMTool) -> None:
-        """
-        Register a tool with this provider.
-        
-        Args:
-            tool: The tool to register
-        """
-        self.tools.append(tool)
-        logger.info(f"Registered tool '{tool.name}' with {self.provider_name} provider")
 
-    async def get_llm_response(self, context: ContextManager) -> Dict[str, Any]:
+    async def get_llm_response(self, context: ContextManager, tools: Optional[List[LLMTool]] = None) -> Dict[str, Any]:
         """
         Get complete response from the LLM including both text and tool calls.
         
         Args:
             context: The conversation context manager
+            tools: Optional list of tools available for this specific call
             
         Returns:
             Dictionary containing:
@@ -251,11 +241,11 @@ class LLMProvider:
         logger.info(f"Sending prompt to {self.provider_name} ({self.model})")
         logger.debug(f"Prompt: {prompt}")
         
-        # Prepare tools if they exist
-        tools = None
-        if self.tools:
-            tools = [tool.to_openai_tool() for tool in self.tools]
-            logger.debug(f"Available tools: {[tool['function']['name'] for tool in tools]}")
+        # Prepare tools if they are provided
+        formatted_tools = None
+        if tools:
+            formatted_tools = [tool.to_openai_tool() for tool in tools]
+            logger.debug(f"Available tools: {[tool['function']['name'] for tool in formatted_tools]}")
         
         try:
             # Prepare the completion kwargs
@@ -270,8 +260,8 @@ class LLMProvider:
             if self.max_tokens:
                 completion_kwargs["max_tokens"] = self.max_tokens
             
-            if tools:
-                completion_kwargs["tools"] = tools
+            if formatted_tools:
+                completion_kwargs["tools"] = formatted_tools
                 completion_kwargs["tool_choice"] = "auto"
                 
                 # Note for Ollama users
@@ -328,28 +318,30 @@ class LLMProvider:
             raise
         
     # Legacy methods that delegate to the main method (for backwards compatibility)
-    async def get_response(self, context: ContextManager) -> Optional[str]:
+    async def get_response(self, context: ContextManager, tools: Optional[List[LLMTool]] = None) -> Optional[str]:
         """
         Get a response from the LLM based on the current context.
         
         Args:
             context: The conversation context manager
+            tools: Optional list of tools available for this specific call
             
         Returns:
             The LLM's response as a string, or None if tool calls should be processed first
         """
-        response = await self.get_llm_response(context)
+        response = await self.get_llm_response(context, tools)
         return response.get('text')
         
-    async def get_tool_calls(self, context: ContextManager) -> List[Dict[str, Any]]:
+    async def get_tool_calls(self, context: ContextManager, tools: Optional[List[LLMTool]] = None) -> List[Dict[str, Any]]:
         """
         Get tool calls from the LLM based on the current context.
         
         Args:
             context: The conversation context manager
+            tools: Optional list of tools available for this specific call
             
         Returns:
             List of tool call specifications
         """
-        response = await self.get_llm_response(context)
+        response = await self.get_llm_response(context, tools)
         return response.get('tool_calls', [])

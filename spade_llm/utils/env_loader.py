@@ -118,3 +118,32 @@ def _get_env_file_variables(env_path: Path) -> Dict[str, str]:
             variables[key] = value
             
     return variables
+
+
+def get_memory_path() -> Path:
+    """
+    Get configurable memory storage path from environment variable.
+    
+    Returns:
+        Path: Path object for memory storage directory
+        
+    Environment Variables:
+        SPADE_LLM_MEMORY_PATH: Custom path for memory storage (optional)
+    """
+    default_path = "spade_llm/data/agent_memory"
+    custom_path = os.getenv('SPADE_LLM_MEMORY_PATH', default_path)
+    memory_path = Path(custom_path)
+    
+    # Create directory if it doesn't exist
+    try:
+        memory_path.mkdir(parents=True, exist_ok=True)
+        logger.debug(f"Memory path configured: {memory_path.absolute()}")
+    except (OSError, PermissionError) as e:
+        logger.error(f"Failed to create memory directory {memory_path}: {e}")
+        # Fall back to default path in case of permission issues
+        fallback_path = Path(default_path)
+        fallback_path.mkdir(parents=True, exist_ok=True)
+        logger.info(f"Using fallback memory path: {fallback_path.absolute()}")
+        return fallback_path
+    
+    return memory_path

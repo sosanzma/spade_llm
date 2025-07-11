@@ -32,6 +32,7 @@ class ChatAgent(Agent):
                 msg = Message(to=target_jid)
                 msg.body = message_to_send
                 msg.set_metadata("performative", "request")
+                msg.set_metadata("message_type", "llm")  # Mark as LLM-targeted message
 
                 # Log if verbose mode is enabled
                 verbose = self.get("verbose")
@@ -142,6 +143,7 @@ class ChatAgent(Agent):
         msg = Message(to=self.target_agent_jid)
         msg.body = message
         msg.set_metadata("performative", "request")
+        msg.set_metadata("message_type", "llm")  # Mark as LLM-targeted message
 
         if self.verbose:
             logger.info(f"ChatAgent sending: '{message}' to {self.target_agent_jid}")

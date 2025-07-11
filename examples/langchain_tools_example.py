@@ -47,17 +47,13 @@ async def main():
     #     base_url="http://localhost:11434/v1"
     # )
 
-    # Register tools
-    for tool in tools:
-        provider.register_tool(tool)
-
-    # Create LLM agent
+    # Create LLM agent with tools
     smart_agent = LLMAgent(
         jid=smart_jid,
         password=smart_password,
         provider=provider,
         system_prompt="You are a helpful assistant with search and Wikipedia tools. Use them for current info.",
-        tools=tools
+        tools=tools  # Tools are now passed directly to the agent
     )
 
     await smart_agent.start()

@@ -7,8 +7,8 @@ from mcp.types import Tool
 
 from ..tools.llm_tool import LLMTool
 import logging
-from .adapters import SseMCPToolAdapter, StdioMCPToolAdapter
-from .config import MCPServerConfig, SseServerConfig, StdioServerConfig
+from .adapters import SseMCPToolAdapter, StdioMCPToolAdapter, StreamableHttpMCPToolAdapter
+from .config import MCPServerConfig, SseServerConfig, StdioServerConfig, StreamableHttpServerConfig
 from .session import MCPSession
 
 logger = logging.getLogger(__name__)
@@ -40,6 +40,8 @@ async def get_mcp_server_tools(server_config: MCPServerConfig) -> List[LLMTool]:
             return [StdioMCPToolAdapter(server_config, tool) for tool in tools]
         elif isinstance(server_config, SseServerConfig):
             return [SseMCPToolAdapter(server_config, tool) for tool in tools]
+        elif isinstance(server_config, StreamableHttpServerConfig):
+            return [StreamableHttpMCPToolAdapter(server_config, tool) for tool in tools]
         else:
             raise ValueError(f"Unsupported server configuration type: {type(server_config)}")
     except Exception as e:
@@ -84,6 +86,8 @@ async def get_mcp_tool(
             return StdioMCPToolAdapter(server_config, tool)
         elif isinstance(server_config, SseServerConfig):
             return SseMCPToolAdapter(server_config, tool)
+        elif isinstance(server_config, StreamableHttpServerConfig):
+            return StreamableHttpMCPToolAdapter(server_config, tool)
         else:
             raise ValueError(f"Unsupported server configuration type: {type(server_config)}")
     except Exception as e:

@@ -84,3 +84,33 @@ class SseServerConfig(MCPServerConfig):
         """Validate required fields after initialization."""
         if self.url is None:
             raise ValueError("url is required for SseServerConfig")
+
+
+@dataclass
+class StreamableHttpServerConfig(MCPServerConfig):
+    """Configuration for MCP servers using Streamable HTTP transport.
+
+    This configuration is used for MCP servers that communicate via
+    the Streamable HTTP protocol, which provides improved session
+    management and stability over SSE.
+    """
+
+    url: str = field(default=None)
+    """The URL of the Streamable HTTP endpoint."""
+
+    headers: Optional[Dict[str, str]] = None
+    """HTTP headers to include in requests."""
+
+    timeout: float = 30.0
+    """Connection timeout in seconds."""
+
+    sse_read_timeout: float = 300.0  # 5 minutes
+    """Read timeout for SSE stream in seconds."""
+
+    terminate_on_close: bool = True
+    """Whether to terminate the connection when closed."""
+    
+    def __post_init__(self):
+        """Validate required fields after initialization."""
+        if self.url is None:
+            raise ValueError("url is required for StreamableHttpServerConfig")

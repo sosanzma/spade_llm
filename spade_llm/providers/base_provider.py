@@ -16,19 +16,23 @@ class LLMProvider(ABC):
     
     This class defines the interface that all LLM providers must implement,
     allowing for consistent interaction regardless of the underlying LLM service.
+    
+    Providers are responsible for communication with LLM services only.
+    Tools and capabilities are managed at the agent/behaviour level.
     """
     
     def __init__(self):
         """Initialize the LLM provider."""
-        self.tools = []
+        pass
     
     @abstractmethod
-    async def get_llm_response(self, context: ContextManager) -> Dict[str, Any]:
+    async def get_llm_response(self, context: ContextManager, tools: Optional[List[LLMTool]] = None) -> Dict[str, Any]:
         """
         Get complete response from the LLM including both text and tool calls.
         
         Args:
             context: The conversation context manager
+            tools: Optional list of tools available for this specific call
             
         Returns:
             Dictionary containing:
@@ -36,39 +40,32 @@ class LLMProvider(ABC):
             - 'tool_calls': List of tool calls (empty if there are none)
         """
         pass
-    
-    def register_tool(self, tool: LLMTool) -> None:
-        """
-        Register a tool with the provider.
-        
-        Args:
-            tool: The tool to register
-        """
-        self.tools.append(tool)
         
     # Legacy methods that delegate to the new unified method
-    async def get_response(self, context: ContextManager) -> Optional[str]:
+    async def get_response(self, context: ContextManager, tools: Optional[List[LLMTool]] = None) -> Optional[str]:
         """
         Get a response from the LLM based on the current context.
         
         Args:
             context: The conversation context manager
+            tools: Optional list of tools available for this specific call
             
         Returns:
             The LLM's response as a string, or None if tool calls should be processed first
         """
-        response = await self.get_llm_response(context)
+        response = await self.get_llm_response(context, tools)
         return response.get('text')
         
-    async def get_tool_calls(self, context: ContextManager) -> List[Dict[str, Any]]:
+    async def get_tool_calls(self, context: ContextManager, tools: Optional[List[LLMTool]] = None) -> List[Dict[str, Any]]:
         """
         Get tool calls from the LLM based on the current context.
         
         Args:
             context: The conversation context manager
+            tools: Optional list of tools available for this specific call
             
         Returns:
             List of tool call specifications
         """
-        response = await self.get_llm_response(context)
+        response = await self.get_llm_response(context, tools)
         return response.get('tool_calls', [])

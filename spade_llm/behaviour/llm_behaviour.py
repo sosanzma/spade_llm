@@ -16,6 +16,7 @@ from ..context import (
 from ..providers.base_provider import LLMProvider
 from ..tools import LLMTool
 from ..routing import RoutingFunction, RoutingResponse
+from ..guardrails import InputGuardrail, OutputGuardrail, GuardrailAction, GuardrailResult, apply_input_guardrails, apply_output_guardrails
 
 logger = logging.getLogger("spade_llm.behaviour")
 
@@ -40,6 +41,7 @@ class LLMBehaviour(CyclicBehaviour):
     - Send prompts to LLM providers
     - Handle tool invocation
     - Send responses back with optional conditional routing
+    - Apply input and output guardrails for content filtering
     
     The behaviour remains active throughout the agent's lifecycle,
     but individual conversations can be terminated based on conditions.
@@ -53,7 +55,11 @@ class LLMBehaviour(CyclicBehaviour):
                 termination_markers: Optional[List[str]] = None,
                 max_interactions_per_conversation: Optional[int] = None,
                 on_conversation_end: Optional[Callable[[str, str], None]] = None,
-                tools: Optional[List[LLMTool]] = None):
+                tools: Optional[List[LLMTool]] = None,
+                input_guardrails: Optional[List[InputGuardrail]] = None,
+                output_guardrails: Optional[List[OutputGuardrail]] = None,
+                on_guardrail_trigger: Optional[Callable[[GuardrailResult], None]] = None,
+                interaction_memory=None):
         """
         Initialize the LLM behaviour.
         
@@ -66,6 +72,10 @@ class LLMBehaviour(CyclicBehaviour):
             max_interactions_per_conversation: Maximum number of back-and-forth exchanges in a conversation
             on_conversation_end: Callback function when a conversation ends (receives conversation_id and reason)
             tools: Optional list of tools that can be used by the LLM
+            input_guardrails: List of guardrails to apply to incoming messages
+            output_guardrails: List of guardrails to apply to LLM responses
+            on_guardrail_trigger: Callback when a guardrail blocks/modifies content
+            interaction_memory: Optional AgentInteractionMemory instance for agent-to-agent memory
         """
         super().__init__()
         self.provider = llm_provider
@@ -81,10 +91,16 @@ class LLMBehaviour(CyclicBehaviour):
         self.max_interactions_per_conversation = max_interactions_per_conversation
         self.on_conversation_end = on_conversation_end
         
-        # Register tools with the provider
-        if tools:
-            for tool in tools:
-                self.provider.register_tool(tool)
+        # Store tools at the behaviour level
+        self.tools: List[LLMTool] = tools or []
+        
+        # Guardrails
+        self.input_guardrails: List[InputGuardrail] = input_guardrails or []
+        self.output_guardrails: List[OutputGuardrail] = output_guardrails or []
+        self.on_guardrail_trigger = on_guardrail_trigger
+        
+        # Interaction memory
+        self.interaction_memory = interaction_memory
         
         # Track active conversations
         self._active_conversations: Dict[str, Dict[str, Any]] = {}
@@ -143,18 +159,37 @@ class LLMBehaviour(CyclicBehaviour):
                 ConversationState.MAX_INTERACTIONS_REACHED
             )
             
-            # Optional: Send a message indicating the conversation has reached its limit
+
             reply = msg.make_reply()
             reply.body = f"This conversation has reached the maximum limit of {self.max_interactions_per_conversation} interactions."
             await self.send(reply)
             return
         
-        # Update context with new message
-        self.context.add_message(msg, conversation_id)
+        # Apply input guardrails
+        processed_content = await apply_input_guardrails(
+            content=msg.body,
+            message=msg,
+            guardrails=self.input_guardrails,
+            on_trigger=self.on_guardrail_trigger,
+            send_reply=self.send
+        )
+        if processed_content is None:
+            # Message was blocked - the guardrail already sent a response
+            return
+        
+        # Create a copy of the message with processed content
+        processed_msg = Message(to=str(msg.to), sender=str(msg.sender), thread=msg.thread)
+        processed_msg.body = processed_content
+        
+        # Update context with processed message
+        self.context.add_message(processed_msg, conversation_id)
+        
+        # Auto-inject interaction memory if available
+        await self._inject_interaction_memory(conversation_id)
         
         # Process the conversation with the LLM
         try:
-            await self._process_message_with_llm(msg, conversation_id)
+            await self._process_message_with_llm(processed_msg, conversation_id)
         except Exception as e:
             logger.error(f"Error processing message: {e}")
             await self._end_conversation(conversation_id, ConversationState.ERROR)
@@ -173,16 +208,20 @@ class LLMBehaviour(CyclicBehaviour):
             conversation_id: The ID of the conversation
         """
         final_response = None
-        max_tool_iterations = 5  # Limit to prevent infinite loops -- should be parametrized
+        max_tool_iterations = 20  # Limit to prevent infinite loops -- should be parametrized
         current_iteration = 0
         
         try:
+            # Prepare tools with conversation context
+            prepared_tools = self._prepare_tools_with_conversation_context(conversation_id)
+            
             # Tool processing loop until a final response is obtained
             while final_response is None and current_iteration < max_tool_iterations:
                 current_iteration += 1
                 logger.info(f"Tool processing iteration {current_iteration}/{max_tool_iterations}")
                 
-                llm_response = await self.provider.get_llm_response(self.context)
+                # Pass prepared tools to provider for this specific call
+                llm_response = await self.provider.get_llm_response(self.context, prepared_tools)
                 
                 tool_calls = llm_response.get('tool_calls', [])
                 text_response = llm_response.get('text')
@@ -208,8 +247,8 @@ class LLMBehaviour(CyclicBehaviour):
                     
                     logger.info(f"Processing tool call: {tool_name} with args: {tool_args}")
                     
-                    # Find the tool by name
-                    tool = next((t for t in self.provider.tools if t.name == tool_name), None)
+                    # Find the tool by name in the prepared tools
+                    tool = next((t for t in prepared_tools if t.name == tool_name), None)
                     
                     if tool:
                         try:
@@ -230,7 +269,7 @@ class LLMBehaviour(CyclicBehaviour):
             # Handle case where max iterations was reached
             if final_response is None and current_iteration >= max_tool_iterations:
                 logger.warning(f"Reached maximum tool iterations ({max_tool_iterations}), forcing final response")
-                final_response = (await self.provider.get_llm_response(self.context)).get('text')
+                final_response = (await self.provider.get_llm_response(self.context, prepared_tools)).get('text')
                 
         except Exception as e:
             logger.error(f"Error in tool processing loop: {e}")
@@ -239,6 +278,14 @@ class LLMBehaviour(CyclicBehaviour):
         
         if not final_response:
             final_response = "I'm sorry, I couldn't complete this request properly. Please try again or rephrase your query."
+        
+        # Apply output guardrails before sending
+        final_response = await apply_output_guardrails(
+            content=final_response,
+            original_message=msg,
+            guardrails=self.output_guardrails,
+            on_trigger=self.on_guardrail_trigger
+        )
         
         # Add assistant response to context before sending
         self.context.add_assistant_message(final_response, conversation_id)
@@ -298,6 +345,9 @@ class LLMBehaviour(CyclicBehaviour):
             reply = Message(to=recipient)
             reply.body = transform(response) if transform else response
             reply.thread = conversation_id
+            
+            # Mark as LLM message for proper template filtering
+            reply.set_metadata("message_type", "llm")
             
             # Add any metadata
             for key, value in metadata.items():
@@ -362,9 +412,97 @@ class LLMBehaviour(CyclicBehaviour):
         
     def register_tool(self, tool: LLMTool) -> None:
         """
-        Register a tool with the LLM provider.
+        Register a tool with this behaviour.
         
         Args:
             tool: The tool to register
         """
-        self.provider.register_tool(tool)
+        self.tools.append(tool)
+        logger.info(f"Registered tool '{tool.name}' with behaviour")
+        
+    def get_tools(self) -> List[LLMTool]:
+        """
+        Get the list of tools registered with this behaviour.
+        
+        Returns:
+            List of tools available to this behaviour
+        """
+        return self.tools
+    
+    def add_input_guardrail(self, guardrail: InputGuardrail) -> None:
+        """
+        Add an input guardrail to this behaviour.
+        
+        Args:
+            guardrail: The input guardrail to add
+        """
+        self.input_guardrails.append(guardrail)
+        logger.info(f"Added input guardrail '{guardrail.name}' to behaviour")
+    
+    def add_output_guardrail(self, guardrail: OutputGuardrail) -> None:
+        """
+        Add an output guardrail to this behaviour.
+        
+        Args:
+            guardrail: The output guardrail to add
+        """
+        self.output_guardrails.append(guardrail)
+        logger.info(f"Added output guardrail '{guardrail.name}' to behaviour")
+    
+    async def _inject_interaction_memory(self, conversation_id: str):
+        """
+        Inject relevant interaction memory into the context automatically.
+        
+        This method checks if we have previous interaction memory for this conversation
+        and adds it to the context as a system message so the agent is aware of 
+        previous learned information without needing to explicitly recall it.
+        
+        Args:
+            conversation_id: The conversation ID to check for memory
+        """
+        if not self.interaction_memory:
+            return
+        
+        # Get memory summary for this conversation
+        memory_summary = self.interaction_memory.get_context_summary(conversation_id)
+        
+        if memory_summary:
+            # Check if we've already injected memory for this conversation
+            # to avoid duplicating it on every message
+            conversation_history = self.context.get_conversation_history(conversation_id)
+            
+            # Check if any existing message contains this memory summary
+            memory_already_injected = any(
+                msg.get("role") == "system" and "Previous interaction notes:" in msg.get("content", "")
+                for msg in conversation_history
+            )
+            
+            if not memory_already_injected:
+                # Inject memory as a system message
+                from ..context._types import create_system_message
+                memory_message = create_system_message(memory_summary)
+                self.context.add_message_dict(memory_message, conversation_id)
+                logger.info(f"Injected interaction memory for conversation {conversation_id}")
+    
+    def _prepare_tools_with_conversation_context(self, conversation_id: str):
+        """
+        Prepare tools with conversation context for execution.
+        
+        This ensures that memory tools have access to the current conversation_id
+        so they can store information correctly.
+        
+        Args:
+            conversation_id: The current conversation ID
+            
+        Returns:
+            List of tools prepared with conversation context
+        """
+        prepared_tools = []
+        
+        for tool in self.tools:
+            # Check if this is a memory tool that needs conversation context
+            if hasattr(tool, 'set_conversation_id'):
+                tool.set_conversation_id(conversation_id)
+            prepared_tools.append(tool)
+        
+        return prepared_tools

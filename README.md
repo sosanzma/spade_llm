@@ -1,176 +1,32 @@
 # SPADE_LLM
 
-SPADE_LLM is an extension for [SPADE](https://github.com/javipalanca/spade) (Smart Python Agent Development Environment) that integrates Large Language Models (LLMs) capabilities into SPADE agents.
+Extension for [SPADE](https://github.com/javipalanca/spade) that integrates Large Language Models into multi-agent systems.
 
-## Overview
+## Features
 
-SPADE_LLM extends SPADE's multi-agent framework by providing:
+- **Multi-Provider Support**: OpenAI, Ollama, LM Studio, vLLM
+- **Tool System**: Function calling with async execution
+- **Context Management**: Multi-conversation support. Automatic cleanup and smart managment
+- **Memory Extensions**: Agent-based and agent-thread memory for persistent state
+- **Message Routing**: Conditional routing based on LLM responses
+- **Guardrails System**: Content filtering and safety controls for input/output
+- **MCP Integration**: Model Context Protocol server support
+- **Human-in-the-Loop**: Web interface for human expert consultation
 
-- Integration with multiple LLM providers (OpenAI, Ollama, LM Studio, vLLM)
-- Tool-calling capabilities for agents
-- Context management for conversations
-- Model Context Protocol (MCP) support
-- Routing mechanisms for inter-agent communication
-
-## Architecture
-
-### System Overview
-
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                           SPADE_LLM                                 │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│  ┌─────────────┐    ┌──────────────┐    ┌───────────────┐         │
-│  │  LLMAgent   │───►│ LLMBehaviour │───►│ LLMProvider   │         │
-│  │             │    │              │    │               │         │
-│  └─────┬───────┘    └──────┬───────┘    └───────────────┘         │
-│        │                   │                                       │
-│        │                   ▼                                       │
-│        │            ┌──────────────┐    ┌───────────────┐         │
-│        │            │ContextManager│    │   LLMTool     │         │
-│        │            │              │    │               │         │
-│        │            └──────────────┘    └───────────────┘         │
-│        │                                                           │
-│        │            ┌──────────────┐    ┌───────────────┐         │
-│        └───────────►│ MCP Session  │───►│  MCP Server   │         │
-│                     │              │    │               │         │
-│                     └──────────────┘    └───────────────┘         │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
-                                ▲
-                                │
-                                ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                            SPADE                                    │
-│                    (Multi-Agent Framework)                          │
-└─────────────────────────────────────────────────────────────────────┘
-```
-
-### Core Components
-
-- **LLMAgent**: Enhanced SPADE agent with LLM capabilities
-- **LLMBehaviour**: Specialized behaviour for processing messages with LLMs
-- **ContextManager**: Manages conversation history and context
-- **LLMProvider**: Unified interface for LLM service integration (OpenAI, Ollama, LM Studio)
-- **LLMTool**: Framework for defining and executing tools
-- **MCPServerConfig**: Configuration for Model Context Protocol servers
-
-### Design Principles
-
-SPADE_LLM follows a modular design where:
-
-1. Agents maintain SPADE's asynchronous communication model
-2. LLM interactions are abstracted through a unified provider
-3. Tools can be native or adapted from external frameworks
-4. Context management handles multi-conversation scenarios
-5. MCP integration enables connection to external services
-
-### LLM Behaviour Flow
-
-```
-┌─────────────────┐
-│ Incoming Message│
-└────────┬────────┘
-         ▼
-┌─────────────────────────────────────────────────┐
-│           LLMBehaviour.run()                    │
-├─────────────────────────────────────────────────┤
-│                                                 │
-│  1. Check conversation state                    │
-│     ├─ Active → Continue                        │
-│     └─ Inactive → Skip                          │
-│                                                 │
-│  2. Update context                              │
-│     └─ Add message to ContextManager            │
-│                                                 │
-│  3. Process with LLM                            │
-│     ├─ Send context to LLMProvider              │
-│     └─ Receive response                         │
-│                                                 │
-│  4. Handle tool calls (if any)                  │
-│     ├─ Execute tools                            │
-│     ├─ Add results to context                   │
-│     └─ Get final response from LLM              │
-│                                                 │
-│  5. Check termination conditions                │
-│     ├─ Termination markers                      │
-│     └─ Max interactions reached                 │
-│                                                 │
-│  6. Route response                              │
-│     ├─ Apply routing function (if defined)      │
-│     └─ Send to recipients                       │
-│                                                 │
-└─────────────────────────────────────────────────┘
-```
-
-### Multi-Agent Communication Flow
-
-```
-┌──────────┐      ┌──────────┐      ┌──────────┐      ┌──────────┐
-│  Agent A │      │  Agent B │      │  Agent C │      │  Agent D │
-│          │      │  (LLM)   │      │  (LLM)   │      │          │
-└────┬─────┘      └────┬─────┘      └────┬─────┘      └────┬─────┘
-     │                 │                 │                 │
-     │    Message      │                 │                 │
-     ├────────────────►│                 │                 │
-     │                 │                 │                 │
-     │                 ├─── Process ────►│                 │
-     │                 │    with LLM     │                 │
-     │                 │                 │                 │
-     │                 │◄── Response ────┤                 │
-     │                 │    + Routing    │                 │
-     │                 │                 │                 │
-     │                 │    Routed       │                 │
-     │                 ├─────────────────┼────────────────►│
-     │                 │    Message      │                 │
-     │                 │                 │                 │
-     │◄────────────────┼─────────────────┼─────────────────┤
-     │    Final        │                 │    Response     │
-     │    Response     │                 │                 │
-     │                 │                 │                 │
-```
-
-## Installation
-
-### Requirements
-
-- Python 3.8+
-- SPADE 3.3.0+
-
-### Install via pip
-
-```bash
-pip install spade_llm
-```
-
-### Install from source
-
-```bash
-git clone https://github.com/sosanzma/spade_llm.git
-cd spade_llm
-pip install -e .
-```
-
-## Usage
-
-### Basic Agent
+## Quick Start
 
 ```python
 import spade
-from spade_llm import LLMAgent
-from spade_llm.providers import LLMProvider
+from spade_llm import LLMAgent, LLMProvider
 
 async def main():
-    # Configure provider using factory method
     provider = LLMProvider.create_openai(
         api_key="your-api-key",
         model="gpt-4o-mini"
     )
     
-    # Create LLM agent
     agent = LLMAgent(
-        jid="agent@xmpp-server.com",
+        jid="assistant@example.com",
         password="password",
         provider=provider,
         system_prompt="You are a helpful assistant"
@@ -182,168 +38,228 @@ if __name__ == "__main__":
     spade.run(main())
 ```
 
-### Using Different LLM Providers
+## Installation
+
+```bash
+pip install spade_llm
+```
+
+## Examples
+
+### Multi-Provider Support
 
 ```python
 # OpenAI
-provider_openai = LLMProvider.create_openai(
-    api_key="your-openai-api-key",
-    model="gpt-4o-mini"
-)
+provider = LLMProvider.create_openai(api_key="key", model="gpt-4o-mini")
 
-# Ollama (local models)
-provider_ollama = LLMProvider.create_ollama(
-    model="llama3:8b",
-    base_url="http://localhost:11434/v1",
-    timeout=120.0
-)
+# Ollama (local)
+provider = LLMProvider.create_ollama(model="llama3.1:8b")
 
-# LM Studio (local models)
-provider_lm_studio = LLMProvider.create_lm_studio(
-    model="mistral-7b",
-    base_url="http://localhost:1234/v1"
-)
-
+# LM Studio (local)
+provider = LLMProvider.create_lm_studio(model="local-model")
 ```
 
-### Agent with Tools
+### Tools and Function Calling
 
 ```python
-from spade_llm import LLMAgent, LLMTool
-# Define a custom tool
-async def get_weather(location: str) -> str:
-    # Implementation
-    return f"Weather in {location}: Sunny, 22°C"
+from spade_llm import LLMTool
+
+async def get_weather(city: str) -> str:
+    return f"Weather in {city}: 22°C, sunny"
 
 weather_tool = LLMTool(
     name="get_weather",
-    description="Get current weather for a location",
+    description="Get weather for a city",
     parameters={
         "type": "object",
-        "properties": {
-            "location": {"type": "string"}
-        },
-        "required": ["location"]
+        "properties": {"city": {"type": "string"}},
+        "required": ["city"]
     },
     func=get_weather
 )
 
-# Create agent with tools
 agent = LLMAgent(
-    jid="agent@xmpp-server.com",
+    jid="assistant@example.com",
     password="password",
     provider=provider,
     tools=[weather_tool]
 )
 ```
 
-### LangChain Tool Integration
+### Content Safety with Guardrails
 
 ```python
-from langchain_community.tools import DuckDuckGoSearchRun
-from spade_llm.tools import LangChainToolAdapter
+from spade_llm.guardrails import KeywordGuardrail, GuardrailAction
 
-# Adapt LangChain tool
-search_tool = LangChainToolAdapter(DuckDuckGoSearchRun())
-
-agent = LLMAgent(
-    jid="agent@xmpp-server.com",
-    password="password",
-    provider=provider,
-    tools=[search_tool]
-)
-```
-
-### MCP Server Integration
-
-```python
-from spade_llm.mcp import StdioServerConfig
-
-# Configure MCP server
-mcp_server = StdioServerConfig(
-    name="CustomService",
-    command="python",
-    args=["path/to/mcp_server.py"],
-    cache_tools=True
+# Block harmful content
+safety_filter = KeywordGuardrail(
+    name="safety_filter",
+    blocked_keywords=["hack", "exploit", "malware"],
+    action=GuardrailAction.BLOCK,
+    blocked_message="I cannot help with potentially harmful activities."
 )
 
 agent = LLMAgent(
-    jid="agent@xmpp-server.com",
+    jid="assistant@example.com",
     password="password",
     provider=provider,
-    mcp_servers=[mcp_server]
+    input_guardrails=[safety_filter]  # Filter incoming messages
 )
 ```
 
-### Routing and Multi-Agent Communication
+### Message Routing
 
 ```python
-from spade_llm import RoutingFunction, RoutingResponse
-
-def custom_router(msg, response, context):
-    if "urgent" in response.lower():
-        return RoutingResponse(
-            recipients="urgent-handler@server.com",
-            metadata={"priority": "high"}
-        )
-    return "default-handler@server.com"
+def router(msg, response, context):
+    if "technical" in response.lower():
+        return "tech-support@example.com"
+    return str(msg.sender)
 
 agent = LLMAgent(
-    jid="router@server.com",
+    jid="router@example.com",
     password="password",
     provider=provider,
-    routing_function=custom_router
+    routing_function=router
 )
 ```
 
-## Features
+### Interactive Chat
+
+```python
+from spade_llm import ChatAgent
+
+# Create chat interface
+chat_agent = ChatAgent(
+    jid="human@example.com",
+    password="password",
+    target_agent_jid="assistant@example.com"
+)
+
+await chat_agent.start()
+await chat_agent.run_interactive()  # Start interactive chat
+```
+
+### Memory Extensions
+
+```python
+# Agent-based memory: Single shared memory per agent
+agent = LLMAgent(
+    jid="assistant@example.com",
+    password="password",
+    provider=provider,
+    agent_base_memory=(True, "./memory.db")  # Enabled with custom path
+)
+
+# Agent-thread memory: Separate memory per conversation
+agent = LLMAgent(
+    jid="assistant@example.com",
+    password="password",
+    provider=provider,
+    agent_thread_memory=(True, "./thread_memory.db")  # Enabled with custom path
+)
+
+# Default memory paths (if path not specified)
+agent = LLMAgent(
+    jid="assistant@example.com",
+    password="password",
+    provider=provider,
+    agent_base_memory=(True, None)  # Uses default path
+)
+```
 
 ### Context Management
 
-- Automatic conversation tracking
-- Multi-conversation support
-- Context windowing for token limits
-- Tool result integration
+```python
+from spade_llm.context import SmartWindowSizeContext, FixedWindowSizeContext
 
-### Tool System
+# Smart context: Dynamic window sizing based on content
+smart_context = SmartWindowSizeContext(
+    max_tokens=4000,
+    include_system_prompt=True,
+    preserve_last_k_messages=5
+)
 
-- Native tool definition
-- LangChain adapter
-- MCP tool discovery
-- Asynchronous execution
+# Fixed context: Traditional sliding window
+fixed_context = FixedWindowSizeContext(
+    max_messages=20,
+    include_system_prompt=True
+)
 
-### Conversation Lifecycle
+agent = LLMAgent(
+    jid="assistant@example.com",
+    password="password",
+    provider=provider,
+    context_manager=smart_context
+)
+```
 
-- Termination markers
-- Interaction limits
-- Conversation state tracking
-- Callback support
+### Human-in-the-Loop
 
-### Provider Abstraction
+```python
+from spade_llm import HumanInTheLoopTool
 
-- Unified interface for LLM providers (OpenAI, Ollama, LM Studio, vLLM)
-- Named factory methods for provider creation
-- Tool format translation
-- Response handling
+# Create tool for human consultation
+human_tool = HumanInTheLoopTool(
+    human_expert_jid="expert@example.com",
+    timeout=300.0  # 5 minutes
+)
 
-## Supported LLM Providers
+agent = LLMAgent(
+    jid="assistant@example.com",
+    password="password",
+    provider=provider,
+    tools=[human_tool]  # Pass tools in constructor
+)
 
-SPADE_LLM supports multiple LLM providers through a unified interface:
+# Start web interface for human expert
+# python -m spade_llm.human_interface.web_server
+# Open http://localhost:8080 and connect as expert
+```
 
-- **OpenAI**: API access to GPT models
-- **Ollama**: Run local models like Llama, Mistral, Gemma, etc.
-- **LM Studio**: GUI tool for running local models
+## Architecture
+
+```mermaid
+graph LR
+    A[LLMAgent] --> C[ContextManager]
+    A --> D[LLMProvider]
+    A --> E[LLMTool]
+    A --> G[Guardrails]
+    A --> M[Memory]
+    D --> F[OpenAI/Ollama/etc]
+    G --> H[Input/Output Filtering]
+    E --> I[Human-in-the-Loop]
+    E --> J[MCP]
+    E --> P[CustomTool/LangchainTool]
+    J --> K[STDIO]
+    J --> L[HTTP Streaming]
+    M --> N[Agent-based]
+    M --> O[Agent-thread]
+```
+
+## Documentation
+
+- **[Installation](https://sosanzma.github.io/spade_llm/dev/getting-started/installation/)** - Setup and requirements
+- **[Quick Start](https://sosanzma.github.io/spade_llm/dev/getting-started/quickstart/)** - Basic usage examples
+- **[Providers](https://sosanzma.github.io/spade_llm/dev/guides/providers/)** - LLM provider configuration
+- **[Tools](https://sosanzma.github.io/spade_llm/dev/guides/tools-system/)** - Function calling system
+- **[Guardrails](https://sosanzma.github.io/spade_llm/dev/guides/guardrails/)** - Content filtering and safety
+- **[API Reference](https://sosanzma.github.io/dev/spade_llm/reference/)** - Complete API documentation
 
 ## Examples
 
-The `examples/` directory contains several demonstrations:
+The `/examples` directory contains complete working examples:
 
-- `multi_provider_chat_example.py`: Using different LLM providers
-- `langchain_tools_example.py`: LangChain tool integration
-- `ollama_with_tools_example.py`: Using tools with Ollama models
-- `spanish_to_english_translator.py`: Simple translation agent
-- `valencia_smartCity_mcp_example.py`: MCP server integration
-- `document_workflow_example.py`: Multi-agent workflow
+- `multi_provider_chat_example.py` - Chat with different LLM providers
+- `ollama_with_tools_example.py` - Local models with tool calling
+- `langchain_tools_example.py` - LangChain tool integration
+- `guardrails_example.py` - Content filtering and safety controls
+- `human_in_the_loop_example.py` - Human expert consultation via web interface
+- `valencia_multiagent_trip_planner.py` - Multi-agent workflow
+
+## Requirements
+
+- Python 3.10+
+- SPADE 3.3.0+
 
 ## License
 
@@ -351,17 +267,9 @@ MIT License
 
 ## Contributing
 
-Contributions are welcome. Please:
-
 1. Fork the repository
 2. Create a feature branch
 3. Add tests for new functionality
 4. Submit a pull request
 
-## Support
-
-For issues and questions:
-
-- GitHub Issues: [Report bugs or request features]
-- Documentation: [Extended documentation and examples]
-- SPADE Documentation: [SPADE framework documentation]
+See [Contributing Guide](https://sosanzma.github.io/spade_llm/contributing/) for details.

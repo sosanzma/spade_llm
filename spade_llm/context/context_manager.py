@@ -9,6 +9,7 @@ from ._types import (
     create_system_message, create_user_message, spade_message_to_user_message,
     create_assistant_message, create_tool_result_message
 )
+from .management import ContextManagement, NoContextManagement
 
 logger = logging.getLogger("spade_llm.context")
 
@@ -27,13 +28,15 @@ class ContextManager:
     
     def __init__(self, 
                 max_tokens: int = 4096, 
-                system_prompt: Optional[str] = None):
+                system_prompt: Optional[str] = None,
+                context_management: Optional[ContextManagement] = None):
         """
         Initialize the context manager.
         
         Args:
             max_tokens: Maximum number of tokens to maintain in context
             system_prompt: Optional system instructions for the LLM
+            context_management: Optional context management strategy
         """
         self.max_tokens = max_tokens
         self._system_prompt = system_prompt
@@ -45,6 +48,9 @@ class ContextManager:
         self._active_conversations: Set[str] = set()
         # Current conversation ID (used when not explicitly specified)
         self._current_conversation_id: Optional[str] = None
+        
+        # Context management strategy
+        self.context_management = context_management or NoContextManagement()
         
     def add_message_dict(self, message_dict: ContextMessage, conversation_id: str) -> None:
         """
@@ -121,28 +127,20 @@ class ContextManager:
         # Add system prompt if available
         if self._system_prompt:
             prompt.append(create_system_message(self._system_prompt))
-            
-        # Add conversation history - filter out metadata fields when sending to LLM
-        for msg in self._conversations[conv_id]:
-            # Create a clean copy without internal metadata
-            message_entry = {
-                "role": msg["role"],
-                "content": msg["content"]
-            }
-            
-            # Include tool_call_id for tool messages
-            if msg["role"] == "tool" and "tool_call_id" in msg:
-                message_entry["tool_call_id"] = msg["tool_call_id"]
-            
-            # Include tool_calls if present (for assistant messages with tool calls)
-            if msg.get("tool_calls"):
-                message_entry["tool_calls"] = msg["tool_calls"]
-                
-            # Include name if present for user messages
-            if msg["role"] == "user" and "name" in msg:
-                message_entry["name"] = msg["name"]
-                
-            prompt.append(message_entry)
+        
+        # Get conversation messages
+        conversation_messages = self._conversations[conv_id]
+        
+        # Apply context management strategy
+        managed_messages = self.context_management.apply_context_strategy(
+            conversation_messages, 
+            self._system_prompt
+        )
+        
+        # Clean and add messages to prompt
+        for msg in managed_messages:
+            clean_message = self._clean_message_for_llm(msg)
+            prompt.append(clean_message)
             
         return prompt
         
@@ -263,3 +261,60 @@ class ContextManager:
             return []
             
         return self._conversations[conv_id]
+    
+    def _clean_message_for_llm(self, msg: ContextMessage) -> ContextMessage:
+        """
+        Remove internal metadata from message for LLM consumption.
+        
+        Args:
+            msg: Message with potential internal metadata
+            
+        Returns:
+            Clean message suitable for LLM API
+        """
+        message_entry = {
+            "role": msg["role"],
+            "content": msg["content"]
+        }
+        
+        # Include tool_call_id for tool messages
+        if msg["role"] == "tool" and "tool_call_id" in msg:
+            message_entry["tool_call_id"] = msg["tool_call_id"]
+        
+        # Include tool_calls if present (for assistant messages with tool calls)
+        if msg.get("tool_calls"):
+            message_entry["tool_calls"] = msg["tool_calls"]
+            
+        # Include name if present for user messages
+        if msg["role"] == "user" and "name" in msg:
+            message_entry["name"] = msg["name"]
+            
+        return message_entry
+    
+    def get_context_stats(self, conversation_id: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Get context management statistics for a conversation.
+        
+        Args:
+            conversation_id: Optional ID of the conversation. If not provided,
+                          uses the current conversation.
+        
+        Returns:
+            Dictionary with context management statistics
+        """
+        conv_id = conversation_id or self._current_conversation_id
+        
+        if not conv_id or conv_id not in self._conversations:
+            return {}
+        
+        total_messages = len(self._conversations[conv_id])
+        return self.context_management.get_stats(total_messages)
+    
+    def update_context_management(self, new_context_management: ContextManagement) -> None:
+        """
+        Update the context management strategy.
+        
+        Args:
+            new_context_management: New context management strategy to use
+        """
+        self.context_management = new_context_management
