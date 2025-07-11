@@ -26,15 +26,18 @@ setup(
     packages=find_packages(exclude=["tests*", "examples*"]),
     include_package_data=True,
     install_requires=[
-        "spade>=3.3.0",
+        "spade>=4.0.0",
         "openai>=1.0.0",
         "pydantic>=2.0.0",
         "aiohttp>=3.8.0",
         "python-dateutil>=2.8.2",
-        "langchain_community>=0.3.2",
-        "mcp>=1.2.0",
+        "mcp>=1.8.0",
+        "aiosqlite>=0.17.0",
     ],
     extras_require={
+        "langchain": [
+            "langchain_community>=0.3.2",
+        ],
         "dev": [
             "pytest>=7.0.0",
             "pytest-asyncio>=0.21.0",
@@ -52,6 +55,7 @@ setup(
             "sphinx-rtd-theme>=1.2.0",
         ],
         "all": [
+            "langchain_community>=0.3.2",
             "google-generativeai>=0.3.0",
             "anthropic>=0.5.0",
         ]
