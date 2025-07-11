@@ -335,5 +335,4 @@ graph TB
 ## Next Steps
 
 - **[Memory System Guide](memory.md)** - Complete memory system documentation
-- **[Memory Configuration](memory-configuration.md)** - Configuration options and setup
 - **[API Reference](../reference/api/memory.md)** - Detailed API documentation
