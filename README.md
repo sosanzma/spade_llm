@@ -238,12 +238,12 @@ graph LR
 
 ## Documentation
 
-- **[Installation](https://sosanzma.github.io/spade_llm/dev/getting-started/installation/)** - Setup and requirements
-- **[Quick Start](https://sosanzma.github.io/spade_llm/dev/getting-started/quickstart/)** - Basic usage examples
-- **[Providers](https://sosanzma.github.io/spade_llm/dev/guides/providers/)** - LLM provider configuration
-- **[Tools](https://sosanzma.github.io/spade_llm/dev/guides/tools-system/)** - Function calling system
-- **[Guardrails](https://sosanzma.github.io/spade_llm/dev/guides/guardrails/)** - Content filtering and safety
-- **[API Reference](https://sosanzma.github.io/dev/spade_llm/reference/)** - Complete API documentation
+- **[Installation](https://sosanzma.github.io/spade_llm/getting-started/installation/)** - Setup and requirements
+- **[Quick Start](https://sosanzma.github.io/spade_llm/getting-started/quickstart/)** - Basic usage examples
+- **[Providers](https://sosanzma.github.io/spade_llm/guides/providers/)** - LLM provider configuration
+- **[Tools](https://sosanzma.github.io/spade_llm/guides/tools-system/)** - Function calling system
+- **[Guardrails](https://sosanzma.github.io/spade_llm/guides/guardrails/)** - Content filtering and safety
+- **[API Reference](https://sosanzma.github.io/spade_llm/reference/)** - Complete API documentation
 
 ## Examples
 
