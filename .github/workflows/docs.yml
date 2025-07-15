@@ -2,7 +2,7 @@ name: Build and Deploy Documentation
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [ main ]
     paths:
       - 'docs/**'
       - 'spade_llm/**'
@@ -13,21 +13,18 @@ on:
       - 'docs/**'
       - 'spade_llm/**'
       - '.github/workflows/docs.yml'
-  # Allow manual trigger from GitHub UI
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Build job
   build:
     runs-on: ubuntu-latest
     steps:
@@ -39,42 +36,26 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Cache pip dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-docs-${{ hashFiles('docs/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-docs-
-            ${{ runner.os }}-pip-
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r docs/requirements.txt
           pip install -e .
-          pip install --upgrade mkdocs-material
 
-      - name: Configure Git for mkdocs
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
 
       - name: Build documentation
         run: |
           cd docs
           mkdocs build --strict
-        env:
-          # Set environment variables that might be needed for doc generation
-          PYTHONPATH: ${{ github.workspace }}
 
-      - name: Upload Pages artifact
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs/site
 
-  # Deploy job (main branch - production)
-  deploy-production:
+  deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment:
       name: github-pages
@@ -84,41 +65,7 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
-
-  # Deploy job (dev branch - development docs)
-  deploy-development:
-    if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: github-pages
-          path: ./artifact
-
-      - name: Extract artifact
-        run: |
-          mkdir -p docs-site
-          cd artifact
-          tar -xf artifact.tar
-          cp -r * ../docs-site/ || cp -r . ../docs-site/
-          cd ..
-          rm -rf artifact
-
-      - name: Deploy to GitHub Pages (Dev)
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs-site
-          destination_dir: dev
-          cname: false
-          allow_empty_commit: true
-          keep_files: true
+        uses: actions/deploy-pages@v4
 
   # Check job for PRs (build only, no deploy)
   check:
@@ -128,15 +75,3 @@ jobs:
     steps:
       - name: Check documentation build
         run: echo "Documentation build successful ✅"
-
-      - name: Comment on PR
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '✅ Documentation build successful! The docs will be updated when this PR is merged.'
-            })
