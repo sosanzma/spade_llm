@@ -217,9 +217,15 @@ class AgentBaseMemory:
         
         # Format each category
         context_parts = []
+        category_titles = {
+            "fact": "Facts I remember",
+            "pattern": "Patterns I remember", 
+            "preference": "Preferences I remember",
+            "capability": "Capabilities I remember"
+        }
         for category in ["fact", "pattern", "preference", "capability"]:
             if category in categories:
-                category_title = category.capitalize() + "s I remember"
+                category_title = category_titles[category]
                 context_parts.append(f"{category_title}:")
                 for content in categories[category]:
                     context_parts.append(f"- {content}")
