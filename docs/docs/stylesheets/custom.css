@@ -1,0 +1,227 @@
+/* Variables CSS para tema SpadeLLM */
+:root {
+  --md-primary-fg-color: #8e44ad;
+  --md-primary-fg-color--light: #9b59b6;
+  --md-primary-fg-color--dark: #7d3c98;
+  --md-accent-fg-color: #9b59b6;
+  --spade-gradient: linear-gradient(135deg, #8e44ad, #9b59b6);
+  --spade-gradient-hover: linear-gradient(135deg, #7d3c98, #8e44ad);
+  --spade-gradient-diagonal: linear-gradient(45deg, #8e44ad, #9b59b6, #bb8fce);
+  --spade-gradient-radial: radial-gradient(circle, #8e44ad, #9b59b6);
+  --spade-gradient-animated: linear-gradient(270deg, #8e44ad, #9b59b6, #bb8fce, #8e44ad);
+}
+
+/* Header con gradiente púrpura animado */
+.md-header {
+  background: var(--spade-gradient-animated) !important;
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Botones con estilo SpadeLLM */
+.md-button {
+  background: var(--spade-gradient);
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 0.5rem 1.5rem;
+  font-weight: 500;
+}
+
+.md-button:hover {
+  background: var(--spade-gradient-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
+}
+
+/* Enlaces con color púrpura */
+.md-content a {
+  color: #8e44ad;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.md-content a:hover {
+  color: #7d3c98;
+  border-bottom-color: #9b59b6;
+}
+
+/* Bloques de código con gradiente púrpura */
+.md-typeset .highlight {
+  border-left: 4px solid transparent;
+  border-left-image: var(--spade-gradient-diagonal);
+  background: linear-gradient(90deg, rgba(142, 68, 173, 0.05), rgba(155, 89, 182, 0.02));
+  position: relative;
+}
+
+.md-typeset .highlight::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--spade-gradient-diagonal);
+}
+
+/* Navegación lateral activa con gradiente */
+.md-nav__item--active > .md-nav__link {
+  background: var(--spade-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 600;
+}
+
+.md-nav__link:hover {
+  background: var(--spade-gradient-hover);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  transition: all 0.3s ease;
+}
+
+/* Pestañas de navegación con gradiente */
+.md-tabs__item--active {
+  background: var(--spade-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Badges y etiquetas con gradiente */
+.md-typeset .admonition.info {
+  border-left: 4px solid transparent;
+  border-image: var(--spade-gradient-diagonal) 1;
+  background: linear-gradient(135deg, rgba(142, 68, 173, 0.05), rgba(155, 89, 182, 0.02));
+}
+
+.md-typeset .admonition.info > .admonition-title {
+  background: var(--spade-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 600;
+}
+
+/* Tabla de contenidos */
+.md-nav__item .md-nav__link--active {
+  color: #8e44ad;
+}
+
+/* Elementos de búsqueda */
+.md-search__input {
+  border-bottom: 2px solid #9b59b6;
+}
+
+.md-search__input:focus {
+  border-bottom-color: #8e44ad;
+}
+
+/* Modo oscuro con gradientes mejorados */
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #a569bd;
+  --md-primary-fg-color--light: #bb8fce;
+  --md-primary-fg-color--dark: #8e44ad;
+  --md-accent-fg-color: #bb8fce;
+  --spade-gradient: linear-gradient(135deg, #a569bd, #bb8fce);
+  --spade-gradient-hover: linear-gradient(135deg, #8e44ad, #a569bd);
+  --spade-gradient-diagonal: linear-gradient(45deg, #a569bd, #bb8fce, #d2b4de);
+  --spade-gradient-radial: radial-gradient(circle, #a569bd, #bb8fce);
+  --spade-gradient-animated: linear-gradient(270deg, #a569bd, #bb8fce, #d2b4de, #a569bd);
+}
+
+[data-md-color-scheme="slate"] .md-content a {
+  color: #bb8fce;
+}
+
+[data-md-color-scheme="slate"] .md-content a:hover {
+  color: #d2b4de;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .highlight {
+  border-left-color: #bb8fce;
+  background: rgba(165, 105, 189, 0.1);
+}
+
+/* Animaciones suaves */
+.md-nav__link,
+.md-button,
+.md-content a {
+  transition: all 0.3s ease;
+}
+
+/* Sombras púrpuras para elementos interactivos */
+.md-button:focus,
+.md-button:hover {
+  box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
+}
+
+/* Personalización adicional para elementos específicos con gradiente */
+.md-typeset h1,
+.md-typeset h2 {
+  background: var(--spade-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 700;
+}
+
+[data-md-color-scheme="slate"] .md-typeset h1,
+[data-md-color-scheme="slate"] .md-typeset h2 {
+  background: linear-gradient(135deg, #bb8fce, #d2b4de);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Mejoras para elementos de código inline */
+.md-typeset code {
+  background: rgba(142, 68, 173, 0.1);
+  border: 1px solid rgba(142, 68, 173, 0.2);
+  color: #8e44ad;
+}
+
+[data-md-color-scheme="slate"] .md-typeset code {
+  background: linear-gradient(135deg, rgba(165, 105, 189, 0.15), rgba(187, 143, 206, 0.08));
+  border: 1px solid transparent;
+  border-image: var(--spade-gradient-diagonal) 1;
+  color: #bb8fce;
+}
+
+/* Gradiente para elementos de búsqueda */
+.md-search__input:focus {
+  border-bottom: 2px solid transparent;
+  border-image: var(--spade-gradient) 1;
+  background: linear-gradient(90deg, rgba(142, 68, 173, 0.05), transparent);
+}
+
+/* Efecto hover para tarjetas y elementos */
+.md-typeset .tabbed-set > input:checked + .tabbed-labels .tabbed-label {
+  background: var(--spade-gradient);
+  color: white;
+}
+
+/* Scrollbar con gradiente */
+::-webkit-scrollbar-thumb {
+  background: var(--spade-gradient);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--spade-gradient-hover);
+}

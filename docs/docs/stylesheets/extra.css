@@ -4,16 +4,16 @@
 .highlight .hll { background-color: #ffffcc }
 .highlight .c { color: #408080; font-style: italic }
 
-/* Admonition styling */
+/* Admonition styling with purple theme */
 .md-typeset .admonition.info,
 .md-typeset details.info {
-  border-color: #448aff;
+  border-color: #9b59b6;
 }
 
 .md-typeset .admonition.info > .admonition-title,
 .md-typeset details.info > .admonition-title {
-  background-color: rgba(68, 138, 255, 0.1);
-  border-color: #448aff;
+  background-color: rgba(142, 68, 173, 0.1);
+  border-color: #9b59b6;
 }
 
 /* Custom styling for API documentation */
@@ -51,7 +51,12 @@
 
 .feature-card h3 {
   margin-top: 0;
-  color: var(--md-primary-fg-color);
+  color: #8e44ad;
+}
+
+/* Dark mode styling for feature cards */
+[data-md-color-scheme="slate"] .feature-card h3 {
+  color: #bb8fce;
 }
 
 /* Responsive adjustments */

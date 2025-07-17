@@ -12,24 +12,20 @@ theme:
   name: material
   language: en
   palette:
-    - media: "(prefers-color-scheme)"
-      toggle:
-        icon: material/brightness-auto
-        name: Switch to light mode
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: blue
-      accent: blue
+    # Modo claro
+    - scheme: default
+      primary: deep purple
+      accent: purple
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: blue
-      accent: blue
+    # Modo oscuro
+    - scheme: slate
+      primary: deep purple
+      accent: purple
       toggle:
         icon: material/brightness-4
-        name: Switch to system preference
+        name: Switch to light mode
 
   font:
     text: Roboto
@@ -41,6 +37,7 @@ theme:
     - navigation.expand
     - navigation.indexes
     - toc.follow
+    - toc.integrate
     - navigation.top
     - search.highlight
     - search.share
@@ -124,6 +121,7 @@ extra:
 
 extra_css:
   - stylesheets/extra.css
+  - stylesheets/custom.css
 
 extra_javascript:
   - javascripts/mathjax.js
