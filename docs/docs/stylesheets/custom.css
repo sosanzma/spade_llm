@@ -225,3 +225,56 @@
 ::-webkit-scrollbar-thumb:hover {
   background: var(--spade-gradient-hover);
 }
+
+/* Estilos específicos para el logo */
+.logo-container {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.spade-logo {
+  max-width: 200px;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(142, 68, 173, 0.2);
+  transition: all 0.3s ease;
+}
+
+.spade-logo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(142, 68, 173, 0.3);
+}
+
+/* Logo en el header */
+.md-header__button.md-logo {
+  padding: 0.4rem;
+  display: flex;
+  align-items: center;
+}
+
+.md-header__button.md-logo img {
+  height: 48px;
+  width: auto;
+  filter: none; /* Sin filtro para mantener colores originales */
+  background: white;
+  border-radius: 6px;
+  padding: 4px;
+}
+
+/* Asegurar que el logo se muestre correctamente */
+.md-header .md-header__button.md-logo {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Responsive logo */
+@media screen and (max-width: 768px) {
+  .spade-logo {
+    max-width: 150px;
+  }
+  
+  .md-header__button.md-logo img {
+    height: 36px;
+  }
+}

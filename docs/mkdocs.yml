@@ -1,4 +1,4 @@
-site_name: SPADE_LLM Documentation
+site_name: Documentation
 site_description: 'Extension for SPADE to integrate Large Language Models in agents'
 site_author: 'Manel Soler Sanz'
 site_url: 'https://sosanzma.github.io/spade_llm'
@@ -11,6 +11,8 @@ copyright: Copyright &copy; 2024 Manel Soler Sanz
 theme:
   name: material
   language: en
+  logo: assets/images/spade_llm_logo.png
+  favicon: assets/images/favicon.png
   palette:
     # Modo claro
     - scheme: default
