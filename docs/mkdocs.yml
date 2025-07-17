@@ -86,7 +86,6 @@ nav:
     - getting-started/index.md
     - Installation: getting-started/installation.md
     - Quick Start: getting-started/quickstart.md
-    - Your First Agent: getting-started/first-agent.md
   - Guides:
     - guides/index.md
     - Architecture: guides/architecture.md
