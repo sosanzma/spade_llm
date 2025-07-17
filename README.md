@@ -1,5 +1,13 @@
 # SPADE_LLM
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Coverage Status](https://coveralls.io/repos/github/sosanzma/spade_llm/badge.svg?branch=main)](https://coveralls.io/github/sosanzma/spade_llm?branch=main)
+![Python Version](https://img.shields.io/badge/python-3.10%20to%203.12-orange?logo=python&logoColor=green)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/sosanzma/spade_llm/python-app.yml)](https://github.com/sosanzma/spade_llm/actions)
+[![Docs Status](https://img.shields.io/github/actions/workflow/status/sosanzma/spade_llm/docs.yml)](https://github.com/sosanzma/spade_llm/actions/workflows/docs.yml)
+
+
+
 Extension for [SPADE](https://github.com/javipalanca/spade) that integrates Large Language Models into multi-agent systems.
 
 ## Features
@@ -40,9 +48,10 @@ if __name__ == "__main__":
 
 ## Installation
 
+> ⚠️ **Warning**: `spade_llm` is not yet available on PyPI. It will be published in the coming days. Stay tuned!
+
 ```bash
 pip install spade_llm
-```
 
 ## Examples
 

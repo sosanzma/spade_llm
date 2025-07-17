@@ -155,7 +155,7 @@ conversations = memory.get_all_conversations()
 
 ## AgentBaseMemory
 
-Manages long-term agent memory with SQLite backend and categorized storage.
+Manages long-term agent memory with SQLite backend and categorized storage. Supports both persistent file-based and temporary in-memory storage modes.
 
 ### Constructor
 
@@ -169,7 +169,7 @@ AgentBaseMemory(
 
 **Parameters:**
 - `agent_id` (str): Unique identifier for the agent
-- `memory_path` (str, optional): Custom memory storage directory path
+- `memory_path` (str, optional): Custom memory storage directory path or ":memory:" for in-memory storage
 - `backend` (MemoryBackend, optional): Custom memory backend implementation
 
 **Example:**
@@ -177,13 +177,19 @@ AgentBaseMemory(
 ```python
 from spade_llm.memory import AgentBaseMemory
 
-# Default SQLite backend
+# Default SQLite backend (persistent)
 memory = AgentBaseMemory("agent@example.com")
 
-# Custom memory path
+# Custom memory path (persistent)
 memory = AgentBaseMemory(
     agent_id="agent@example.com",
     memory_path="/custom/memory/path"
+)
+
+# In-memory storage (temporary)
+memory = AgentBaseMemory(
+    agent_id="agent@example.com",
+    memory_path=":memory:"
 )
 ```
 

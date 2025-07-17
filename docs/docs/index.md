@@ -1,4 +1,8 @@
-# SPADE_LLM : SPADE with Large Language Models 
+# SPADE-LLM : SPADE with Large Language Models 
+
+<div style="text-align: center; margin: 1rem 0;">
+  <img src="assets/images/spade_llm_logo.png" alt="SPADE-LLM Logo" style="max-width: 200px; width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 16px rgba(142, 68, 173, 0.2);">
+</div>
 
 Extension for [SPADE](https://github.com/javipalanca/spade) that integrates Large Language Models into multi-agent systems.
 

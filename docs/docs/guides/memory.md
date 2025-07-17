@@ -67,8 +67,9 @@ graph TB
 **Key Features**:
 - **Agent-scoped**: Memory persists across all conversations
 - **SQLite backend**: Reliable database storage with search capabilities
+- **Flexible Storage**: Choose between persistent file-based or temporary in-memory storage
 - **Categorized**: Organized into four memory categories
-- **Persistent**: Survives agent restarts and system reboots
+- **Persistent**: Survives agent restarts and system reboots (file-based mode)
 - **Tool integration**: Three auto-registered tools for LLM access
 
 **Memory Categories**:
@@ -93,7 +94,7 @@ agent = LLMAgent(
     interaction_memory=True
 )
 
-# Agent base memory only
+# Agent base memory only (persistent)
 agent = LLMAgent(
     jid="agent@example.com",
     password="password",
@@ -101,7 +102,15 @@ agent = LLMAgent(
     agent_base_memory=True
 )
 
-# Both memory types (recommended)
+# Agent base memory (in-memory, temporary)
+agent = LLMAgent(
+    jid="test_agent@example.com",
+    password="password",
+    provider=provider,
+    agent_base_memory=(True, ":memory:")
+)
+
+# Both memory types
 agent = LLMAgent(
     jid="agent@example.com",
     password="password",
@@ -224,9 +233,13 @@ List memories by category or view recent memories.
 
 ### Agent Base Memory Storage
 
+#### Persistent Mode (Default)
 **Location**: `{memory_path}/{safe_agent_id}_base_memory.db`
 
-**SQLite Schema**:
+#### In-Memory Mode
+**Location**: RAM-only (`:memory:` database)
+
+**SQLite Schema** (both modes):
 ```sql
 CREATE TABLE agent_memories (
     id TEXT PRIMARY KEY,
@@ -242,6 +255,10 @@ CREATE TABLE agent_memories (
     INDEX idx_content_search (content)
 );
 ```
+
+**Storage Modes**:
+- **Persistent**: Survives agent restarts, stored in database files
+- **In-Memory**: Temporary storage, automatically deleted when agent stops
 
 ## Usage Examples
 
@@ -474,16 +491,30 @@ agent = LLMAgent(
 
 ### Agent Base Memory
 
+#### Persistent Mode
 **Advantages**:
 - Fast SQLite database operations
 - Full-text search capabilities
 - Concurrent access support
 - Structured data storage
+- Survives agent restarts
 
 **Limitations**:
 - Database file size growth
 - Memory queries add latency
 - Requires database maintenance
+
+#### In-Memory Mode
+**Advantages**:
+- Fastest possible operations (no disk I/O)
+- Automatic cleanup on agent stop
+- No file system pollution
+- Perfect for testing and development
+
+**Limitations**:
+- No persistence across agent restarts
+- Higher memory usage
+- Data lost when agent stops
 
 
 

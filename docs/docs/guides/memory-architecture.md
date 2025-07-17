@@ -19,6 +19,8 @@ graph TB
     subgraph "Storage Backends"
         D --> F[JSON Files]
         E --> G[SQLite Database]
+        G --> G1[Persistent Mode]
+        G --> G2[In-Memory Mode]
     end
     
     subgraph "Memory Tools"
@@ -69,6 +71,7 @@ sequenceDiagram
 
 ### Agent Base Memory Flow
 
+#### Persistent Mode
 ```mermaid
 sequenceDiagram
     participant LLM as LLM Provider
@@ -91,10 +94,36 @@ sequenceDiagram
     ABM->>LLM: Formatted results
 ```
 
+#### In-Memory Mode
+```mermaid
+sequenceDiagram
+    participant LLM as LLM Provider
+    participant ABM as Agent Base Memory
+    participant SB as SQLite Backend
+    participant RAM as Memory (RAM)
+    
+    LLM->>ABM: store_memory(content, category)
+    ABM->>SB: Execute INSERT query
+    SB->>RAM: Write to in-memory database
+    RAM->>SB: Confirm write
+    SB->>ABM: Return memory ID
+    ABM->>LLM: Confirmation message
+    
+    LLM->>ABM: search_memories(query)
+    ABM->>SB: Execute SELECT query
+    SB->>RAM: Read from memory
+    RAM->>SB: Return results
+    SB->>ABM: Memory entries
+    ABM->>LLM: Formatted results
+    
+    Note over RAM: Automatically deleted on agent stop
+```
+
 ## Data Storage Architecture
 
 ### File System Organization
 
+#### Persistent Storage
 ```mermaid
 graph LR
     subgraph "Memory Root Path"
@@ -121,6 +150,38 @@ graph LR
     style C fill:#e8f5e8
     style D fill:#f3e5f5
     style E fill:#e8f5e8
+```
+
+#### In-Memory Storage
+```mermaid
+graph LR
+    subgraph "RAM Memory Space"
+        A[In-Memory Databases]
+    end
+    
+    subgraph "Agent 1 Memory"
+        A --> B[:memory: database]
+        B --> C[agent_memories table]
+        C --> D[Temporary data]
+    end
+    
+    subgraph "Agent 2 Memory"
+        A --> E[:memory: database]
+        E --> F[agent_memories table]
+        F --> G[Temporary data]
+    end
+    
+    subgraph "Lifecycle"
+        H[Agent Start] --> I[Create :memory: DB]
+        I --> J[Store/Retrieve Data]
+        J --> K[Agent Stop]
+        K --> L[Automatic Cleanup]
+    end
+    
+    style A fill:#e3f2fd
+    style B fill:#e8f5e8
+    style E fill:#e8f5e8
+    style L fill:#ffebee
 ```
 
 ### Database Schema Architecture
@@ -261,7 +322,7 @@ graph TB
 
 ## Context Integration
 
-### Memory Context Injection
+### Agent interaction Memory Context Injection
 
 ```mermaid
 graph TB
