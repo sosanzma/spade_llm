@@ -1,4 +1,10 @@
-# SPADE_LLM
+<div align="center">
+  <img src="docs/docs/assets/images/spade_llm_logo.png" alt="SPADE-LLM Logo" width="200"/>
+</div>
+
+<div align="center">
+
+
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Coverage Status](https://coveralls.io/repos/github/sosanzma/spade_llm/badge.svg?branch=main)](https://coveralls.io/github/sosanzma/spade_llm?branch=main)
@@ -6,20 +12,44 @@
 [![Build Status](https://img.shields.io/github/actions/workflow/status/sosanzma/spade_llm/python-app.yml)](https://github.com/sosanzma/spade_llm/actions)
 [![Docs Status](https://img.shields.io/github/actions/workflow/status/sosanzma/spade_llm/docs.yml)](https://github.com/sosanzma/spade_llm/actions/workflows/docs.yml)
 
+[**Documentation**](https://sosanzma.github.io/spade_llm) | [**Quick Start**](https://sosanzma.github.io/spade_llm/getting-started/quickstart/) | [**Examples**](https://sosanzma.github.io/spade_llm/reference/examples/) | [**API Reference**](https://sosanzma.github.io/spade_llm/reference/)
 
+</div>
 
-Extension for [SPADE](https://github.com/javipalanca/spade) that integrates Large Language Models into multi-agent systems.
+# SPADE-LLM
 
-## Features
+Extension for [SPADE](https://github.com/javipalanca/spade) that integrates Large Language Models into multi-agent systems. Build intelligent, collaborative agents that can communicate, reason, and take actions in complex distributed environments.
 
-- **Multi-Provider Support**: OpenAI, Ollama, LM Studio, vLLM
-- **Tool System**: Function calling with async execution
-- **Context Management**: Multi-conversation support. Automatic cleanup and smart managment
-- **Memory Extensions**: Agent-based and agent-thread memory for persistent state
-- **Message Routing**: Conditional routing based on LLM responses
-- **Guardrails System**: Content filtering and safety controls for input/output
-- **MCP Integration**: Model Context Protocol server support
-- **Human-in-the-Loop**: Web interface for human expert consultation
+## Table of Contents
+
+- [Key Features](#key-features)
+- [Quick Start](#quick-start)
+- [Installation](#installation)
+- [Architecture](#architecture)
+- [Documentation](#documentation)
+- [Examples](#examples)
+  - [Multi-Provider Support](#multi-provider-support)
+  - [Tools and Function Calling](#tools-and-function-calling)
+  - [Content Safety with Guardrails](#content-safety-with-guardrails)
+  - [Message Routing](#message-routing)
+  - [Interactive Chat](#interactive-chat)
+  - [Memory Extensions](#memory-extensions)
+  - [Context Management](#context-management)
+  - [Human-in-the-Loop](#human-in-the-loop)
+- [Requirements](#requirements)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Key Features
+
+- **Multi-Provider Support** - OpenAI, Ollama, LM Studio, vLLM integration  
+- **Tool System** - Function calling with async execution  
+- **Context Management** - Multi-conversation support with automatic cleanup  
+- **Memory Extensions** - Agent-based and agent-thread memory for persistent state  
+- **Message Routing** - Conditional routing based on LLM responses  
+- **Guardrails System** - Content filtering and safety controls for input/output  
+- **MCP Integration** - Model Context Protocol server support  
+- **Human-in-the-Loop** - Web interface for human expert consultation
 
 ## Quick Start
 
@@ -52,6 +82,7 @@ if __name__ == "__main__":
 
 ```bash
 pip install spade_llm
+```
 
 ## Examples
 
@@ -254,7 +285,7 @@ graph LR
 - **[Guardrails](https://sosanzma.github.io/spade_llm/guides/guardrails/)** - Content filtering and safety
 - **[API Reference](https://sosanzma.github.io/spade_llm/reference/)** - Complete API documentation
 
-## Examples
+## Examples Directory
 
 The `/examples` directory contains complete working examples:
 
@@ -270,10 +301,6 @@ The `/examples` directory contains complete working examples:
 - Python 3.10+
 - SPADE 3.3.0+
 
-## License
-
-MIT License
-
 ## Contributing
 
 1. Fork the repository
@@ -282,3 +309,7 @@ MIT License
 4. Submit a pull request
 
 See [Contributing Guide](https://sosanzma.github.io/spade_llm/contributing/) for details.
+
+## License
+
+MIT License

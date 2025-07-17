@@ -1,287 +1,299 @@
-# Your First Agent
+# Your First LLM Agent
 
-Step-by-step tutorial for creating a complete LLM-powered agent.
+In this tutorial, you'll learn how to create your first SPADE-LLM agent step by step. We'll start with a basic setup and gradually add features to understand the core concepts.
 
 ## Prerequisites
 
-- SPADE_LLM installed
-- OpenAI API key or local model running
-- XMPP server access
+Before starting, ensure you have:
+- Python 3.10 or higher installed
+- SPADE-LLM installed (`pip install spade_llm`)
+- An XMPP server running (for local testing, you can use [Prosody](https://prosody.im/))
+- Access to at least one LLM provider (OpenAI API key or local Ollama installation)
 
-## Step 1: Basic Agent
+## Step 1: Basic Agent Setup
 
-Create `my_agent.py`:
+Let's start with the simplest possible SPADE-LLM agent. Create `my_first_agent.py`:
 
 ```python
 import spade
 from spade_llm import LLMAgent, LLMProvider
 
 async def main():
-    # Configure LLM provider
+    # Create an LLM provider
     provider = LLMProvider.create_openai(
-        api_key="your-api-key",
+        api_key="your-api-key-here",
         model="gpt-4o-mini",
         temperature=0.7
     )
     
-    # Create agent
+    # Create the LLM agent
     agent = LLMAgent(
-        jid="myagent@jabber.at", 
-        password="mypassword",
+        jid="assistant@localhost",
+        password="password123",
         provider=provider,
-        system_prompt="You are a helpful coding assistant"
+        system_prompt="You are a helpful assistant."
     )
     
+    # Start the agent
     await agent.start()
-    print("Agent started successfully!")
+    print("✅ Agent started successfully!")
     
-    # Keep running
-    import asyncio
-    await asyncio.sleep(60)
-    
-    await agent.stop()
-    print("Agent stopped")
+    # Keep the agent running
+    await agent.wait_until_finished()
 
 if __name__ == "__main__":
     spade.run(main())
 ```
 
-Run with: `python my_agent.py`
+### Understanding the Components
 
-## Step 2: Add Tools
-
-Add function calling capabilities:
+**LLMProvider**: Your interface to different LLM services. SPADE-LLM supports multiple providers:
 
 ```python
-from spade_llm import LLMTool
-from datetime import datetime
-
-# Define tool function
-async def get_current_time() -> str:
-    """Get the current date and time."""
-    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-# Create tool
-time_tool = LLMTool(
-    name="get_current_time",
-    description="Get current date and time",
-    parameters={"type": "object", "properties": {}, "required": []},
-    func=get_current_time
+# OpenAI
+provider = LLMProvider.create_openai(
+    api_key="your-api-key",
+    model="gpt-4o-mini"
 )
 
-# Add to agent
-agent = LLMAgent(
-    jid="myagent@jabber.at",
-    password="mypassword", 
-    provider=provider,
-    system_prompt="You are a helpful assistant with access to time information",
-    tools=[time_tool]  # Add tools here
+# Ollama (local)
+provider = LLMProvider.create_ollama(
+    model="llama3.1:8b",
+    base_url="http://localhost:11434/v1"
+)
+
+# LM Studio (local)
+provider = LLMProvider.create_lm_studio(
+    model="local-model",
+    base_url="http://localhost:1234/v1"
 )
 ```
 
-## Step 3: Interactive Chat
+**LLMAgent**: The core component that connects to XMPP, receives messages, processes them through the LLM, and sends responses back.
 
-Create interactive chat interface:
+Run with: `python my_first_agent.py`
 
-```python
-from spade_llm import ChatAgent
+## Step 2: Creating an Interactive Chat
 
-async def main():
-    # LLM Agent
-    llm_agent = LLMAgent(
-        jid="assistant@jabber.at",
-        password="password1",
-        provider=provider,
-        system_prompt="You are a helpful assistant"
-    )
-    
-    # Chat Agent for human interaction
-    chat_agent = ChatAgent(
-        jid="human@jabber.at",
-        password="password2", 
-        target_agent_jid="assistant@jabber.at"
-    )
-    
-    await llm_agent.start()
-    await chat_agent.start()
-    
-    print("Chat system ready! Type messages below.")
-    print("Type 'exit' to quit.")
-    
-    # Start interactive chat
-    await chat_agent.run_interactive()
-    
-    await chat_agent.stop()
-    await llm_agent.stop()
-
-if __name__ == "__main__":
-    spade.run(main())
-```
-
-## Step 4: Conversation Management
-
-Add conversation limits and callbacks:
-
-```python
-def on_conversation_end(conversation_id: str, reason: str):
-    print(f"Conversation {conversation_id} ended: {reason}")
-
-agent = LLMAgent(
-    jid="assistant@jabber.at",
-    password="password",
-    provider=provider,
-    system_prompt="You are a helpful assistant",
-    max_interactions_per_conversation=10,
-    termination_markers=["<DONE>", "goodbye"],
-    on_conversation_end=on_conversation_end
-)
-```
-
-## Step 5: Message Routing
-
-Route responses to different recipients:
-
-```python
-def my_router(msg, response, context):
-    """Route based on response content."""
-    if "technical" in response.lower():
-        return "tech-support@jabber.at"
-    elif "sales" in response.lower():
-        return "sales@jabber.at"
-    else:
-        return str(msg.sender)  # Reply to sender
-
-agent = LLMAgent(
-    jid="router@jabber.at",
-    password="password",
-    provider=provider,
-    routing_function=my_router
-)
-```
-
-## Step 6: Adding Safety with Guardrails
-
-Protect your agent with content filtering and safety controls:
-
-```python
-from spade_llm.guardrails import KeywordGuardrail, GuardrailAction
-
-# Create content filter
-safety_filter = KeywordGuardrail(
-    name="basic_safety",
-    blocked_keywords=["hack", "exploit", "malware", "virus"],
-    action=GuardrailAction.BLOCK,
-    blocked_message="I cannot help with potentially harmful activities."
-)
-
-# Profanity filter
-profanity_filter = KeywordGuardrail(
-    name="profanity_filter",
-    blocked_keywords=["damn", "hell", "stupid"],
-    action=GuardrailAction.MODIFY,
-    replacement="[FILTERED]"
-)
-
-# Add to your agent
-agent = LLMAgent(
-    jid="safe-assistant@jabber.at",
-    password="password",
-    provider=provider,
-    system_prompt="You are a helpful and safe assistant",
-    input_guardrails=[safety_filter, profanity_filter]  # Filter incoming messages
-)
-```
-
-**Guardrail monitoring**:
-```python
-def on_guardrail_trigger(result):
-    """Monitor guardrail activity."""
-    if result.action == GuardrailAction.BLOCK:
-        print(f"🚫 Blocked: {result.reason}")
-    elif result.action == GuardrailAction.MODIFY:
-        print(f"✏️ Modified: {result.reason}")
-
-agent = LLMAgent(
-    jid="monitored-assistant@jabber.at",
-    password="password",
-    provider=provider,
-    input_guardrails=[safety_filter],
-    on_guardrail_trigger=on_guardrail_trigger  # Monitor events
-)
-```
-
-## Complete Example
-
-Here's a full-featured agent combining all concepts:
+To make your agent interactive, you'll need a `ChatAgent` to handle user input. Create `interactive_agent.py`:
 
 ```python
 import spade
-from spade_llm import LLMAgent, ChatAgent, LLMProvider, LLMTool
-from datetime import datetime
-
-# Tool function
-async def get_time() -> str:
-    """Get current time."""
-    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-# Routing function
-def smart_router(msg, response, context):
-    """Route based on content."""
-    if "time" in response.lower():
-        return "time-service@jabber.at"
-    return str(msg.sender)
-
-# Conversation callback
-def on_end(conv_id: str, reason: str):
-    print(f"Conversation ended: {conv_id} ({reason})")
+import getpass
+from spade_llm import LLMAgent, ChatAgent, LLMProvider
 
 async def main():
-    # Create provider
+    # Get XMPP server details
+    xmpp_server = input("Enter XMPP server domain (e.g., localhost): ") or "localhost"
+    
+    # Create LLM provider
     provider = LLMProvider.create_openai(
         api_key="your-api-key",
         model="gpt-4o-mini"
     )
     
-    # Create tool
-    time_tool = LLMTool(
-        name="get_time",
-        description="Get current time",
-        parameters={"type": "object", "properties": {}, "required": []},
-        func=get_time
-    )
-    
-    # Create LLM agent
+    # Create the LLM agent
     llm_agent = LLMAgent(
-        jid="smart-assistant@jabber.at",
-        password="password1",
+        jid=f"assistant@{xmpp_server}",
+        password=getpass.getpass("LLM agent password: "),
         provider=provider,
-        system_prompt="You are a smart assistant with time access",
-        tools=[time_tool],
-        routing_function=smart_router,
-        max_interactions_per_conversation=20,
-        on_conversation_end=on_end
+        system_prompt="You are a helpful assistant. Keep responses concise and friendly."
     )
     
-    # Create chat agent
+    # Create the chat agent for user interaction
     chat_agent = ChatAgent(
-        jid="human@jabber.at",
-        password="password2",
-        target_agent_jid="smart-assistant@jabber.at"
+        jid=f"user@{xmpp_server}",
+        password=getpass.getpass("Chat agent password: "),
+        target_agent_jid=f"assistant@{xmpp_server}"
     )
     
-    # Start agents
-    await llm_agent.start()
-    await chat_agent.start()
+    try:
+        # Start both agents
+        await llm_agent.start()
+        await chat_agent.start()
+        
+        print("✅ Agents started successfully!")
+        print("💬 You can now chat with your AI assistant")
+        print("Type 'exit' to quit\n")
+        
+        # Run interactive chat
+        await chat_agent.run_interactive()
+        
+    except KeyboardInterrupt:
+        print("\n👋 Shutting down...")
+    finally:
+        # Clean up
+        await chat_agent.stop()
+        await llm_agent.stop()
+        print("✅ Agents stopped successfully!")
+
+if __name__ == "__main__":
+    spade.run(main())
+```
+
+### Adding Custom Display
+
+You can customize how responses are displayed:
+
+```python
+def display_response(message: str, sender: str):
+    print(f"\n🤖 Assistant: {message}")
+    print("-" * 50)
+
+def on_message_sent(message: str, recipient: str):
+    print(f"👤 You: {message}")
+
+chat_agent = ChatAgent(
+    jid=f"user@{xmpp_server}",
+    password=chat_password,
+    target_agent_jid=f"assistant@{xmpp_server}",
+    display_callback=display_response,
+    on_message_sent=on_message_sent
+)
+```
+
+## Step 3: Adding Error Handling
+
+Always include proper error handling in production code:
+
+```python
+import spade
+import logging
+from spade_llm import LLMAgent, ChatAgent, LLMProvider
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+async def main():
+    try:
+        # Create provider with error handling
+        provider = LLMProvider.create_openai(
+            api_key="your-api-key",
+            model="gpt-4o-mini",
+            timeout=30.0  # Set timeout
+        )
+        
+        # Create agents with error handling
+        llm_agent = LLMAgent(
+            jid="assistant@localhost",
+            password="password123",
+            provider=provider,
+            system_prompt="You are a helpful assistant.",
+            verify_security=False  # For testing only
+        )
+        
+        await llm_agent.start()
+        logger.info("✅ LLM Agent started successfully")
+        
+        # Your chat logic here...
+        
+    except Exception as e:
+        logger.error(f"❌ Error: {e}")
+        print("💡 Check your configuration and try again")
+    finally:
+        # Always clean up
+        if 'llm_agent' in locals():
+            await llm_agent.stop()
+        if 'chat_agent' in locals():
+            await chat_agent.stop()
+
+if __name__ == "__main__":
+    spade.run(main())
+```
+
+## Complete Example with Best Practices
+
+Here's a complete, production-ready example that demonstrates best practices:
+
+```python
+import spade
+import getpass
+import logging
+from spade_llm import LLMAgent, ChatAgent, LLMProvider
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+async def main():
+    print("🚀 Starting your first SPADE-LLM agent!")
     
-    print("Smart assistant ready!")
-    print("Try asking: 'What time is it?' or 'Help me with Python'")
+    # Configuration
+    xmpp_server = input("XMPP server domain (default: localhost): ") or "localhost"
     
-    # Interactive chat
-    await chat_agent.run_interactive()
+    # Create provider (choose one)
+    provider_type = input("Provider (openai/ollama): ").lower()
     
-    # Cleanup
-    await chat_agent.stop()
-    await llm_agent.stop()
+    if provider_type == "openai":
+        api_key = getpass.getpass("OpenAI API key: ")
+        provider = LLMProvider.create_openai(
+            api_key=api_key,
+            model="gpt-4o-mini",
+            timeout=30.0
+        )
+    else:  # ollama
+        model = input("Ollama model (default: llama3.1:8b): ") or "llama3.1:8b"
+        provider = LLMProvider.create_ollama(
+            model=model,
+            base_url="http://localhost:11434/v1",
+            timeout=60.0
+        )
+    
+    # Get passwords
+    llm_password = getpass.getpass("LLM agent password: ")
+    chat_password = getpass.getpass("Chat agent password: ")
+    
+    # Create agents
+    llm_agent = LLMAgent(
+        jid=f"assistant@{xmpp_server}",
+        password=llm_password,
+        provider=provider,
+        system_prompt="You are a helpful and friendly AI assistant. Keep responses concise but informative.",
+        verify_security=False  # For development only
+    )
+    
+    def display_response(message: str, sender: str):
+        print(f"\n🤖 Assistant: {message}")
+        print("-" * 50)
+    
+    def on_message_sent(message: str, recipient: str):
+        print(f"👤 You: {message}")
+    
+    chat_agent = ChatAgent(
+        jid=f"user@{xmpp_server}",
+        password=chat_password,
+        target_agent_jid=f"assistant@{xmpp_server}",
+        display_callback=display_response,
+        on_message_sent=on_message_sent,
+        verify_security=False  # For development only
+    )
+    
+    try:
+        # Start agents
+        await llm_agent.start()
+        await chat_agent.start()
+        
+        logger.info("✅ Agents started successfully!")
+        print("💬 Start chatting with your AI assistant")
+        print("Type 'exit' to quit\n")
+        
+        # Run interactive chat
+        await chat_agent.run_interactive()
+        
+    except KeyboardInterrupt:
+        print("\n👋 Shutting down...")
+    except Exception as e:
+        logger.error(f"❌ Error: {e}")
+        print("💡 Check your configuration and try again")
+    finally:
+        # Clean up
+        try:
+            await chat_agent.stop()
+            await llm_agent.stop()
+            logger.info("✅ Agents stopped successfully!")
+        except Exception as e:
+            logger.error(f"Error during cleanup: {e}")
 
 if __name__ == "__main__":
     spade.run(main())
@@ -289,31 +301,35 @@ if __name__ == "__main__":
 
 ## Testing Your Agent
 
-1. **Run the agent**: `python my_agent.py`
-2. **Send test messages** using an XMPP client
-3. **Check agent responses** and tool execution
-4. **Monitor conversation limits** and termination
+1. **Run the agent**: `python my_first_agent.py`
+2. **Choose your provider**: OpenAI or Ollama
+3. **Enter your credentials**: API key and XMPP passwords
+4. **Start chatting**: Type messages and get responses
 
-## Troubleshooting
+## Common Issues and Solutions
 
-**Agent won't start**:
-- Check XMPP credentials
-- Verify server connectivity
-- Try `verify_security=False` for development
+### Connection Problems
+- **Agent won't start**: Check XMPP credentials and server availability
+- **Authentication failed**: Verify JID format and passwords
+- **Network issues**: Ensure XMPP server is accessible
 
-**No LLM responses**:
-- Verify API key
-- Check provider configuration
-- Test with simple queries first
+### LLM Provider Issues
+- **OpenAI errors**: Verify API key and account credits
+- **Ollama not responding**: Check if `ollama serve` is running
+- **Timeout errors**: Increase timeout values for slow models
 
-**Tools not working**:
-- Ensure tool functions are async
-- Check parameter schema
-- Verify tool registration
+### Performance Tips
+- Use appropriate model sizes for your hardware
+- Set reasonable timeouts based on your provider
+- Monitor token usage for cost optimization
+- Use local models (Ollama) for development
 
 ## Next Steps
 
-- **[Tools System](../guides/tools-system/)** - Advanced tool development
-- **[Message Routing](../guides/routing/)** - Complex routing patterns
-- **[Examples](../reference/examples/)** - More complete examples
-- **[API Reference](../reference/)** - Detailed documentation
+Now that you have a working agent, explore these advanced features:
+
+1. **[Custom Tools Tutorial](tools-tutorial.md)** - Add function calling capabilities
+2. **[Guardrails Tutorial](guardrails-tutorial.md)** - Implement safety and content filtering  
+3. **[Advanced Agent Tutorial](advanced-agent.md)** - Multi-agent workflows and integrations
+
+Each tutorial builds on the concepts you've learned here, gradually adding more sophisticated capabilities to your agents.

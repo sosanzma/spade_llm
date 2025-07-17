@@ -17,6 +17,26 @@ Extension for [SPADE](https://github.com/javipalanca/spade) that integrates Larg
 - **MCP Integration**: Model Context Protocol server support
 - **Production Ready**: Comprehensive error handling and logging
 
+## Architecture
+
+```mermaid
+graph LR
+    A[LLMAgent] --> C[ContextManager]
+    A --> D[LLMProvider]
+    A --> E[LLMTool]
+    A --> G[Guardrails]
+    A --> M[Memory]
+    D --> F[OpenAI/Ollama/etc]
+    G --> H[Input/Output Filtering]
+    E --> I[Human-in-the-Loop]
+    E --> J[MCP]
+    E --> P[CustomTool/LangchainTool]
+    J --> K[STDIO]
+    J --> L[HTTP Streaming]
+    M --> N[Agent-based]
+    M --> O[Agent-thread]
+```
+
 ## Quick Start
 
 ```python
@@ -40,23 +60,6 @@ async def main():
 
 if __name__ == "__main__":
     spade.run(main())
-```
-
-## Architecture
-
-```mermaid
-graph TB
-    A[LLMAgent] --> B[LLMBehaviour]
-    B --> C[ContextManager]
-    B --> D[LLMProvider]
-    B --> E[LLMTool]
-    B --> I[Guardrails System]
-    
-    D --> F[OpenAI/Ollama/etc]
-    E --> G[Python Functions]
-    E --> H[MCP Servers]
-    I --> J[Input Filters]
-    I --> K[Output Filters]
 ```
 
 ## Documentation Structure
