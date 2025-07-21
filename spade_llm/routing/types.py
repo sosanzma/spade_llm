@@ -1,7 +1,7 @@
 """Type definitions for routing system."""
 
-from typing import Callable, Union, List, Optional, Dict, Any
 from dataclasses import dataclass
+from typing import Any, Callable, Dict, List, Optional, Union
 
 from spade.message import Message
 
@@ -10,17 +10,17 @@ from spade.message import Message
 class RoutingResponse:
     """
     Encapsulates a routing decision with optional transformations and metadata.
-    
+
     This class provides a more expressive way to define routing beyond simple
     string destinations, allowing for message transformation and metadata attachment.
     """
-    
+
     recipients: Union[str, List[str]]
     """One or more JID destinations for the message."""
-    
+
     transform: Optional[Callable[[str], str]] = None
     """Optional function to transform the message before sending."""
-    
+
     metadata: Optional[Dict[str, Any]] = None
     """Optional metadata to attach to the outgoing message."""
 

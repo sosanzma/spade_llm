@@ -2,6 +2,7 @@
 """Quick start script for the Human Expert web interface."""
 
 import sys
+
 from .web_server import run_server
 
 

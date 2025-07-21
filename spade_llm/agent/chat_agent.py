@@ -3,7 +3,7 @@
 import asyncio
 import logging
 import sys
-from typing import Optional, Callable, Any
+from typing import Any, Callable, Optional
 
 from spade.agent import Agent
 from spade.behaviour import CyclicBehaviour
@@ -37,7 +37,9 @@ class ChatAgent(Agent):
                 # Log if verbose mode is enabled
                 verbose = self.get("verbose")
                 if verbose:
-                    logger.info(f"ChatAgent sending: '{message_to_send}' to {target_jid}")
+                    logger.info(
+                        f"ChatAgent sending: '{message_to_send}' to {target_jid}"
+                    )
 
                 await self.send(msg)
                 self.set("message_to_send", None)
@@ -71,15 +73,17 @@ class ChatAgent(Agent):
 
             await asyncio.sleep(0.1)
 
-    def __init__(self,
-                 jid: str,
-                 password: str,
-                 target_agent_jid: str,
-                 display_callback: Optional[Callable[[str, str], None]] = None,
-                 on_message_sent: Optional[Callable[[str, str], None]] = None,
-                 on_message_received: Optional[Callable[[str, str], None]] = None,
-                 verbose: bool = False,
-                 verify_security: bool = False):
+    def __init__(
+        self,
+        jid: str,
+        password: str,
+        target_agent_jid: str,
+        display_callback: Optional[Callable[[str, str], None]] = None,
+        on_message_sent: Optional[Callable[[str, str], None]] = None,
+        on_message_received: Optional[Callable[[str, str], None]] = None,
+        verbose: bool = False,
+        verify_security: bool = False,
+    ):
         """
         Initialize the chat agent.
 
@@ -106,7 +110,9 @@ class ChatAgent(Agent):
 
     async def setup(self):
         """Set up the chat agent with send and receive behaviours."""
-        logger.info(f"ChatAgent {self.jid} starting, will communicate with {self.target_agent_jid}")
+        logger.info(
+            f"ChatAgent {self.jid} starting, will communicate with {self.target_agent_jid}"
+        )
 
         # Store configuration in agent's data
         self.set("target_agent_jid", self.target_agent_jid)
@@ -182,10 +188,12 @@ class ChatAgent(Agent):
         """
         return not self.get("response_received")
 
-    async def run_interactive(self,
-                            input_prompt: str = "> ",
-                            exit_command: str = "exit",
-                            response_timeout: float = 10.0):
+    async def run_interactive(
+        self,
+        input_prompt: str = "> ",
+        exit_command: str = "exit",
+        response_timeout: float = 10.0,
+    ):
         """
         Run an interactive chat session with this agent.
 
@@ -198,7 +206,7 @@ class ChatAgent(Agent):
             self,
             input_prompt=input_prompt,
             exit_command=exit_command,
-            response_timeout=response_timeout
+            response_timeout=response_timeout,
         )
 
 
@@ -217,10 +225,12 @@ async def safe_input(prompt: str = "") -> str:
     return await asyncio.to_thread(input, prompt)
 
 
-async def run_interactive_chat(chat_agent: ChatAgent,
-                               input_prompt: str = "> ",
-                               exit_command: str = "exit",
-                               response_timeout: float = 10.0):
+async def run_interactive_chat(
+    chat_agent: ChatAgent,
+    input_prompt: str = "> ",
+    exit_command: str = "exit",
+    response_timeout: float = 10.0,
+):
     """
     Run an interactive chat session with the chat agent using synchronized communication.
 

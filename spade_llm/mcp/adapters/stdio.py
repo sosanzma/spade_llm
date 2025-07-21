@@ -1,12 +1,14 @@
 """STDIO adapter for MCP tools."""
 
+import logging
+
 from mcp.types import Tool
 
-import logging
 from ..config import StdioServerConfig
 from .base import MCPToolAdapter
 
 logger = logging.getLogger(__name__)
+
 
 class StdioMCPToolAdapter(MCPToolAdapter):
     """Adapter for MCP tools using STDIO transport.

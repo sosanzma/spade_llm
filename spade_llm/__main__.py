@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+
 from .version import __version__
 
 
@@ -9,25 +10,23 @@ def main():
     """Main entry point for SPADE_LLM command line interface."""
     parser = argparse.ArgumentParser(
         description="SPADE_LLM - Extension for SPADE to integrate Large Language Models",
-        prog="spade-llm"
+        prog="spade-llm",
     )
-    
+
     parser.add_argument(
-        "--version",
-        action="version",
-        version=f"SPADE_LLM {__version__}"
+        "--version", action="version", version=f"SPADE_LLM {__version__}"
     )
-    
+
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
-    
+
     # Info command
     info_parser = subparsers.add_parser("info", help="Show SPADE_LLM information")
-    
+
     # Example command
     example_parser = subparsers.add_parser("examples", help="List available examples")
-    
+
     args = parser.parse_args()
-    
+
     if args.command == "info":
         print(f"SPADE_LLM version {__version__}")
         print("Extension for SPADE to integrate Large Language Models in agents")

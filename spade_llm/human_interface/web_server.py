@@ -1,9 +1,9 @@
 """Simple web server for the Human Expert interface."""
 
-import os
 import logging
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+import os
 from functools import partial
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 logger = logging.getLogger("spade_llm.human_interface.web_server")
 

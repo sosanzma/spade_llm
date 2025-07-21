@@ -2,7 +2,7 @@
 
 import asyncio
 import logging
-from typing import List, Optional, Dict, Any, Callable, Union, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 from spade.agent import Agent
 from spade.message import Message
@@ -11,14 +11,15 @@ from spade.template import Template
 from ..behaviour import LLMBehaviour
 from ..context import ContextManager
 from ..context.management import ContextManagement
+from ..guardrails import GuardrailResult, InputGuardrail, OutputGuardrail
 from ..mcp import MCPServerConfig, get_all_mcp_tools
-from ..providers.base_provider import LLMProvider
-from ..tools import LLMTool
-from ..routing import RoutingFunction
-from ..guardrails import InputGuardrail, OutputGuardrail, GuardrailResult
 from ..memory import AgentInteractionMemory, AgentMemoryTool
+from ..providers.base_provider import LLMProvider
+from ..routing import RoutingFunction
+from ..tools import LLMTool
 
 logger = logging.getLogger("spade_llm.agent")
+
 
 class LLMAgent(Agent):
     """
@@ -33,25 +34,27 @@ class LLMAgent(Agent):
     - Input and output guardrails for content filtering
     """
 
-    def __init__(self,
-                 jid: str,
-                 password: str,
-                 provider: LLMProvider,
-                 reply_to: Optional[str] = None,
-                 routing_function: Optional[RoutingFunction] = None,
-                 system_prompt: Optional[str] = None,
-                 context_management: Optional[ContextManagement] = None,
-                 mcp_servers: Optional[List[MCPServerConfig]] = None,
-                 tools: Optional[List[LLMTool]] = None,
-                 termination_markers: Optional[List[str]] = None,
-                 max_interactions_per_conversation: Optional[int] = None,
-                 on_conversation_end: Optional[Callable[[str, str], None]] = None,
-                 input_guardrails: Optional[List[InputGuardrail]] = None,
-                 output_guardrails: Optional[List[OutputGuardrail]] = None,
-                 on_guardrail_trigger: Optional[Callable[[GuardrailResult], None]] = None,
-                 interaction_memory: Union[bool, Tuple[bool, str]] = False,
-                 agent_base_memory: Union[bool, Tuple[bool, str]] = False,
-                 verify_security: bool = False):
+    def __init__(
+        self,
+        jid: str,
+        password: str,
+        provider: LLMProvider,
+        reply_to: Optional[str] = None,
+        routing_function: Optional[RoutingFunction] = None,
+        system_prompt: Optional[str] = None,
+        context_management: Optional[ContextManagement] = None,
+        mcp_servers: Optional[List[MCPServerConfig]] = None,
+        tools: Optional[List[LLMTool]] = None,
+        termination_markers: Optional[List[str]] = None,
+        max_interactions_per_conversation: Optional[int] = None,
+        on_conversation_end: Optional[Callable[[str, str], None]] = None,
+        input_guardrails: Optional[List[InputGuardrail]] = None,
+        output_guardrails: Optional[List[OutputGuardrail]] = None,
+        on_guardrail_trigger: Optional[Callable[[GuardrailResult], None]] = None,
+        interaction_memory: Union[bool, Tuple[bool, str]] = False,
+        agent_base_memory: Union[bool, Tuple[bool, str]] = False,
+        verify_security: bool = False,
+    ):
         """
         Initialize an LLM-capable agent.
 
@@ -75,15 +78,14 @@ class LLMAgent(Agent):
                 - bool: True/False (uses default path)
                 - tuple: (True, "/custom/path") for custom path
             agent_base_memory: Enable agent base memory. Can be:
-                - bool: True/False (uses default path)  
+                - bool: True/False (uses default path)
                 - tuple: (True, "/custom/path") for custom path
             verify_security: Whether to verify security certificates
         """
         super().__init__(jid, password, verify_security=verify_security)
 
         self.context = ContextManager(
-            system_prompt=system_prompt,
-            context_management=context_management
+            system_prompt=system_prompt, context_management=context_management
         )
         self.provider = provider
         self.context_management = context_management
@@ -91,7 +93,7 @@ class LLMAgent(Agent):
         self.routing_function = routing_function
         self.tools: List[LLMTool] = []
         self.mcp_servers = mcp_servers or []
-        
+
         # Process initial tools and bind HumanInTheLoopTools to this agent
         if tools:
             for tool in tools:
@@ -99,32 +101,44 @@ class LLMAgent(Agent):
 
         # Setup interaction memory if enabled
         self.interaction_memory = None
-        interaction_enabled, interaction_path = self._parse_memory_config(interaction_memory)
+        interaction_enabled, interaction_path = self._parse_memory_config(
+            interaction_memory
+        )
         if interaction_enabled:
             self.interaction_memory = AgentInteractionMemory(jid, interaction_path)
             memory_tool = AgentMemoryTool(self.interaction_memory)
             self._register_tool(memory_tool)
-            logger.info(f"Enabled interaction memory for agent {jid} with path: {interaction_path or 'default'}")
+            logger.info(
+                f"Enabled interaction memory for agent {jid} with path: {interaction_path or 'default'}"
+            )
 
         # Setup agent base memory if enabled
         self.agent_base_memory = None
-        base_memory_enabled, base_memory_path = self._parse_memory_config(agent_base_memory)
+        base_memory_enabled, base_memory_path = self._parse_memory_config(
+            agent_base_memory
+        )
         if base_memory_enabled:
             from ..memory.agent_base_memory import AgentBaseMemory
             from ..memory.agent_base_memory_tools import create_base_memory_tools
-            
+
             self.agent_base_memory = AgentBaseMemory(jid, memory_path=base_memory_path)
             base_memory_tools = create_base_memory_tools(self.agent_base_memory)
-            
+
             for tool in base_memory_tools:
                 self._register_tool(tool)
-            
-            logger.info(f"Enabled agent base memory for agent {jid} with path: {base_memory_path or 'default'}")
 
-        self.termination_markers = termination_markers or ["<TASK_COMPLETE>", "<END>", "<DONE>"]
+            logger.info(
+                f"Enabled agent base memory for agent {jid} with path: {base_memory_path or 'default'}"
+            )
+
+        self.termination_markers = termination_markers or [
+            "<TASK_COMPLETE>",
+            "<END>",
+            "<DONE>",
+        ]
         self.max_interactions_per_conversation = max_interactions_per_conversation
         self.on_conversation_end = on_conversation_end
-        
+
         # Guardrails
         self.input_guardrails = input_guardrails or []
         self.output_guardrails = output_guardrails or []
@@ -143,7 +157,7 @@ class LLMAgent(Agent):
             input_guardrails=self.input_guardrails,
             output_guardrails=self.output_guardrails,
             on_guardrail_trigger=self.on_guardrail_trigger,
-            interaction_memory=self.interaction_memory
+            interaction_memory=self.interaction_memory,
         )
 
     async def setup(self):
@@ -169,19 +183,23 @@ class LLMAgent(Agent):
             for tool in mcp_tools:
                 self.add_tool(tool)
 
-            logger.info(f"Registered {len(mcp_tools)} MCP tools from {len(self.mcp_servers)} servers")
+            logger.info(
+                f"Registered {len(mcp_tools)} MCP tools from {len(self.mcp_servers)} servers"
+            )
         except Exception as e:
             logger.error(f"Error setting up MCP tools: {e}")
 
-    def _parse_memory_config(self, memory_config: Union[bool, Tuple[bool, str]]) -> Tuple[bool, Optional[str]]:
+    def _parse_memory_config(
+        self, memory_config: Union[bool, Tuple[bool, str]]
+    ) -> Tuple[bool, Optional[str]]:
         """
         Parse memory configuration parameter.
-        
+
         Args:
             memory_config: Can be:
                 - bool: True/False (uses default path)
                 - tuple: (enabled, custom_path)
-        
+
         Returns:
             Tuple of (enabled, path)
         """
@@ -192,23 +210,27 @@ class LLMAgent(Agent):
             if isinstance(enabled, bool) and isinstance(path, str):
                 return enabled, path
             else:
-                logger.warning(f"Invalid memory config tuple format: {memory_config}. Using default.")
+                logger.warning(
+                    f"Invalid memory config tuple format: {memory_config}. Using default."
+                )
                 return False, None
         else:
-            logger.warning(f"Invalid memory config type: {type(memory_config)}. Expected bool or tuple.")
+            logger.warning(
+                f"Invalid memory config type: {type(memory_config)}. Expected bool or tuple."
+            )
             return False, None
 
     def _register_tool(self, tool: LLMTool):
         """
         Internal method to register a tool and handle special setup.
-        
+
         Args:
             tool: The tool to register
         """
         # Check if it's a HumanInTheLoopTool and bind it to this agent
-        if hasattr(tool, 'set_agent') and callable(getattr(tool, 'set_agent')):
+        if hasattr(tool, "set_agent") and callable(getattr(tool, "set_agent")):
             tool.set_agent(self)
-            
+
         self.tools.append(tool)
 
     def add_tool(self, tool: LLMTool):
@@ -221,76 +243,80 @@ class LLMAgent(Agent):
         self._register_tool(tool)
         # Also register with the behaviour
         self.llm_behaviour.register_tool(tool)
-        
+
     def reset_conversation(self, conversation_id: str) -> bool:
         """
         Reset a conversation to allow it to continue beyond its limits.
-        
+
         Args:
             conversation_id: The ID of the conversation to reset
-            
+
         Returns:
             bool: True if the conversation was reset, False if not found
         """
         return self.llm_behaviour.reset_conversation(conversation_id)
-    
+
     def get_conversation_state(self, conversation_id: str) -> Optional[Dict[str, Any]]:
         """
         Get the current state of a conversation.
-        
+
         Args:
             conversation_id: The ID of the conversation
-            
+
         Returns:
             Dict or None: The conversation state if found, None otherwise
         """
         return self.llm_behaviour.get_conversation_state(conversation_id)
-    
+
     def get_tools(self) -> List[LLMTool]:
         """
         Get the list of tools available to this agent.
-        
+
         Returns:
             List of tools
         """
         return self.tools
-    
+
     def add_input_guardrail(self, guardrail: InputGuardrail):
         """
         Add an input guardrail to the agent.
-        
+
         Args:
             guardrail: The input guardrail to add
         """
         self.input_guardrails.append(guardrail)
         self.llm_behaviour.add_input_guardrail(guardrail)
-    
+
     def add_output_guardrail(self, guardrail: OutputGuardrail):
         """
         Add an output guardrail to the agent.
-        
+
         Args:
             guardrail: The output guardrail to add
         """
         self.output_guardrails.append(guardrail)
         self.llm_behaviour.add_output_guardrail(guardrail)
-    
-    def get_context_stats(self, conversation_id: Optional[str] = None) -> Dict[str, Any]:
+
+    def get_context_stats(
+        self, conversation_id: Optional[str] = None
+    ) -> Dict[str, Any]:
         """
         Get context management statistics for a conversation.
-        
+
         Args:
             conversation_id: Optional ID of the conversation to get stats for
-            
+
         Returns:
             Dictionary with context management statistics
         """
         return self.context.get_context_stats(conversation_id)
-    
-    def update_context_management(self, new_context_management: ContextManagement) -> None:
+
+    def update_context_management(
+        self, new_context_management: ContextManagement
+    ) -> None:
         """
         Update the context management strategy.
-        
+
         Args:
             new_context_management: New context management strategy to use
         """
