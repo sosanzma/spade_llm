@@ -1,9 +1,10 @@
 """Streamable HTTP adapter for MCP tools."""
 
+import logging
+
 from mcp.types import Tool
 
 from ..config import StreamableHttpServerConfig
-import logging
 from .base import MCPToolAdapter
 
 logger = logging.getLogger(__name__)
@@ -26,7 +27,9 @@ class StreamableHttpMCPToolAdapter(MCPToolAdapter):
             tool: The MCP tool to adapt.
         """
         if not isinstance(server_config, StreamableHttpServerConfig):
-            raise TypeError(f"Expected StreamableHttpServerConfig, got {type(server_config)}")
+            raise TypeError(
+                f"Expected StreamableHttpServerConfig, got {type(server_config)}"
+            )
 
         super().__init__(server_config=server_config, tool=tool)
 

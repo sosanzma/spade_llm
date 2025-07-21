@@ -53,7 +53,7 @@ class StdioServerConfig(MCPServerConfig):
 
     read_timeout_seconds: float = 5.0
     """Timeout for read operations in seconds."""
-    
+
     def __post_init__(self):
         """Validate required fields after initialization."""
         if self.command is None:
@@ -79,7 +79,7 @@ class SseServerConfig(MCPServerConfig):
 
     sse_read_timeout: float = 300.0  # 5 minutes
     """Read timeout for SSE connection in seconds."""
-    
+
     def __post_init__(self):
         """Validate required fields after initialization."""
         if self.url is None:
@@ -109,7 +109,7 @@ class StreamableHttpServerConfig(MCPServerConfig):
 
     terminate_on_close: bool = True
     """Whether to terminate the connection when closed."""
-    
+
     def __post_init__(self):
         """Validate required fields after initialization."""
         if self.url is None:

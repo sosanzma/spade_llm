@@ -18,7 +18,7 @@
 
 # SPADE-LLM
 
-Extension for [SPADE](https://github.com/javipalanca/spade) that integrates Large Language Models into multi-agent systems. Build intelligent, collaborative agents that can communicate, reason, and take actions in complex distributed environments.
+Extension for [SPADE](https://spadeagents.eu) that integrates Large Language Models into multi-agent systems. Build intelligent, collaborative agents that can communicate, reason, and take actions in complex distributed environments.
 
 ## Table of Contents
 

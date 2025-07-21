@@ -15,16 +15,24 @@ from mcp.client.stdio import StdioServerParameters, stdio_client
 # Try to import streamable_http, but don't fail if it's not available
 try:
     from mcp.client.streamable_http import streamablehttp_client
+
     HAS_STREAMABLE_HTTP = True
 except ImportError:
     HAS_STREAMABLE_HTTP = False
-    
-from mcp.types import JSONRPCMessage
 
 import logging
-from .config import MCPServerConfig, SseServerConfig, StdioServerConfig, StreamableHttpServerConfig
+
+from mcp.types import JSONRPCMessage
+
+from .config import (
+    MCPServerConfig,
+    SseServerConfig,
+    StdioServerConfig,
+    StreamableHttpServerConfig,
+)
 
 logger = logging.getLogger(__name__)
+
 
 def create_stdio_params(config: StdioServerConfig) -> StdioServerParameters:
     """Convert a StdioServerConfig to StdioServerParameters.
@@ -47,7 +55,7 @@ def create_stdio_params(config: StdioServerConfig) -> StdioServerParameters:
 
 @asynccontextmanager
 async def create_mcp_session(
-        config: MCPServerConfig
+    config: MCPServerConfig,
 ) -> AsyncGenerator[ClientSession, None]:
     """Create an MCP client session for a server.
 
@@ -66,19 +74,21 @@ async def create_mcp_session(
             stdio_params = create_stdio_params(config)
             async with stdio_client(stdio_params) as (read, write):
                 async with ClientSession(
-                        read_stream=read,
-                        write_stream=write,
-                        read_timeout_seconds=timedelta(seconds=config.read_timeout_seconds),
+                    read_stream=read,
+                    write_stream=write,
+                    read_timeout_seconds=timedelta(seconds=config.read_timeout_seconds),
                 ) as session:
                     yield session
         elif isinstance(config, SseServerConfig):
             async with sse_client(
-                    url=config.url,
-                    headers=config.headers,
-                    timeout=config.timeout,
-                    sse_read_timeout=config.sse_read_timeout,
+                url=config.url,
+                headers=config.headers,
+                timeout=config.timeout,
+                sse_read_timeout=config.sse_read_timeout,
             ) as (read, write):
-                async with ClientSession(read_stream=read, write_stream=write) as session:
+                async with ClientSession(
+                    read_stream=read, write_stream=write
+                ) as session:
                     yield session
         elif isinstance(config, StreamableHttpServerConfig):
             if not HAS_STREAMABLE_HTTP:
@@ -87,17 +97,17 @@ async def create_mcp_session(
                     "Please upgrade MCP to use this transport: pip install --upgrade mcp"
                 )
             async with streamablehttp_client(
-                    url=config.url,
-                    headers=config.headers,
-                    timeout=timedelta(seconds=config.timeout),
-                    sse_read_timeout=timedelta(seconds=config.sse_read_timeout),
-                    terminate_on_close=config.terminate_on_close,
+                url=config.url,
+                headers=config.headers,
+                timeout=timedelta(seconds=config.timeout),
+                sse_read_timeout=timedelta(seconds=config.sse_read_timeout),
+                terminate_on_close=config.terminate_on_close,
             ) as (read, write, session_id_callback):
                 # TODO: Handle session_id_callback if needed in the future
                 async with ClientSession(
-                        read_stream=read,
-                        write_stream=write,
-                        read_timeout_seconds=timedelta(seconds=config.sse_read_timeout),
+                    read_stream=read,
+                    write_stream=write,
+                    read_timeout_seconds=timedelta(seconds=config.sse_read_timeout),
                 ) as session:
                     yield session
         else:
@@ -156,7 +166,9 @@ class MCPSession:
 
                     return tools_response.tools
             except Exception as e:
-                logger.error(f"Error fetching tools from MCP server {self.config.name}: {e}")
+                logger.error(
+                    f"Error fetching tools from MCP server {self.config.name}: {e}"
+                )
                 raise RuntimeError(f"Failed to fetch tools from MCP server: {e}") from e
 
     def invalidate_cache(self) -> None:
@@ -164,9 +176,7 @@ class MCPSession:
         self._tools_cache = None
 
     async def call_tool(
-            self,
-            tool_name: str,
-            arguments: Dict[str, Any]
+        self, tool_name: str, arguments: Dict[str, Any]
     ) -> mcp.types.CallToolResult:
         """Call a tool on the server.
 
@@ -188,5 +198,7 @@ class MCPSession:
                 # Call the tool
                 return await session.call_tool(tool_name, arguments)
         except Exception as e:
-            logger.error(f"Error calling tool {tool_name} on MCP server {self.config.name}: {e}")
+            logger.error(
+                f"Error calling tool {tool_name} on MCP server {self.config.name}: {e}"
+            )
             raise RuntimeError(f"Failed to call tool {tool_name}: {e}") from e

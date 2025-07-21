@@ -1,12 +1,14 @@
 """SSE adapter for MCP tools."""
 
+import logging
+
 from mcp.types import Tool
 
 from ..config import SseServerConfig
-import logging
 from .base import MCPToolAdapter
 
 logger = logging.getLogger(__name__)
+
 
 class SseMCPToolAdapter(MCPToolAdapter):
     """Adapter for MCP tools using SSE transport.
