@@ -12,7 +12,7 @@
 [![Build Status](https://img.shields.io/github/actions/workflow/status/sosanzma/spade_llm/python-app.yml)](https://github.com/sosanzma/spade_llm/actions)
 [![Docs Status](https://img.shields.io/github/actions/workflow/status/sosanzma/spade_llm/docs.yml)](https://github.com/sosanzma/spade_llm/actions/workflows/docs.yml)
 
-[**Documentation**](https://spadeagents.eu) | [**Quick Start**](https://sosanzma.github.io/spade_llm/getting-started/quickstart/) | [**Examples**](https://sosanzma.github.io/spade_llm/reference/examples/) | [**API Reference**](https://sosanzma.github.io/spade_llm/reference/)
+[**Documentation**](https://sosanzma.github.io/spade_llm/) | [**Quick Start**](https://sosanzma.github.io/spade_llm/getting-started/quickstart/) | [**Examples**](https://sosanzma.github.io/spade_llm/reference/examples/) | [**API Reference**](https://sosanzma.github.io/spade_llm/reference/)
 
 </div>
 
