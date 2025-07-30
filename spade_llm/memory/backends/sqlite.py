@@ -3,7 +3,7 @@
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import List, Optional
+from typing import List
 
 try:
     import aiosqlite
@@ -111,21 +111,21 @@ class SQLiteMemoryBackend(MemoryBackend):
                 # Create indexes for efficient queries
                 await db.execute(
                     """
-                    CREATE INDEX IF NOT EXISTS idx_agent_category 
+                    CREATE INDEX IF NOT EXISTS idx_agent_category
                     ON agent_memories(agent_id, category)
                 """
                 )
 
                 await db.execute(
                     """
-                    CREATE INDEX IF NOT EXISTS idx_agent_recent 
+                    CREATE INDEX IF NOT EXISTS idx_agent_recent
                     ON agent_memories(agent_id, last_accessed DESC)
                 """
                 )
 
                 await db.execute(
                     """
-                    CREATE INDEX IF NOT EXISTS idx_agent_content 
+                    CREATE INDEX IF NOT EXISTS idx_agent_content
                     ON agent_memories(agent_id, content)
                 """
                 )
@@ -154,21 +154,21 @@ class SQLiteMemoryBackend(MemoryBackend):
                     # Create indexes for efficient queries
                     await db.execute(
                         """
-                        CREATE INDEX IF NOT EXISTS idx_agent_category 
+                        CREATE INDEX IF NOT EXISTS idx_agent_category
                         ON agent_memories(agent_id, category)
                     """
                     )
 
                     await db.execute(
                         """
-                        CREATE INDEX IF NOT EXISTS idx_agent_recent 
+                        CREATE INDEX IF NOT EXISTS idx_agent_recent
                         ON agent_memories(agent_id, last_accessed DESC)
                     """
                     )
 
                     await db.execute(
                         """
-                        CREATE INDEX IF NOT EXISTS idx_agent_content 
+                        CREATE INDEX IF NOT EXISTS idx_agent_content
                         ON agent_memories(agent_id, content)
                     """
                     )
@@ -200,7 +200,7 @@ class SQLiteMemoryBackend(MemoryBackend):
                 db = await self._get_connection()
                 await db.execute(
                     """
-                    INSERT OR REPLACE INTO agent_memories 
+                    INSERT OR REPLACE INTO agent_memories
                     (id, agent_id, category, content, context, confidence, created_at, last_accessed, access_count)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
@@ -230,7 +230,7 @@ class SQLiteMemoryBackend(MemoryBackend):
                 async with aiosqlite.connect(self.db_path) as db:
                     await db.execute(
                         """
-                        INSERT OR REPLACE INTO agent_memories 
+                        INSERT OR REPLACE INTO agent_memories
                         (id, agent_id, category, content, context, confidence, created_at, last_accessed, access_count)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
@@ -282,9 +282,9 @@ class SQLiteMemoryBackend(MemoryBackend):
         async def query_func(db):
             cursor = await db.execute(
                 """
-                SELECT id, agent_id, category, content, context, confidence, 
+                SELECT id, agent_id, category, content, context, confidence,
                        created_at, last_accessed, access_count
-                FROM agent_memories 
+                FROM agent_memories
                 WHERE agent_id = ? AND category = ?
                 ORDER BY last_accessed DESC
                 LIMIT ?
@@ -347,9 +347,9 @@ class SQLiteMemoryBackend(MemoryBackend):
 
             cursor = await db.execute(
                 """
-                SELECT id, agent_id, category, content, context, confidence, 
+                SELECT id, agent_id, category, content, context, confidence,
                        created_at, last_accessed, access_count
-                FROM agent_memories 
+                FROM agent_memories
                 WHERE agent_id = ? AND (content LIKE ? OR context LIKE ?)
                 ORDER BY last_accessed DESC
                 LIMIT ?
@@ -409,9 +409,9 @@ class SQLiteMemoryBackend(MemoryBackend):
             async with aiosqlite.connect(self.db_path) as db:
                 cursor = await db.execute(
                     """
-                    SELECT id, agent_id, category, content, context, confidence, 
+                    SELECT id, agent_id, category, content, context, confidence,
                            created_at, last_accessed, access_count
-                    FROM agent_memories 
+                    FROM agent_memories
                     WHERE agent_id = ?
                     ORDER BY last_accessed DESC
                     LIMIT ?
@@ -463,7 +463,7 @@ class SQLiteMemoryBackend(MemoryBackend):
             async with aiosqlite.connect(self.db_path) as db:
                 await db.execute(
                     """
-                    UPDATE agent_memories 
+                    UPDATE agent_memories
                     SET last_accessed = ?, access_count = access_count + 1
                     WHERE id = ?
                 """,
@@ -535,7 +535,7 @@ class SQLiteMemoryBackend(MemoryBackend):
                 # Get count by category
                 cursor = await db.execute(
                     """
-                    SELECT category, COUNT(*) FROM agent_memories 
+                    SELECT category, COUNT(*) FROM agent_memories
                     WHERE agent_id = ? GROUP BY category
                 """,
                     (agent_id,),
@@ -545,7 +545,7 @@ class SQLiteMemoryBackend(MemoryBackend):
                 # Get oldest and newest memories
                 cursor = await db.execute(
                     """
-                    SELECT MIN(created_at), MAX(created_at) FROM agent_memories 
+                    SELECT MIN(created_at), MAX(created_at) FROM agent_memories
                     WHERE agent_id = ?
                 """,
                     (agent_id,),

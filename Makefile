@@ -27,7 +27,7 @@ clean-test: ## Remove test and coverage artifacts
 	rm -fr .pytest_cache
 
 lint: ## Check code style with flake8
-	flake8 --ignore=E501 spade_llm
+	flake8 --ignore=E501,W503,W504 spade_llm
 
 format: ## Format code with black and isort
 	black spade_llm/

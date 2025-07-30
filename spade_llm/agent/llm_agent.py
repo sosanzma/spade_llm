@@ -1,11 +1,9 @@
 """LLM-capable agent implementation for SPADE."""
 
-import asyncio
 import logging
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 from spade.agent import Agent
-from spade.message import Message
 from spade.template import Template
 
 from ..behaviour import LLMBehaviour

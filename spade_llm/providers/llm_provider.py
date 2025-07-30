@@ -4,7 +4,7 @@ import asyncio
 import json
 import logging
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 from openai import OpenAI, OpenAIError
 

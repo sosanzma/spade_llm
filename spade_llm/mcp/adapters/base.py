@@ -1,10 +1,8 @@
 """Base adapter for MCP tools."""
 
 import abc
-import asyncio
-import json
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from mcp.types import CallToolResult, Tool
 
@@ -43,8 +41,8 @@ class MCPToolAdapter(LLMTool, abc.ABC):
         # Initialize the LLMTool with the processed metadata
         super().__init__(
             name=f"{server_config.name}_{tool.name}",
-            description=tool.description
-            or f"Tool '{tool.name}' from server '{server_config.name}'",
+            description=(tool.description
+                         or f"Tool '{tool.name}' from server '{server_config.name}'"),
             parameters=parameters,
             func=self._execute_tool,
         )
