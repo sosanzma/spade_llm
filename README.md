@@ -6,6 +6,7 @@
 
 
 
+[![PyPI Version](https://img.shields.io/pypi/v/spade-llm)](https://pypi.org/project/spade-llm/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Coverage Status](https://coveralls.io/repos/github/sosanzma/spade_llm/badge.svg?branch=main)](https://coveralls.io/github/sosanzma/spade_llm?branch=main)
 ![Python Version](https://img.shields.io/badge/python-3.10%20to%203.12-orange?logo=python&logoColor=green)
