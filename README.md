@@ -78,8 +78,6 @@ if __name__ == "__main__":
 
 ## Installation
 
-> ⚠️ **Warning**: `spade_llm` is not yet available on PyPI. It will be published in the coming days. Stay tuned!
-
 ```bash
 pip install spade_llm
 ```
