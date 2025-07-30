@@ -9,8 +9,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Coverage Status](https://coveralls.io/repos/github/sosanzma/spade_llm/badge.svg?branch=main)](https://coveralls.io/github/sosanzma/spade_llm?branch=main)
 ![Python Version](https://img.shields.io/badge/python-3.10%20to%203.12-orange?logo=python&logoColor=green)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/sosanzma/spade_llm/python-app.yml)](https://github.com/sosanzma/spade_llm/actions)
-[![Docs Status](https://img.shields.io/github/actions/workflow/status/sosanzma/spade_llm/docs.yml)](https://github.com/sosanzma/spade_llm/actions/workflows/docs.yml)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/sosanzma/spade_llm/python-app.yml?label=build)](https://github.com/sosanzma/spade_llm/actions)
+[![Docs Status](https://img.shields.io/github/actions/workflow/status/sosanzma/spade_llm/docs.yml?label=docs)](https://github.com/sosanzma/spade_llm/actions/workflows/docs.yml)
 
 [**Documentation**](https://sosanzma.github.io/spade_llm/) | [**Quick Start**](https://sosanzma.github.io/spade_llm/getting-started/quickstart/) | [**Examples**](https://sosanzma.github.io/spade_llm/reference/examples/) | [**API Reference**](https://sosanzma.github.io/spade_llm/reference/)
 
