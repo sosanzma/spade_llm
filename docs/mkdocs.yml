@@ -59,12 +59,6 @@ plugins:
             docstring_style: google
             show_submodules: false
   - autorefs
-  - meta
-  - tags:
-      tags_file: tags.md
-  - social:
-      cards_layout_options:
-        font_family: Roboto
 
 markdown_extensions:
   - abbr
