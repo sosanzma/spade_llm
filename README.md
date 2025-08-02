@@ -1,3 +1,5 @@
+<meta name="google-site-verification" content="bni7pRppgBa2PYG9F7grgoRsMlU47w9etD8GnBuHsjk" />
+
 <div align="center">
   <img src="docs/docs/assets/images/spade_llm_logo.png" alt="SPADE-LLM Logo" width="200"/>
 </div>
