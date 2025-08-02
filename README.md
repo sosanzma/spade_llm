@@ -17,9 +17,11 @@
 
 </div>
 
-# SPADE-LLM
+# SPADE-LLM: Large Language Model Integration for Multi-Agent Systems
 
-Extension for [SPADE](https://spadeagents.eu) that integrates Large Language Models into multi-agent systems. Build intelligent, collaborative agents that can communicate, reason, and take actions in complex distributed environments.
+**SPADE-LLM** is a Python framework that extends [SPADE](https://spadeagents.eu) multi-agent platform with Large Language Model capabilities. Build AI agents powered by OpenAI GPT, Ollama, LM Studio, and other LLM providers for multi-agent systems, distributed AI applications, and intelligent chatbots.
+
+**Keywords**: SPADE, LLM, large language models, multi-agent systems, AI agents, OpenAI, GPT, Ollama, chatbot framework, distributed AI, Python AI, agent communication, XMPP agents, AI collaboration
 
 ## Table of Contents
 
@@ -43,14 +45,14 @@ Extension for [SPADE](https://spadeagents.eu) that integrates Large Language Mod
 
 ## Key Features
 
-- **Multi-Provider Support** - OpenAI, Ollama, LM Studio, vLLM integration  
-- **Tool System** - Function calling with async execution  
-- **Context Management** - Multi-conversation support with automatic cleanup  
-- **Memory Extensions** - Agent-based and agent-thread memory for persistent state  
-- **Message Routing** - Conditional routing based on LLM responses  
-- **Guardrails System** - Content filtering and safety controls for input/output  
-- **MCP Integration** - Model Context Protocol server support  
-- **Human-in-the-Loop** - Web interface for human expert consultation
+- **Multi-LLM Provider Support** - Integrate OpenAI GPT-4, Ollama local models, LM Studio, vLLM, Anthropic Claude, Google Gemini
+- **Advanced Tool System** - Function calling, async execution, LangChain tool integration, custom tool development
+- **Smart Context Management** - Multi-conversation support, automatic cleanup, sliding window, token-aware context
+- **Persistent Memory** - Agent-based memory, conversation threading, long-term state persistence across sessions
+- **Intelligent Message Routing** - Conditional routing based on LLM responses, dynamic agent selection
+- **Content Safety Guardrails** - Input/output filtering, keyword blocking, content moderation, safety controls
+- **MCP Integration** - Model Context Protocol server support for external tools and services
+- **Human-in-the-Loop** - Web interface for human expert consultation, interactive decision making
 
 ## Quick Start
 

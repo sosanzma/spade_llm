@@ -1,5 +1,5 @@
-site_name: Documentation
-site_description: 'Extension for SPADE to integrate Large Language Models in agents'
+site_name: SPADE-LLM Documentation - Multi-Agent LLM Framework
+site_description: 'SPADE-LLM: Python framework for Large Language Model integration in multi-agent systems. OpenAI GPT, Ollama, LM Studio support for AI agents, chatbots, and distributed AI applications. Complete documentation and examples.'
 site_author: 'Manel Soler Sanz'
 site_url: 'https://sosanzma.github.io/spade_llm'
 
@@ -50,7 +50,8 @@ theme:
     repo: fontawesome/brands/github
 
 plugins:
-  - search
+  - search:
+      lang: en
   - mkdocstrings:
       handlers:
         python:
@@ -58,6 +59,12 @@ plugins:
             docstring_style: google
             show_submodules: false
   - autorefs
+  - meta
+  - tags:
+      tags_file: tags.md
+  - social:
+      cards_layout_options:
+        font_family: Roboto
 
 markdown_extensions:
   - abbr
@@ -119,6 +126,23 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/sosanzma/spade_llm
+  analytics:
+    feedback:
+      title: Was this page helpful?
+      ratings:
+        - icon: material/thumb-up-outline
+          name: This page was helpful
+          data: 1
+          note: >-
+            Thanks for your feedback!
+        - icon: material/thumb-down-outline
+          name: This page could be improved
+          data: 0
+          note: >- 
+            Thanks for your feedback! Help us improve this page by
+            using our <a href="https://github.com/sosanzma/spade_llm/issues/new/?title=[Feedback]+{title}+-+{url}" target="_blank" rel="noopener">feedback form</a>.
+  version:
+    provider: mike
 
 extra_css:
   - stylesheets/extra.css
