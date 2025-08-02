@@ -1,0 +1,19 @@
+{
+  "agent_id": "api@sosanzma",
+  "interactions": {
+    "human@sosanzma_api@sosanzma": [
+      {
+        "content": "The MySQL database typically operates on port 3306.",
+        "timestamp": "2025-07-08T10:56:24.773818"
+      },
+      {
+        "content": "The database is available Monday to Friday from 9 AM to 5 PM GMT. It is not available on weekends (Saturday and Sunday). It manages MySQL databases on port 3306 with authentication token 'db_token_123'.",
+        "timestamp": "2025-07-08T11:21:52.375715"
+      },
+      {
+        "content": "The host address for the MySQL database is db.internal.company.com, accessible on port 3306.",
+        "timestamp": "2025-07-08T11:23:05.285174"
+      }
+    ]
+  }
+}
