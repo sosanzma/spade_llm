@@ -7,8 +7,19 @@ In this tutorial, you'll learn how to create your first SPADE-LLM agent step by 
 Before starting, ensure you have:
 - Python 3.10 or higher installed
 - SPADE-LLM installed (`pip install spade_llm`)
-- An XMPP server running (for local testing, you can use [Prosody](https://prosody.im/))
+- **SPADE's built-in server running** (recommended - no external setup needed!)
 - Access to at least one LLM provider (OpenAI API key or local Ollama installation)
+
+### Start SPADE Server
+
+**New in SPADE 4.0+ - Built-in XMPP server included!**
+
+```bash
+# Terminal 1: Start SPADE's built-in server
+spade run
+```
+
+This eliminates the need for external XMPP servers like Prosody. Keep this running in a separate terminal while you work through the tutorial.
 
 ## Step 1: Basic Agent Setup
 
@@ -26,12 +37,12 @@ async def main():
         temperature=0.7
     )
     
-    # Create the LLM agent
+    # Create the LLM agent (using SPADE's built-in server)
     agent = LLMAgent(
         jid="assistant@localhost",
         password="password123",
         provider=provider,
-        system_prompt="You are a helpful assistant."
+        system_prompt="You are a helpful assistant.",
     )
     
     # Start the agent
@@ -83,8 +94,12 @@ import getpass
 from spade_llm import LLMAgent, ChatAgent, LLMProvider
 
 async def main():
-    # Get XMPP server details
-    xmpp_server = input("Enter XMPP server domain (e.g., localhost): ") or "localhost"
+    # Using SPADE's built-in server (make sure it's running!)
+    spade_server = "localhost"
+    
+    print("🚀 Using SPADE's built-in server")
+    print("Make sure you started it with: spade run")
+    input("Press Enter when the server is running...")
     
     # Create LLM provider
     provider = LLMProvider.create_openai(
@@ -94,17 +109,17 @@ async def main():
     
     # Create the LLM agent
     llm_agent = LLMAgent(
-        jid=f"assistant@{xmpp_server}",
-        password=getpass.getpass("LLM agent password: "),
+        jid=f"assistant@{spade_server}",
+        password="assistant_pass",  # Simple password for built-in server
         provider=provider,
-        system_prompt="You are a helpful assistant. Keep responses concise and friendly."
+        system_prompt="You are a helpful assistant. Keep responses concise and friendly.",
     )
     
     # Create the chat agent for user interaction
     chat_agent = ChatAgent(
-        jid=f"user@{xmpp_server}",
-        password=getpass.getpass("Chat agent password: "),
-        target_agent_jid=f"assistant@{xmpp_server}"
+        jid=f"user@{spade_server}",
+        password="user_pass",  # Simple password for built-in server
+        target_agent_jid=f"assistant@{spade_server}",
     )
     
     try:
@@ -144,9 +159,9 @@ def on_message_sent(message: str, recipient: str):
     print(f"👤 You: {message}")
 
 chat_agent = ChatAgent(
-    jid=f"user@{xmpp_server}",
-    password=chat_password,
-    target_agent_jid=f"assistant@{xmpp_server}",
+    jid=f"user@localhost",
+    password="user_pass",
+    target_agent_jid=f"assistant@localhost",
     display_callback=display_response,
     on_message_sent=on_message_sent
 )
@@ -179,8 +194,7 @@ async def main():
             jid="assistant@localhost",
             password="password123",
             provider=provider,
-            system_prompt="You are a helpful assistant.",
-            verify_security=False  # For testing only
+            system_prompt="You are a helpful assistant."
         )
         
         await llm_agent.start()
@@ -218,9 +232,11 @@ logger = logging.getLogger(__name__)
 
 async def main():
     print("🚀 Starting your first SPADE-LLM agent!")
+    print("📋 Make sure SPADE server is running: spade run")
+    input("Press Enter when the server is running...")
     
-    # Configuration
-    xmpp_server = input("XMPP server domain (default: localhost): ") or "localhost"
+    # Configuration - using built-in SPADE server
+    spade_server = "localhost"
     
     # Create provider (choose one)
     provider_type = input("Provider (openai/ollama): ").lower()
@@ -240,17 +256,16 @@ async def main():
             timeout=60.0
         )
     
-    # Get passwords
-    llm_password = getpass.getpass("LLM agent password: ")
-    chat_password = getpass.getpass("Chat agent password: ")
+    # Simple passwords for built-in server (no need for getpass)
+    llm_password = "assistant_pass"
+    chat_password = "user_pass"
     
     # Create agents
     llm_agent = LLMAgent(
-        jid=f"assistant@{xmpp_server}",
+        jid=f"assistant@{spade_server}",
         password=llm_password,
         provider=provider,
-        system_prompt="You are a helpful and friendly AI assistant. Keep responses concise but informative.",
-        verify_security=False  # For development only
+        system_prompt="You are a helpful and friendly AI assistant. Keep responses concise but informative."
     )
     
     def display_response(message: str, sender: str):
@@ -261,12 +276,11 @@ async def main():
         print(f"👤 You: {message}")
     
     chat_agent = ChatAgent(
-        jid=f"user@{xmpp_server}",
+        jid=f"user@{spade_server}",
         password=chat_password,
-        target_agent_jid=f"assistant@{xmpp_server}",
+        target_agent_jid=f"assistant@{spade_server}",
         display_callback=display_response,
-        on_message_sent=on_message_sent,
-        verify_security=False  # For development only
+        on_message_sent=on_message_sent
     )
     
     try:
@@ -301,17 +315,22 @@ if __name__ == "__main__":
 
 ## Testing Your Agent
 
-1. **Run the agent**: `python my_first_agent.py`
-2. **Choose your provider**: OpenAI or Ollama
-3. **Enter your credentials**: API key and XMPP passwords
+1. **Start SPADE server**: `spade run`
+2. **Run the agent**: `python my_first_agent.py`
+3. **Choose your provider**: OpenAI or Ollama
 4. **Start chatting**: Type messages and get responses
 
 ## Common Issues and Solutions
 
+### SPADE Server Issues
+- **Server won't start**: Check if port 5222 is already in use (`netstat -an | grep 5222`)
+- **Port conflicts**: Try different ports: `spade run --client_port 6222 --server_port 6269`
+- **Agent connection fails**: Ensure server is running before starting agents
+
 ### Connection Problems
-- **Agent won't start**: Check XMPP credentials and server availability
-- **Authentication failed**: Verify JID format and passwords
-- **Network issues**: Ensure XMPP server is accessible
+- **Agent won't start**: Ensure SPADE built-in server is running first
+- **Authentication failed**: Built-in server auto-registers agents, but verify JID format
+- **Network issues**: Built-in server runs locally, check firewall settings
 
 ### LLM Provider Issues
 - **OpenAI errors**: Verify API key and account credits

@@ -56,11 +56,12 @@ from spade_llm.agent import LLMAgent
 from spade_llm.providers import LLMProvider
 
 # Create LLM agent with human tool
+# Note: Start SPADE server first: spade run
 agent = LLMAgent(
-    jid="agent@xmpp.server", 
+    jid="agent@localhost", 
     password="password",
     provider=LLMProvider.create_openai(api_key="sk-..."),
-    tools=[human_tool],  # Include the human tool
+    tools=[human_tool],
     system_prompt="""You are an AI assistant with access to a human expert.
     When you need current information, human judgment, or clarification,
     use the ask_human_expert tool."""
@@ -82,9 +83,9 @@ python -m spade_llm.human_interface.web_server
 ```python
 # Chat agent for testing
 chat_agent = ChatAgent(
-    jid="user@xmpp.server",
+    jid="user@localhost",
     password="password", 
-    target_agent_jid="agent@xmpp.server"
+    target_agent_jid="agent@localhost"
 )
 
 await chat_agent.start()
