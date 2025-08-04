@@ -6,19 +6,22 @@
 
 
 
+[![PyPI Version](https://img.shields.io/pypi/v/spade-llm)](https://pypi.org/project/spade-llm/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Coverage Status](https://coveralls.io/repos/github/sosanzma/spade_llm/badge.svg?branch=main)](https://coveralls.io/github/sosanzma/spade_llm?branch=main)
 ![Python Version](https://img.shields.io/badge/python-3.10%20to%203.12-orange?logo=python&logoColor=green)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/sosanzma/spade_llm/python-app.yml?label=build)](https://github.com/sosanzma/spade_llm/actions)
 [![Docs Status](https://img.shields.io/github/actions/workflow/status/sosanzma/spade_llm/docs.yml?label=docs)](https://github.com/sosanzma/spade_llm/actions/workflows/docs.yml)
 
-[**Documentation**](https://sosanzma.github.io/spade_llm) | [**Quick Start**](https://sosanzma.github.io/spade_llm/getting-started/quickstart/) | [**Examples**](https://sosanzma.github.io/spade_llm/reference/examples/) | [**API Reference**](https://sosanzma.github.io/spade_llm/reference/)
+[**Documentation**](https://sosanzma.github.io/spade_llm/) | [**Quick Start**](https://sosanzma.github.io/spade_llm/getting-started/quickstart/) | [**Examples**](https://sosanzma.github.io/spade_llm/reference/examples/) | [**API Reference**](https://sosanzma.github.io/spade_llm/reference/)
 
 </div>
 
-# SPADE-LLM
+# SPADE-LLM: Large Language Model Integration for Multi-Agent Systems
 
-Extension for [SPADE](https://spadeagents.eu) that integrates Large Language Models into multi-agent systems. Build intelligent, collaborative agents that can communicate, reason, and take actions in complex distributed environments.
+**SPADE-LLM** is a Python framework that extends [SPADE](https://spadeagents.eu) multi-agent platform with Large Language Model capabilities. Build AI agents powered by OpenAI GPT, Ollama, LM Studio, and other LLM providers for multi-agent systems, distributed AI applications, and intelligent chatbots.
+
+**Keywords**: SPADE, LLM, large language models, multi-agent systems, AI agents, OpenAI, GPT, Ollama, chatbot framework, distributed AI, Python AI, agent communication, XMPP agents, AI collaboration
 
 ## Table of Contents
 
@@ -43,15 +46,16 @@ Extension for [SPADE](https://spadeagents.eu) that integrates Large Language Mod
 
 ## Key Features
 
+
 - **Built-in XMPP Server** - No external server setup needed! Start agents with one command
-- **Multi-Provider Support** - OpenAI, Ollama, LM Studio, vLLM integration  
-- **Tool System** - Function calling with async execution  
-- **Context Management** - Multi-conversation support with automatic cleanup  
-- **Memory Extensions** - Agent-based and agent-thread memory for persistent state  
-- **Message Routing** - Conditional routing based on LLM responses  
-- **Guardrails System** - Content filtering and safety controls for input/output  
-- **MCP Integration** - Model Context Protocol server support  
-- **Human-in-the-Loop** - Web interface for human expert consultation
+- **Multi-LLM Provider Support** - Integrate OpenAI models, Ollama local models, LM Studio and more.
+- **Advanced Tool System** - Function calling, async execution, LangChain tool integration, custom tool development
+- **Smart Context Management** - Multi-conversation support, automatic cleanup, sliding window, token-aware context
+- **Persistent Memory** - Agent-based memory, conversation threading, long-term state persistence across sessions
+- **Intelligent Message Routing** - Conditional routing based on LLM responses, dynamic agent selection
+- **Content Safety Guardrails** - Input/output filtering, keyword blocking, content moderation, safety controls
+- **MCP Integration** - Model Context Protocol server support for external tools and services
+- **Human-in-the-Loop** - Web interface for human expert consultation, interactive decision making
 
 ## Built-in XMPP Server
 
@@ -114,7 +118,6 @@ if __name__ == "__main__":
 python your_agent.py
 ```
 
-That's it! No external XMPP server configuration needed.
 
 ## Installation
 

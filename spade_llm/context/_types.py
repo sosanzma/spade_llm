@@ -87,7 +87,7 @@ def _sanitize_jid_for_name(jid: str) -> str:
     """
     Sanitize an XMPP JID for use as an OpenAI message name field.
 
-    OpenAI name fields cannot contain: whitespace, <, |, \, /, >
+    OpenAI name fields cannot contain: whitespace, <, |, \\, /, >
     This function replaces these characters with underscores and removes the resource
     part of the JID if present.
 

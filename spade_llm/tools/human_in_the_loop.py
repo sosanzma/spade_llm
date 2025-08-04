@@ -2,7 +2,7 @@
 
 import logging
 from asyncio import TimeoutError
-from typing import Any, Optional
+from typing import Optional
 
 from spade.agent import Agent
 
@@ -121,10 +121,10 @@ class HumanInTheLoopTool(LLMTool):
 
             # Get the response
             if interaction.response:
-                logger.info(f"Received response from human expert")
+                logger.info("Received response from human expert")
                 return interaction.response
             else:
-                logger.warning(f"Human expert did not provide a response")
+                logger.warning("Human expert did not provide a response")
                 return "The human expert did not provide a response."
 
         except TimeoutError:
@@ -147,7 +147,7 @@ class HumanInTheLoopTool(LLMTool):
             # Try to clean up the behaviour
             try:
                 self._agent.remove_behaviour(interaction)
-            except:
+            except Exception:
                 pass
 
             return f"Error consulting human expert: {str(e)}"

@@ -1,7 +1,7 @@
 """Auto-registered tools for agent base memory functionality."""
 
 import logging
-from typing import Any, Dict, List
+from typing import List
 
 from ..tools import LLMTool
 from .agent_base_memory import AgentBaseMemory
@@ -34,7 +34,7 @@ class AgentBaseMemoryStoreTool(LLMTool):
             - Patterns: Recurring behaviors or trends I've observed
             - Preferences: User preferences or system settings I've learned
             - Capabilities: My own abilities or limitations I've discovered
-            
+
             This memory persists across conversations and helps me improve over time.""",
             parameters={
                 "type": "object",
@@ -81,7 +81,7 @@ class AgentBaseMemoryStoreTool(LLMTool):
             Confirmation message
         """
         try:
-            memory_id = await self.base_memory.store_memory(
+            await self.base_memory.store_memory(
                 category=category,
                 content=content,
                 context=context,
@@ -120,7 +120,7 @@ class AgentBaseMemorySearchTool(LLMTool):
             - Patterns you've observed
             - User preferences you've discovered
             - Your own capabilities or limitations
-            
+
             The search looks through all your stored memories to find relevant information.""",
             parameters={
                 "type": "object",
@@ -199,7 +199,7 @@ class AgentBaseMemoryListTool(LLMTool):
             - Patterns: Behavioral patterns you've observed
             - Preferences: User or system preferences you've learned
             - Capabilities: Your own abilities or limitations you've discovered
-            
+
             This helps you understand what knowledge you have available.""",
             parameters={
                 "type": "object",

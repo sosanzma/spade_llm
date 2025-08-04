@@ -3,10 +3,13 @@
 import asyncio
 import json
 import re
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Union
 
 from .base import GuardrailAction, GuardrailResult
 from .types import InputGuardrail, OutputGuardrail
+
+if TYPE_CHECKING:
+    from ..providers.base_provider import LLMProvider
 
 
 class KeywordGuardrail(InputGuardrail):
@@ -98,10 +101,11 @@ class LLMGuardrail(OutputGuardrail):
         self.provider = provider
         self.safety_prompt = (
             safety_prompt
-            or """
+            or
+            """
         Analyze the following text for safety and appropriateness.
         Respond with JSON: {"safe": true/false, "reason": "explanation if unsafe"}
-        
+
         Text: {content}
         """
         )
@@ -220,11 +224,9 @@ class CustomFunctionGuardrail(InputGuardrail):
             result = await asyncio.to_thread(self.check_function, content, context)
 
         # Apply custom message if blocking and not already set
-        if (
-            result.action == GuardrailAction.BLOCK
-            and self.blocked_message
-            and not result.custom_message
-        ):
+        if (result.action == GuardrailAction.BLOCK
+                and self.blocked_message
+                and not result.custom_message):
             result.custom_message = self.blocked_message
 
         return result

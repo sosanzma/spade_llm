@@ -2,7 +2,6 @@
 
 import json
 import logging
-import os
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -180,11 +179,11 @@ class AgentMemoryTool(LLMTool):
 
         super().__init__(
             name="remember_interaction_info",
-            description="""Remember specific, useful information about THIS interaction with another agent. 
-            Use this to store concrete details like APIs, authentication methods, data formats, 
-            preferences, capabilities, or technical specifications that will be helpful in future 
-            interactions with the same agent. Be very selective - only store truly useful 
-            information that improves future collaboration. Do NOT store general conversation 
+            description="""Remember specific, useful information about THIS interaction with another agent.
+            Use this to store concrete details like APIs, authentication methods, data formats,
+            preferences, capabilities, or technical specifications that will be helpful in future
+            interactions with the same agent. Be very selective - only store truly useful
+            information that improves future collaboration. Do NOT store general conversation
             content or pleasantries.""",
             parameters={
                 "type": "object",

@@ -1,9 +1,8 @@
 """LangChain tools adapter for SPADE_LLM."""
 
 import asyncio
-import json
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from .llm_tool import LLMTool
 

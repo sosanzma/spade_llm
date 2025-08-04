@@ -1,9 +1,8 @@
 """LLM tool implementation for SPADE agents."""
 
 import asyncio
-import json
 import logging
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Callable, Dict
 
 logger = logging.getLogger("spade_llm.tools")
 
