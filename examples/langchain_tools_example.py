@@ -2,6 +2,17 @@
 LangChain Tools Example
 
 Demonstrates using LangChain tools with SPADE agents.
+
+PREREQUISITES:
+1. Start SPADE built-in server in another terminal:
+   spade run
+   
+   (Advanced server configuration available but not needed)
+
+2. Install dependencies:
+   pip install spade_llm
+
+This example uses SPADE's default built-in server (localhost:5222) - no account registration needed!
 """
 
 import asyncio
@@ -24,9 +35,14 @@ async def main():
     load_env_vars()
     api_key = os.environ.get("OPENAI_API_KEY") or input("OpenAI API key: ")
 
-    # Agent credentials
-    smart_jid = input("Smart Agent JID: ")
-    smart_password = getpass.getpass("Smart Agent password: ")
+    # XMPP server configuration - using default SPADE settings
+    xmpp_server = "localhost"
+    print("🌐 Using SPADE built-in server (localhost:5222)")
+    print("  No account registration needed!")
+    # Advanced server configuration available but not needed
+    
+    smart_jid = f"smart@{xmpp_server}"
+    smart_password = "smart_pass"  # Simple password (auto-registration with SPADE server)
 
     # Create LangChain tools
     tools = [
@@ -61,8 +77,8 @@ async def main():
     print("Available tools: Web Search, Wikipedia")
 
     # Human agent setup
-    human_jid = input("\nHuman Agent JID: ")
-    human_password = getpass.getpass("Human Agent password: ")
+    human_jid = f"human@{xmpp_server}"
+    human_password = "human_pass"  # Simple password (auto-registration with SPADE server)
 
     chat = ChatAgent(
         jid=human_jid,

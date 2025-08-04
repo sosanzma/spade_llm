@@ -3,6 +3,17 @@ Document Creation Workflow Example
 
 Multi-agent workflow for collaborative document creation:
 Research -> Editor -> Reviewer -> Publisher
+
+PREREQUISITES:
+1. Start SPADE built-in server in another terminal:
+   spade run
+   
+   (Advanced server configuration available but not needed)
+
+2. Install dependencies:
+   pip install spade_llm
+
+This example uses SPADE's default built-in server (localhost:5222) - no account registration needed!
 """
 
 import asyncio
@@ -48,7 +59,11 @@ async def main():
     load_env_vars()
     api_key = os.environ.get("OPENAI_API_KEY") or input("OpenAI API key: ")
 
-    XMPP_SERVER = input("your XMPP_SERVER: ")
+    # XMPP server configuration - using default SPADE settings
+    XMPP_SERVER = "localhost"
+    print("🌐 Using SPADE built-in server (localhost:5222)")
+    print("  No account registration needed!")
+    # Advanced server configuration available but not needed
     # Agent credentials
     agents_config = {
         "researcher": (f"researcher@{XMPP_SERVER}", "Research Agent"),
@@ -58,10 +73,11 @@ async def main():
         "human": (f"human@{XMPP_SERVER}", "Human Agent")
     }
 
-    # Get passwords
+    # Get passwords - simple passwords (auto-registration with SPADE server)
     passwords = {}
-    for role, (jid, label) in agents_config.items():
-        passwords[role] = getpass.getpass(f"{label} password: ")
+    for role in agents_config.keys():
+        passwords[role] = f"{role}_pass"
+    print("✓ Using auto-registration with built-in server")
 
     # Create provider
     provider = LLMProvider.create_openai(

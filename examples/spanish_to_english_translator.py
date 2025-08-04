@@ -3,6 +3,17 @@ Spanish to English Translator Example
 
 Demonstrates a SPADE agent that translates Spanish text to English using OpenAI.
 The agent terminates when it receives non-Spanish text.
+
+PREREQUISITES:
+1. Start SPADE built-in server in another terminal:
+   spade run
+   
+   (Advanced server configuration available but not needed)
+
+2. Install dependencies:
+   pip install spade_llm
+
+This example uses SPADE's default built-in server (localhost:5222) - no account registration needed!
 """
 
 import asyncio
@@ -30,9 +41,15 @@ async def main():
     # Get API key
     api_key = os.environ.get("OPENAI_API_KEY") or input("OpenAI API key: ")
 
+    # XMPP server configuration - using default SPADE settings
+    xmpp_server = "localhost"
+    print("🌐 Using SPADE built-in server (localhost:5222)")
+    print("  No account registration needed!")
+    # Advanced server configuration available but not needed
+    
     # Translator agent setup
-    translator_jid = input("Translator agent JID: ")
-    translator_password = getpass.getpass("Translator password: ")
+    translator_jid = f"translator@{xmpp_server}"
+    translator_password = "translator_pass"  # Simple password (auto-registration with SPADE server)
 
     translator = LLMAgent(
         jid=translator_jid,
@@ -50,8 +67,8 @@ async def main():
     print(f"Translator started: {translator_jid}")
 
     # Chat agent setup
-    human_jid = input("Chat agent JID: ")
-    human_password = getpass.getpass("Chat password: ")
+    human_jid = f"human@{xmpp_server}"
+    human_password = "human_pass"  # Simple password (auto-registration with SPADE server)
 
     # Simple callback to detect shutdown
     shutdown = False

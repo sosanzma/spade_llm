@@ -2,6 +2,17 @@
 Valencia Smart City MCP Example
 
 Demonstrates using Valencia Smart City MCP server with SPADE agents.
+
+PREREQUISITES:
+1. Start SPADE built-in server in another terminal:
+   spade run
+   
+   (Advanced server configuration available but not needed)
+
+2. Install dependencies:
+   pip install spade_llm
+
+This example uses SPADE's default built-in server (localhost:5222) - no account registration needed!
 """
 
 import asyncio
@@ -20,9 +31,15 @@ async def main():
     load_env_vars()
     api_key = os.environ.get("OPENAI_API_KEY") or input("OpenAI API key: ")
 
+    # XMPP server configuration - using default SPADE settings
+    xmpp_server = "localhost"
+    print("🌐 Using SPADE built-in server (localhost:5222)")
+    print("  No account registration needed!")
+    # Advanced server configuration available but not needed
+    
     # Agent credentials
-    llm_jid = input("LLM Agent JID: ")
-    llm_password = getpass.getpass("LLM Agent password: ")
+    llm_jid = f"llm_agent@{xmpp_server}"
+    llm_password = "llm_pass"  # Simple password (auto-registration with SPADE server)
 
     # Valencia Smart City MCP server configuration
     valencia_mcp = StdioServerConfig(
@@ -51,8 +68,8 @@ async def main():
     print(f"✓ LLM agent started: {llm_jid}")
 
     # Human agent setup
-    human_jid = input("\nHuman Agent JID: ")
-    human_password = getpass.getpass("Human Agent password: ")
+    human_jid = f"human@{xmpp_server}"
+    human_password = "human_pass"  # Simple password (auto-registration with SPADE server)
 
     # Simple response display
     def display_response(message: str, sender: str):

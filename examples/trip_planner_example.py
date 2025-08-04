@@ -4,6 +4,17 @@ Valencia Trip Planner - Multi-Agent Workflow Example
 Multi-agent workflow for comprehensive Valencia trip planning:
 Airbnb Search → Route Planning → Plan Creation → Price Review → Final Plan
 
+PREREQUISITES:
+1. Start SPADE built-in server in another terminal:
+   spade run
+   
+   (Advanced server configuration available but not needed)
+
+2. Install dependencies:
+   pip install spade_llm
+
+This example uses SPADE's default built-in server (localhost:5222) - no account registration needed!
+
 Uses:
 - Airbnb MCP for accommodation search
 - Valencia Smart City MCP for real-time city data
@@ -65,8 +76,11 @@ async def main():
     load_env_vars()
     api_key = os.environ.get("OPENAI_API_KEY") or input("OpenAI API key: ")
 
-    # XMPP server configuration
-    XMPP_SERVER = input("XMPP server domain: ")
+    # XMPP server configuration - using default SPADE settings
+    XMPP_SERVER = "localhost"
+    print("🌐 Using SPADE built-in server (localhost:5222)")
+    print("  No account registration needed!")
+    # Advanced server configuration available but not needed
 
     # Agent credentials configuration
     agents_config = {
@@ -78,10 +92,11 @@ async def main():
         "human": (f"human@{XMPP_SERVER}", "Human Agent")
     }
 
-    # Get passwords for all agents
+    # Get passwords for all agents - simple passwords (auto-registration with SPADE server)
     passwords = {}
-    for role, (jid, label) in agents_config.items():
-        passwords[role] = getpass.getpass(f"{label} password: ")
+    for role in agents_config.keys():
+        passwords[role] = f"{role}_pass"
+    print("✓ Using auto-registration with built-in server")
 
     # Create LLM provider
     UPV_OLLAMA_BASE_URL = "http://ollama.gti-ia.upv.es/v1"

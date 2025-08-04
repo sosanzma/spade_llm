@@ -10,6 +10,19 @@ This example demonstrates a complete multi-agent GitHub monitoring system with:
 
 Features a 4-agent workflow: ChatAgent → GitHubAnalyzerAgent → NotionManagerAgent → EmailManagerAgent
 All parameters are configurable - no hardcoded values.
+
+PREREQUISITES:
+1. Start SPADE built-in server in another terminal:
+   spade run
+   
+   (Advanced server configuration available but not needed)
+
+2. Install dependencies:
+   pip install spade_llm
+
+3. MCP services (configurable URLs in the example)
+
+This example uses SPADE's default built-in server (localhost:5222) - no account registration needed!
 """
 
 import asyncio
@@ -258,8 +271,11 @@ async def main():
     
     print("🐙 === GitHub Issues/PRs Monitor with Email Notification === 🐙\n")
     
-    # XMPP server (configurable)
-    xmpp_server = input("Enter XMPP server domain: ")
+    # XMPP server configuration - using default SPADE settings
+    xmpp_server = "localhost"
+    print("🌐 Using SPADE built-in server (localhost:5222)")
+    print("  No account registration needed!")
+    # Advanced server configuration available but not needed
     
     # API Key (with fallback)
     api_key = os.environ.get("OPENAI_API_KEY")
@@ -340,10 +356,12 @@ async def main():
     email_jid = f"email_manager@{xmpp_server}"
     human_jid = f"human_expert@{xmpp_server}"
     
-    chat_password = getpass.getpass(f"Password for chat agent ({chat_jid}): ")
-    analyzer_password = getpass.getpass(f"Password for analyzer agent ({analyzer_jid}): ")
-    notion_password = getpass.getpass(f"Password for notion agent ({notion_jid}): ")
-    email_password = getpass.getpass(f"Password for email agent ({email_jid}): ")
+    # Simple passwords (auto-registration with SPADE server)
+    chat_password = "chat_pass"
+    analyzer_password = "analyzer_pass"
+    notion_password = "notion_pass"
+    email_password = "email_pass"
+    print("✓ Using auto-registration with built-in server")
     
     # Create guardrails and tools
     input_guardrails = [GitHubOnlyGuardrail()]
@@ -472,8 +490,10 @@ async def main():
 if __name__ == "__main__":
     print("🚀 Starting GitHub Issues/PRs Monitor...")
     print("\n📋 Prerequisites:")
+    print("• SPADE built-in server running in another terminal:")
+    print("  spade run")
+    print("• Advanced server configuration available but not needed")
     print("• OpenAI API key")
-    print("• XMPP server running")
     print("• Internet connection for MCP services")
     print("• Human expert web interface: python -m spade_llm.human_interface.web_server")
     print()

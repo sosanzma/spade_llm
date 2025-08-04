@@ -4,6 +4,16 @@ Unified SPADE_LLM example that allows choosing between different LLM providers:
 - Ollama
 - LLM Studio (local models)
 
+PREREQUISITES:
+1. Start SPADE built-in server in another terminal:
+   spade run
+   
+   (Advanced server configuration available but not needed)
+
+2. Install dependencies:
+   pip install spade_llm
+
+This example uses SPADE's default built-in server (localhost:5222) - no account registration needed!
 Users can comment/uncomment the configuration for the provider they want to use.
 """
 
@@ -25,8 +35,11 @@ async def main():
     # Load environment variables from .env file
     env_vars = load_env_vars()
 
-    # Ask for XMPP server
-    xmpp_server = input("Enter your XMPP server domain: ")
+    # XMPP server configuration - using default SPADE settings
+    xmpp_server = "localhost"
+    print("🌐 Using SPADE built-in server (localhost:5222)")
+    print("  No account registration needed!")
+    # Advanced server configuration available but not needed
 
     # ==========================================
     # LLM PROVIDER CONFIGURATION
@@ -72,7 +85,7 @@ async def main():
 
     # Smart agent creation
     smart_jid = f"smart@{xmpp_server}"
-    smart_password = getpass.getpass("Enter Smart Agent password: ")
+    smart_password = "smart_pass"  # Simple password (auto-registration with SPADE server)
 
     # Create the LLM agent with the selected provider
     smart_agent = LLMAgent(
@@ -89,7 +102,7 @@ async def main():
 
     # ChatAgent
     human_jid = f"human@{xmpp_server}"
-    human_password = getpass.getpass("Enter Human Agent password: ")
+    human_password = "human_pass"  # Simple password (auto-registration with SPADE server)
 
     # Define a custom function to display responses
     def display_response(message: str, sender: str):

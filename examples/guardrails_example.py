@@ -9,6 +9,17 @@ Features:
 - Input guardrails: keyword filtering, profanity filter
 - Output guardrails: LLM-based safety validation
 - Real-time guardrail action logging
+
+PREREQUISITES:
+1. Start SPADE built-in server in another terminal:
+   spade run
+   
+   (Advanced server configuration available but not needed)
+
+2. Install dependencies:
+   pip install spade_llm
+
+This example uses SPADE's default built-in server (localhost:5222) - no account registration needed!
 """
 
 import asyncio
@@ -84,11 +95,18 @@ async def main():
     """Main function demonstrating guardrails with two agents."""
     print("=== Guardrails Example with Gemma Model ===\n")
     
-    # Get XMPP credentials
-    xmpp_server = input("Enter XMPP server domain: ")
+    # XMPP server configuration - using default SPADE settings
+    xmpp_server = "localhost"
+    print("🌐 Using SPADE built-in server (localhost:5222)")
+    print("  No account registration needed!")
+    # Advanced server configuration available but not needed
     
     llm_jid = f"llm_guardian@{xmpp_server}"
-    llm_password = getpass.getpass("LLM Agent password: ")
+    
+    # Simple password (auto-registration with SPADE server)
+    llm_password = "llm_pass"
+    print(f"✓ Agent JID: {llm_jid}")
+    print("  Using auto-registration with built-in server")
     
     # Create Ollama providers
     main_provider = LLMProvider.create_ollama(
@@ -128,7 +146,10 @@ async def main():
     
     # Chat agent setup
     user_jid = f"user@{xmpp_server}"
-    user_password = getpass.getpass("User Agent password: ")
+    
+    # Simple password (auto-registration with SPADE server)
+    user_password = "user_pass"
+    print(f"✓ Chat Agent JID: {user_jid}")
     
     def display_response(message: str, sender: str):
         print(f"\n🤖 Guardian AI: {message}")
@@ -166,9 +187,11 @@ async def main():
 
 if __name__ == "__main__":
     print("🔍 Prerequisites:")
+    print("• SPADE built-in server running in another terminal:")
+    print("  spade run")
     print("• Ollama running: ollama serve")
     print("• Gemma model: ollama pull gemma3:1b")
-    print("• XMPP server running")
+    print("• Advanced server configuration available but not needed")
     print()
     
     spade.run(main())

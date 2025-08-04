@@ -2,6 +2,21 @@
 Ollama Tool Calling Example
 
 Demonstrates how to use tools with SPADE agents and Ollama.
+
+PREREQUISITES:
+1. Start SPADE built-in server in another terminal:
+   spade run
+   
+   (Advanced server configuration available but not needed)
+
+2. Install dependencies:
+   pip install spade_llm
+
+3. Ollama setup:
+   ollama serve
+   ollama pull qwen3:4b
+
+This example uses SPADE's default built-in server (localhost:5222) - no account registration needed!
 """
 
 import asyncio
@@ -42,10 +57,16 @@ def get_weather(city: str) -> str:
 
 async def main():
     print("=== Ollama Tool Calling Example ===\n")
+    
+    # XMPP server configuration - using default SPADE settings
+    xmpp_server = "localhost"
+    print("🌐 Using SPADE built-in server (localhost:5222)")
+    print("  No account registration needed!")
+    # Advanced server configuration available but not needed
 
     # LLM agent setup
-    llm_jid = input("LLM agent JID: ")
-    llm_password = getpass.getpass("LLM password: ")
+    llm_jid = f"llm_agent@{xmpp_server}"
+    llm_password = "llm_pass"  # Simple password (auto-registration with SPADE server)
 
     # Create tools
     tools = [
@@ -88,8 +109,8 @@ async def main():
     print(f"✓ LLM agent started: {llm_jid}")
 
     # Chat agent setup
-    user_jid = input("User agent JID: ")
-    user_password = getpass.getpass("User password: ")
+    user_jid = f"user@{xmpp_server}"
+    user_password = "user_pass"  # Simple password (auto-registration with SPADE server)
 
     chat = ChatAgent(
         jid=user_jid,
