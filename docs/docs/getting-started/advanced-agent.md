@@ -584,16 +584,20 @@ async def main():
     if not openai_key:
         openai_key = getpass.getpass("Enter your OpenAI API key: ")
     
-    # XMPP server configuration
-    xmpp_server = input("Enter XMPP server domain (default: localhost): ") or "localhost"
+    # Using SPADE's built-in server (recommended)
+    print("🚀 Using SPADE's built-in server")
+    print("Make sure you started it with: spade run")
+    input("Press Enter when the server is running...")
+    
+    spade_server = "localhost"
     
     # Agent credentials
     agents_config = {
-        "chat": (f"github_chat@{xmpp_server}", "GitHub Chat Interface"),
-        "analyzer": (f"github_analyzer@{xmpp_server}", "GitHub Analyzer Agent"),
-        "notion": (f"notion_manager@{xmpp_server}", "Notion Storage Agent"),
-        "email": (f"email_manager@{xmpp_server}", "Email Manager Agent"),
-        "human": (f"human_expert@{xmpp_server}", "Human Expert")
+        "chat": (f"github_chat@{spade_server}", "GitHub Chat Interface"),
+        "analyzer": (f"github_analyzer@{spade_server}", "GitHub Analyzer Agent"),
+        "notion": (f"notion_manager@{spade_server}", "Notion Storage Agent"),
+        "email": (f"email_manager@{spade_server}", "Email Manager Agent"),
+        "human": (f"human_expert@{spade_server}", "Human Expert")
     }
     
     # Get passwords
@@ -639,8 +643,7 @@ async def main():
         jid=agents_config["chat"][0],
         password=passwords["chat"],
         target_agent_jid=agents_config["analyzer"][0],  # → Sends to Analyzer Agent
-        display_callback=display_response,
-        verify_security=False
+        display_callback=display_response
     )
 
     # 2. GitHub Analyzer Agent (Data Collection & Analysis)
@@ -652,8 +655,7 @@ async def main():
         system_prompt=GITHUB_ANALYZER_PROMPT,
         input_guardrails=input_guardrails,
         mcp_servers=[github_mcp],  # Uses GitHub MCP for data collection
-        reply_to=agents_config["notion"][0],  # → Forwards to Notion Agent
-        verify_security=False
+        reply_to=agents_config["notion"][0]  # → Forwards to Notion Agent
     )
     
     # 3. Notion Manager Agent (Storage & Forwarding)
@@ -664,8 +666,7 @@ async def main():
         provider=provider,
         system_prompt=NOTION_MANAGER_PROMPT,
         mcp_servers=[notion_mcp],  # Uses Notion MCP for data storage
-        reply_to=agents_config["email"][0],  # → Forwards to Email Agent
-        verify_security=False
+        reply_to=agents_config["email"][0]  # → Forwards to Email Agent
     )
     
     # 4. Email Manager Agent (HITL & Email Sending)
@@ -678,8 +679,7 @@ async def main():
         system_prompt=EMAIL_MANAGER_PROMPT,
         tools=[human_tool],  # Human-in-the-Loop capability
         mcp_servers=[gmail_mcp],  # Uses Gmail MCP for email sending
-        termination_markers=["<EMAIL_PROCESS_COMPLETE>"],  # End conversation after email process
-        verify_security=False
+        termination_markers=["<EMAIL_PROCESS_COMPLETE>"]  # End conversation after email process
         # No reply_to = This is the end of the pipeline
     )
     

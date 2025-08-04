@@ -64,7 +64,6 @@ setup(
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
@@ -78,7 +77,7 @@ setup(
     project_urls={
         "Bug Reports": "https://github.com/sosanzma/spade_llm/issues",
         "Source": "https://github.com/sosanzma/spade_llm",
-        "Documentation": "https://spade-llm.readthedocs.io/",
+        "Documentation": "https://sosanzma.github.io/spade_llm",
     },
     entry_points={
         "console_scripts": [

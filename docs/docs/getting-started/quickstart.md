@@ -97,9 +97,19 @@ Before starting any tutorial, make sure you have:
 ### 1. Prerequisites
 - Python 3.10+ installed
 - SPADE-LLM installed: `pip install spade_llm`
-- XMPP server running (for local testing)
+- **SPADE built-in server running** (recommended for beginners)
 
-### 2. LLM Provider Access
+### 2. Start SPADE Server
+**New in SPADE 4.0 - No external server needed!**
+
+```bash
+# Terminal 1: Start the built-in SPADE server
+spade run
+```
+
+This provides everything you need - no complex XMPP setup required!
+
+### 3. LLM Provider Access
 Choose one:
 
 **OpenAI** (easiest for beginners):
@@ -113,8 +123,8 @@ ollama pull llama3.1:8b
 ollama serve
 ```
 
-### 3. Ready to Go!
-Pick a tutorial above and start building! 🚀
+### 4. Ready to Go!
+With your SPADE server running and LLM provider configured, pick a tutorial above and start building! 🚀
 
 ## 💡 Tips for Success
 

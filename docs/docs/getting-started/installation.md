@@ -20,6 +20,41 @@ from spade_llm import LLMAgent, LLMProvider
 print(f"SPADE_LLM version: {spade_llm.__version__}")
 ```
 
+## XMPP Server Setup
+
+### Built-in SPADE Server (Recommended)
+
+SPADE 4.0+ includes a built-in XMPP server - **no external server setup required!**
+
+```bash
+# Start SPADE's built-in server (simplest setup)
+spade run
+```
+The built-in server provides everything you need to run SPADE-LLM agents locally. Simply start the server in one terminal and run your agents in another.
+
+### Advanced XMPP Server Configuration
+
+For custom setups, you can specify different ports and hosts:
+
+```bash
+# Custom host and ports
+spade run --host localhost --client_port 6222 --server_port 6269
+
+# Use IP address instead of localhost
+spade run --host 127.0.0.1 --client_port 6222 --server_port 6269
+
+# Custom ports if defaults are in use
+spade run --client_port 6223 --server_port 6270
+```
+
+### Alternative: External XMPP Servers
+
+For production or if you prefer external servers:
+
+- **Public servers**: `jabber.at`, `jabber.org` (require manual account creation)
+- **Local Prosody**: Install [Prosody](https://prosody.im/) for local hosting
+- **Other servers**: Any XMPP-compliant server
+
 ## LLM Provider Setup
 
 Choose one provider:
@@ -44,10 +79,6 @@ ollama serve
 2. Download a model through the GUI
 3. Start the local server
 
-## XMPP Server
-
-For development, use a public XMPP server like `jabber.at` or set up [Prosody](https://prosody.im/) locally.
-
 ## Development Install
 
 ```bash
@@ -58,12 +89,30 @@ pip install -e ".[dev]"
 
 ## Troubleshooting
 
+**SPADE server not starting**: 
+```bash
+# Check if default ports are already in use
+netstat -an | grep 5222
+
+# Try different ports if needed
+spade run --client_port 6222 --server_port 6269
+```
+
+**Agent connection issues**: Ensure SPADE server is running first
+```bash
+# Terminal 1: Start server
+spade run
+
+# Terminal 2: Run your agent
+python your_agent.py
+```
+
 **Import errors**: Ensure you're in the correct Python environment
 ```bash
 python -m pip install spade_llm
 ```
 
-**SSL errors**: For development only, disable SSL verification:
+**SSL errors**: For development with built-in server, disable SSL verification:
 ```python
 agent = LLMAgent(..., verify_security=False)
 ```

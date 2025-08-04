@@ -26,6 +26,7 @@
 ## Table of Contents
 
 - [Key Features](#key-features)
+- [Built-in XMPP Server](#built-in-xmpp-server)
 - [Quick Start](#quick-start)
 - [Installation](#installation)
 - [Architecture](#architecture)
@@ -45,7 +46,9 @@
 
 ## Key Features
 
-- **Multi-LLM Provider Support** - Integrate OpenAI GPT-4, Ollama local models, LM Studio, vLLM, Anthropic Claude, Google Gemini
+
+- **Built-in XMPP Server** - No external server setup needed! Start agents with one command
+- **Multi-LLM Provider Support** - Integrate OpenAI models, Ollama local models, LM Studio and more.
 - **Advanced Tool System** - Function calling, async execution, LangChain tool integration, custom tool development
 - **Smart Context Management** - Multi-conversation support, automatic cleanup, sliding window, token-aware context
 - **Persistent Memory** - Agent-based memory, conversation threading, long-term state persistence across sessions
@@ -54,9 +57,40 @@
 - **MCP Integration** - Model Context Protocol server support for external tools and services
 - **Human-in-the-Loop** - Web interface for human expert consultation, interactive decision making
 
+## Built-in XMPP Server
+
+SPADE 4+ includes a built-in XMPP server, eliminating the need for external server setup. This is a major advantage over other multi-agent frameworks like AutoGen or Swarm that require complex infrastructure configuration.
+
+### Start the Server
+
+```bash
+# Start SPADE's built-in XMPP server
+spade run
+```
+
+The server automatically handles:
+- Agent registration and authentication
+- Message routing between agents
+- Connection management
+- Domain resolution
+
+Agents automatically connect to the built-in server when using standard SPADE agent configuration.
+
 ## Quick Start
 
+Get started with SPADE-LLM in just 2 steps:
+
+### Step 1: Start the Built-in XMPP Server
+
+```bash
+# Terminal 1: Start SPADE's built-in server
+spade run
+```
+
+### Step 2: Create and Run Your LLM Agent
+
 ```python
+# your_agent.py
 import spade
 from spade_llm import LLMAgent, LLMProvider
 
@@ -67,7 +101,7 @@ async def main():
     )
     
     agent = LLMAgent(
-        jid="assistant@example.com",
+        jid="assistant@localhost",  # Connects to built-in server
         password="password",
         provider=provider,
         system_prompt="You are a helpful assistant"
@@ -79,12 +113,17 @@ if __name__ == "__main__":
     spade.run(main())
 ```
 
+```bash
+# Terminal 2: Run your agent
+python your_agent.py
+```
+
+
 ## Installation
 
 ```bash
 pip install spade_llm
 ```
-
 ## Examples
 
 ### Multi-Provider Support
@@ -120,7 +159,7 @@ weather_tool = LLMTool(
 )
 
 agent = LLMAgent(
-    jid="assistant@example.com",
+    jid="assistant@localhost",  # Uses built-in server
     password="password",
     provider=provider,
     tools=[weather_tool]
@@ -141,7 +180,7 @@ safety_filter = KeywordGuardrail(
 )
 
 agent = LLMAgent(
-    jid="assistant@example.com",
+    jid="assistant@localhost",  # Uses built-in server
     password="password",
     provider=provider,
     input_guardrails=[safety_filter]  # Filter incoming messages
@@ -157,7 +196,7 @@ def router(msg, response, context):
     return str(msg.sender)
 
 agent = LLMAgent(
-    jid="router@example.com",
+    jid="router@localhost",  # Uses built-in server
     password="password",
     provider=provider,
     routing_function=router
@@ -171,9 +210,9 @@ from spade_llm import ChatAgent
 
 # Create chat interface
 chat_agent = ChatAgent(
-    jid="human@example.com",
+    jid="human@localhost",  # Uses built-in server
     password="password",
-    target_agent_jid="assistant@example.com"
+    target_agent_jid="assistant@localhost"
 )
 
 await chat_agent.start()
@@ -185,7 +224,7 @@ await chat_agent.run_interactive()  # Start interactive chat
 ```python
 # Agent-based memory: Single shared memory per agent
 agent = LLMAgent(
-    jid="assistant@example.com",
+    jid="assistant@localhost",  # Uses built-in server
     password="password",
     provider=provider,
     agent_base_memory=(True, "./memory.db")  # Enabled with custom path
@@ -193,7 +232,7 @@ agent = LLMAgent(
 
 # Agent-thread memory: Separate memory per conversation
 agent = LLMAgent(
-    jid="assistant@example.com",
+    jid="assistant@localhost",  # Uses built-in server
     password="password",
     provider=provider,
     agent_thread_memory=(True, "./thread_memory.db")  # Enabled with custom path
@@ -201,7 +240,7 @@ agent = LLMAgent(
 
 # Default memory paths (if path not specified)
 agent = LLMAgent(
-    jid="assistant@example.com",
+    jid="assistant@localhost",  # Uses built-in server
     password="password",
     provider=provider,
     agent_base_memory=(True, None)  # Uses default path
@@ -227,7 +266,7 @@ fixed_context = FixedWindowSizeContext(
 )
 
 agent = LLMAgent(
-    jid="assistant@example.com",
+    jid="assistant@localhost",  # Uses built-in server
     password="password",
     provider=provider,
     context_manager=smart_context
@@ -241,12 +280,12 @@ from spade_llm import HumanInTheLoopTool
 
 # Create tool for human consultation
 human_tool = HumanInTheLoopTool(
-    human_expert_jid="expert@example.com",
+    human_expert_jid="expert@localhost",  # Uses built-in server
     timeout=300.0  # 5 minutes
 )
 
 agent = LLMAgent(
-    jid="assistant@example.com",
+    jid="assistant@localhost",  # Uses built-in server
     password="password",
     provider=provider,
     tools=[human_tool]  # Pass tools in constructor

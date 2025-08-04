@@ -47,6 +47,7 @@ keywords: SPADE-LLM, multi-agent systems, large language models, OpenAI, GPT, Ol
 
 ## Features
 
+- **Built-in XMPP Server**: No external server setup required with SPADE 4.0+
 - **Multi-Provider Support**: OpenAI, Ollama, LM Studio, vLLM
 - **Tool System**: Function calling with async execution
 - **Memory System**: Dual memory architecture for agent learning and conversation continuity
@@ -83,13 +84,16 @@ import spade
 from spade_llm import LLMAgent, LLMProvider
 
 async def main():
+    # First, start SPADE's built-in server:
+    # spade run
+    
     provider = LLMProvider.create_openai(
         api_key="your-api-key",
         model="gpt-4o-mini"
     )
     
     agent = LLMAgent(
-        jid="assistant@example.com",
+        jid="assistant@localhost",
         password="password",
         provider=provider,
         system_prompt="You are a helpful assistant"

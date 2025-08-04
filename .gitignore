@@ -54,3 +54,4 @@ docs/_build/
 # Logs
 *.log
 /docs/site/
+/.claude/
