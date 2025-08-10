@@ -69,7 +69,7 @@ setup(
         "Programming Language :: Python :: 3.12",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
-        "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+        "Topic :: Internet :: XMPP",
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.10",

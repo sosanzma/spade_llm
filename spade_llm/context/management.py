@@ -80,7 +80,7 @@ class WindowSizeContext(ContextManagement):
         if len(messages) <= self.max_messages:
             return messages
 
-        return messages[-self.max_messages :]
+        return messages[-self.max_messages:]
 
     def get_stats(self, total_messages: int) -> Dict[str, Any]:
         """Return statistics for window size strategy."""
@@ -210,11 +210,9 @@ class SmartWindowSizeContext(ContextManagement):
                 pair_after_initial = [
                     idx for idx in pair_for_msg if idx >= self.preserve_initial
                 ]
-                if (
-                    len(pair_after_initial) == len(pair_for_msg)
-                    and remaining_space >= len(pair_for_msg)
-                    and not any(idx in selected_indices for idx in pair_for_msg)
-                ):
+                if (len(pair_after_initial) == len(pair_for_msg)
+                        and remaining_space >= len(pair_for_msg)
+                        and not any(idx in selected_indices for idx in pair_for_msg)):
                     selected_indices.update(pair_for_msg)
                     remaining_space -= len(pair_for_msg)
                 current_pos = min(pair_for_msg) - 1

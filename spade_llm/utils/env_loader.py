@@ -26,8 +26,8 @@ def load_env_vars(env_file: str = ".env") -> Dict[str, str]:
         env_paths = [
             Path(env_file),  # Current directory
             Path.cwd() / env_file,  # Explicit cwd
-            Path(__file__).parents[2]
-            / env_file,  # Project root (2 levels up from utils)
+            (Path(__file__).parents[2]
+             / env_file),  # Project root (2 levels up from utils)
         ]
 
         # Try each path
@@ -94,7 +94,7 @@ def _manual_load_env(env_file: str) -> Dict[str, str]:
         logger.info(f"Manually loaded environment variables from {env_path}")
         return loaded_vars
 
-    logger.warning(f"Could not find .env file in any location.")
+    logger.warning("Could not find .env file in any location.")
     return {}
 
 

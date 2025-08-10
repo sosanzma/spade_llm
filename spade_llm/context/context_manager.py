@@ -1,20 +1,15 @@
 """Context management for LLM conversations."""
 
 import logging
-from typing import Any, Dict, List, Optional, Set, Union
+from typing import Any, Dict, List, Optional, Set
 
 from spade.message import Message
 
 from ._types import (
-    AssistantMessage,
     ContextMessage,
-    SystemMessage,
-    ToolResultMessage,
-    UserMessage,
     create_assistant_message,
     create_system_message,
     create_tool_result_message,
-    create_user_message,
     spade_message_to_user_message,
 )
 from .management import ContextManagement, NoContextManagement

@@ -3,10 +3,6 @@
 from functools import wraps
 from typing import Callable, Optional
 
-from spade.message import Message
-
-from .types import RoutingResponse
-
 
 def routing_rule(priority: int = 0, name: Optional[str] = None):
     """

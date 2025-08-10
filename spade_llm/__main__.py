@@ -1,7 +1,6 @@
 """SPADE_LLM command line interface."""
 
 import argparse
-import sys
 
 from .version import __version__
 
@@ -20,10 +19,10 @@ def main():
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # Info command
-    info_parser = subparsers.add_parser("info", help="Show SPADE_LLM information")
+    subparsers.add_parser("info", help="Show SPADE_LLM information")
 
     # Example command
-    example_parser = subparsers.add_parser("examples", help="List available examples")
+    subparsers.add_parser("examples", help="List available examples")
 
     args = parser.parse_args()
 

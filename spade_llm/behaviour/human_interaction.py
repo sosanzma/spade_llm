@@ -6,7 +6,6 @@ from typing import Optional
 
 from spade.behaviour import OneShotBehaviour
 from spade.message import Message
-from spade.template import Template
 
 logger = logging.getLogger("spade_llm.behaviour.human_interaction")
 
@@ -105,6 +104,6 @@ class HumanInteractionBehaviour(OneShotBehaviour):
             formatted += f"\n\nContext: {self.context}"
 
         # Add instructions for responding
-        formatted += f"\n\n(Please reply to this message to provide your answer)"
+        formatted += "\n\n(Please reply to this message to provide your answer)"
 
         return formatted

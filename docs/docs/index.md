@@ -1,10 +1,49 @@
-# SPADE-LLM : SPADE with Large Language Models 
+---
+title: SPADE-LLM Documentation - Multi-Agent LLM Framework for Python
+description: Complete documentation for SPADE-LLM, a Python framework for integrating Large Language Models into multi-agent systems. OpenAI GPT, Ollama, LM Studio support for AI agents and chatbots.
+keywords: SPADE-LLM, multi-agent systems, large language models, OpenAI, GPT, Ollama, Python AI framework, chatbot development, distributed AI, agent communication
+---
+
+# SPADE-LLM: Large Language Model Integration for Multi-Agent Systems
 
 <div style="text-align: center; margin: 1rem 0;">
   <img src="assets/images/spade_llm_logo.png" alt="SPADE-LLM Logo" style="max-width: 200px; width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 16px rgba(142, 68, 173, 0.2);">
 </div>
 
-Extension for [SPADE](https://github.com/javipalanca/spade) that integrates Large Language Models into multi-agent systems.
+**SPADE-LLM** is a Python framework that extends [SPADE](https://github.com/javipalanca/spade) multi-agent platform with Large Language Model capabilities. Build AI agents powered by OpenAI GPT, Ollama, LM Studio, and other LLM providers for distributed AI applications, intelligent chatbots, and collaborative agent systems.
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "SPADE-LLM",
+  "description": "Python framework for Large Language Model integration in multi-agent systems",
+  "url": "https://sosanzma.github.io/spade_llm/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Cross-platform",
+  "programmingLanguage": "Python",
+  "license": "https://opensource.org/licenses/MIT",
+  "downloadUrl": "https://pypi.org/project/spade-llm/",
+  "codeRepository": "https://github.com/sosanzma/spade_llm",
+  "author": {
+    "@type": "Person",
+    "name": "Manel Soler Sanz"
+  },
+  "keywords": ["SPADE", "LLM", "multi-agent", "OpenAI", "GPT", "Ollama", "AI", "chatbot", "Python"],
+  "softwareVersion": "latest",
+  "requirements": "Python 3.10+",
+  "featureList": [
+    "Multi-LLM Provider Support",
+    "Advanced Tool System", 
+    "Context Management",
+    "Memory Extensions",
+    "Message Routing",
+    "Content Safety Guardrails",
+    "MCP Integration",
+    "Human-in-the-Loop"
+  ]
+}
+</script>
 
 ## Features
 

@@ -1,20 +1,17 @@
 """LLM Behaviour implementation for SPADE agents."""
 
-import asyncio
 import logging
 import time
-from typing import Any, Callable, Dict, List, Optional, Set, Union
+from typing import Any, Callable, Dict, List, Optional, Set
 
 from spade.behaviour import CyclicBehaviour
 from spade.message import Message
 
 from ..context import (
     ContextManager,
-    create_assistant_message,
     create_assistant_tool_call_message,
 )
 from ..guardrails import (
-    GuardrailAction,
     GuardrailResult,
     InputGuardrail,
     OutputGuardrail,
@@ -171,8 +168,7 @@ class LLMBehaviour(CyclicBehaviour):
         # Check for max interactions
         if (
             self.max_interactions_per_conversation
-            and conversation["interaction_count"]
-            > self.max_interactions_per_conversation
+            and conversation["interaction_count"] > self.max_interactions_per_conversation
         ):
             await self._end_conversation(
                 conversation_id, ConversationState.MAX_INTERACTIONS_REACHED

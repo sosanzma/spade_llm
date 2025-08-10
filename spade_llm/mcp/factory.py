@@ -2,9 +2,7 @@
 
 import asyncio
 import logging
-from typing import List, Optional, Union
-
-from mcp.types import Tool
+from typing import List, Optional
 
 from ..tools.llm_tool import LLMTool
 from .adapters import (

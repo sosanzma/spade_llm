@@ -3,7 +3,7 @@
 import asyncio
 import logging
 import sys
-from typing import Any, Callable, Optional
+from typing import Callable, Optional
 
 from spade.agent import Agent
 from spade.behaviour import CyclicBehaviour

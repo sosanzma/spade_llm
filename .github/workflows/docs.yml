@@ -49,6 +49,13 @@ jobs:
         run: |
           cd docs
           mkdocs build --strict
+          
+      - name: Add SEO files
+        run: |
+          # Copy robots.txt to build output
+          cp docs/docs/robots.txt docs/site/robots.txt
+          # Ensure .nojekyll exists
+          touch docs/site/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
