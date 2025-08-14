@@ -14,37 +14,56 @@ theme:
   logo: assets/images/spade_llm_logo.png
   favicon: assets/images/favicon.png
   palette:
-    # Modo claro
-    - scheme: default
-      primary: deep purple
-      accent: purple
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
-    # Modo oscuro
-    - scheme: slate
-      primary: deep purple
-      accent: purple
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
 
   font:
-    text: Roboto
-    code: Roboto Mono
+    text: Inter
+    code: Fira Code
 
   features:
+    # Navigation
     - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.sections
     - navigation.expand
     - navigation.indexes
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.tracking
+    - navigation.top
+    - navigation.footer
+    # Table of contents
     - toc.follow
     - toc.integrate
-    - navigation.top
+    # Search
     - search.highlight
     - search.share
+    - search.suggest
+    # Content
     - content.code.copy
     - content.code.select
+    - content.code.annotate
+    - content.tooltips
+    - content.tabs.link
+    # Header
+    - header.autohide
+    # Announce
+    - announce.dismiss
 
   icon:
     repo: fontawesome/brands/github
