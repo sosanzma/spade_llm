@@ -4,13 +4,23 @@ description: Complete documentation for SPADE-LLM, a Python framework for integr
 keywords: SPADE-LLM, multi-agent systems, large language models, OpenAI, GPT, Ollama, Python AI framework, chatbot development, distributed AI, agent communication
 ---
 
-# SPADE-LLM: Large Language Model Integration for Multi-Agent Systems
-
-<div style="text-align: center; margin: 1rem 0;">
-  <img src="assets/images/spade_llm_logo.png" alt="SPADE-LLM Logo" style="max-width: 200px; width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 16px rgba(142, 68, 173, 0.2);">
+<div class="hero-section">
+  <h1 class="hero-title">SPADE-LLM</h1>
+  <p class="hero-subtitle">
+    Build distributed based-XMPP multi-agent systems powered by Large Language Models. Extends SPADE multi-agent platform with many LLM providers for distributed AI applications, intelligent chatbots, and collaborative agent systems.
+  </p>
+  <div class="hero-buttons">
+    <a href="getting-started/quickstart/" class="hero-button">
+      🚀 Quick Start
+    </a>
+    <a href="getting-started/installation/" class="hero-button">
+      📦 Installation
+    </a>
+    <a href="https://github.com/sosanzma/spade_llm" class="hero-button" target="_blank">
+      📂 GitHub
+    </a>
+  </div>
 </div>
-
-**SPADE-LLM** is a Python framework that extends [SPADE](https://github.com/javipalanca/spade) multi-agent platform with Large Language Model capabilities. Build AI agents powered by OpenAI GPT, Ollama, LM Studio, and other LLM providers for distributed AI applications, intelligent chatbots, and collaborative agent systems.
 
 <script type="application/ld+json">
 {
@@ -45,19 +55,80 @@ keywords: SPADE-LLM, multi-agent systems, large language models, OpenAI, GPT, Ol
 }
 </script>
 
-## Features
+## Key Features
 
-- **Built-in XMPP Server**: No external server setup required with SPADE 4.0+
-- **Multi-Provider Support**: OpenAI, Ollama, LM Studio, vLLM
-- **Tool System**: Function calling with async execution
-- **Memory System**: Dual memory architecture for agent learning and conversation continuity
-- **Context Management**: Multi-conversation support with automatic cleanup
-- **Message Routing**: Conditional routing based on LLM responses
-- **Guardrails System**: Content filtering and safety controls for input/output
-- **MCP Integration**: Model Context Protocol server support
-- **Production Ready**: Comprehensive error handling and logging
+<div class="stats-grid">
+  <div class="stat-card">
+    <span class="stat-number">8+</span>
+    <div class="stat-label">LLM Providers</div>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number">100%</span>
+    <div class="stat-label">Python Native</div>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number">0</span>
+    <div class="stat-label">External Dependencies</div>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number">∞</span>
+    <div class="stat-label">Agent Scalability</div>
+  </div>
+</div>
 
-## Architecture
+<div class="feature-grid">
+  <div class="feature-card">
+    <div class="feature-icon">🔧</div>
+    <h3>Built-in XMPP Server</h3>
+    <p>No external server setup required with SPADE 4.0+. Get started instantly with zero configuration.</p>
+  </div>
+  
+  <div class="feature-card">
+    <div class="feature-icon">🧠</div>
+    <h3>Multi-Provider Support</h3>
+    <p>OpenAI GPT, Ollama, LM Studio, vLLM, Anthropic Claude and more. Switch providers seamlessly.</p>
+  </div>
+  
+  <div class="feature-card">
+    <div class="feature-icon">⚡</div>
+    <h3>Advanced Tool System</h3>
+    <p>Function calling with async execution, human-in-the-loop workflows, and LangChain integration.</p>
+  </div>
+  
+  <div class="feature-card">
+    <div class="feature-icon">💾</div>
+    <h3>Dual Memory Architecture</h3>
+    <p>Agent learning and conversation continuity with SQLite persistence and contextual retrieval.</p>
+  </div>
+  
+  <div class="feature-card">
+    <div class="feature-icon">🎯</div>
+    <h3>Context Management</h3>
+    <p>Multi-conversation support with automatic cleanup and intelligent context window management.</p>
+  </div>
+  
+  <div class="feature-card">
+    <div class="feature-icon">🛡️</div>
+    <h3>Guardrails System</h3>
+    <p>Content filtering and safety controls for input/output with customizable rules and policies.</p>
+  </div>
+  
+  <div class="feature-card">
+    <div class="feature-icon">🔗</div>
+    <h3>Message Routing</h3>
+    <p>Conditional routing based on LLM responses with flexible workflows and decision trees.</p>
+  </div>
+  
+  <div class="feature-card">
+    <div class="feature-icon">🌐</div>
+    <h3>MCP Integration</h3>
+    <p>Model Context Protocol server support for external tool integration and service connectivity.</p>
+  </div>
+</div>
+
+## Architecture Overview
+
+<div class="architecture-diagram">
 
 ```mermaid
 graph LR
@@ -77,7 +148,14 @@ graph LR
     M --> O[Agent-thread]
 ```
 
+</div>
+
 ## Quick Start
+
+<div class="code-example">
+  <div class="code-example-header">
+    🐍 Basic Agent Setup
+  </div>
 
 ```python
 import spade
@@ -104,6 +182,14 @@ async def main():
 if __name__ == "__main__":
     spade.run(main())
 ```
+
+</div>
+
+<div style="text-align: center; margin: 2rem 0;">
+  <span class="badge badge--success">Python 3.10+</span>
+  <span class="badge badge--info">MIT License</span>
+  <span class="badge badge--warning">Beta Release</span>
+</div>
 
 ## Documentation Structure
 
