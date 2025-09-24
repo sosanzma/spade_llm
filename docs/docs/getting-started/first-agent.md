@@ -24,7 +24,7 @@ This eliminates the need for external XMPP servers like Prosody. Keep this runni
 ## Step 1: Basic Agent Setup
 
 Let's start with the simplest possible SPADE-LLM agent. Create `my_first_agent.py`:
-This agent has not de capability to interact with us except trough xmpp message. If we want to chat with him we need to use 
+This agent does not have the capability to interact with us except through XMPP messages. If we want to chat with it we need to use 
 ChatAgent (next step)
 ```python
 import spade
