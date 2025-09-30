@@ -52,6 +52,7 @@ class LLMAgent(Agent):
         interaction_memory: Union[bool, Tuple[bool, str]] = False,
         agent_base_memory: Union[bool, Tuple[bool, str]] = False,
         verify_security: bool = False,
+        **kwargs
     ):
         """
         Initialize an LLM-capable agent.
@@ -82,9 +83,13 @@ class LLMAgent(Agent):
         """
         super().__init__(jid, password, verify_security=verify_security)
 
-        self.context = ContextManager(
-            system_prompt=system_prompt, context_management=context_management
-        )
+        # Allow subclasses to inject custom context managers
+        if '_context_override' in kwargs:
+            self.context = kwargs.pop('_context_override')
+        else:
+            self.context = ContextManager(
+                system_prompt=system_prompt, context_management=context_management
+            )
         self.provider = provider
         self.context_management = context_management
         self.reply_to = reply_to

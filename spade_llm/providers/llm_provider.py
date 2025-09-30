@@ -239,7 +239,8 @@ class LLMProvider:
         )
 
     async def get_llm_response(
-        self, context: ContextManager, tools: Optional[List[LLMTool]] = None
+        self, context: ContextManager, tools: Optional[List[LLMTool]] = None,
+        conversation_id: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Get complete response from the LLM including both text and tool calls.
@@ -247,13 +248,14 @@ class LLMProvider:
         Args:
             context: The conversation context manager
             tools: Optional list of tools available for this specific call
+            conversation_id: Optional conversation ID to retrieve specific conversation context
 
         Returns:
             Dictionary containing:
             - 'text': The text response (None if there are tool calls)
             - 'tool_calls': List of tool calls (empty if there are none)
         """
-        prompt = context.get_prompt()
+        prompt = context.get_prompt(conversation_id)
         logger.info(f"Sending prompt to {self.provider_name} ({self.model})")
         logger.debug(f"Prompt: {prompt}")
 
