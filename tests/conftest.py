@@ -156,19 +156,21 @@ class MockLLMProvider(LLMProvider):
         self.call_count = 0
         self.call_history = []
         
-    async def get_llm_response(self, context: ContextManager, tools: Optional[List[LLMTool]] = None) -> Dict[str, Any]:
+    async def get_llm_response(self, context: ContextManager, tools: Optional[List[LLMTool]] = None,
+                                 conversation_id: Optional[str] = None) -> Dict[str, Any]:
         """Mock implementation that returns predefined responses or tool calls."""
         if self.should_error:
             raise Exception("Mock LLM provider error")
-            
+
         # Store call information for verification
-        prompt = context.get_prompt()
+        prompt = context.get_prompt(conversation_id)
         self.call_history.append({
             "prompt": prompt,
             "tools": [tool.name for tool in (tools or [])],
-            "call_number": self.call_count
+            "call_number": self.call_count,
+            "conversation_id": conversation_id
         })
-        
+
         # Return tool calls if specified, otherwise return text response
         if self.tool_calls and self.call_count < len(self.tool_calls):
             result = {
@@ -181,7 +183,7 @@ class MockLLMProvider(LLMProvider):
                 'text': self.responses[response_index],
                 'tool_calls': []
             }
-        
+
         self.call_count += 1
         return result
 
