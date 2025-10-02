@@ -244,7 +244,7 @@ class LLMBehaviour(CyclicBehaviour):
 
                 # Pass prepared tools to provider for this specific call
                 llm_response = await self.provider.get_llm_response(
-                    self.context, prepared_tools
+                    self.context, prepared_tools, conversation_id
                 )
 
                 tool_calls = llm_response.get("tool_calls", [])
@@ -315,7 +315,7 @@ class LLMBehaviour(CyclicBehaviour):
                     f"Reached maximum tool iterations ({max_tool_iterations}), forcing final response"
                 )
                 final_response = (
-                    await self.provider.get_llm_response(self.context, prepared_tools)
+                    await self.provider.get_llm_response(self.context, prepared_tools, conversation_id)
                 ).get("text")
 
         except Exception as e:

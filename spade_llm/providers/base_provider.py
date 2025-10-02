@@ -27,7 +27,8 @@ class LLMProvider(ABC):
 
     @abstractmethod
     async def get_llm_response(
-        self, context: ContextManager, tools: Optional[List[LLMTool]] = None
+        self, context: ContextManager, tools: Optional[List[LLMTool]] = None,
+        conversation_id: Optional[str] = None
     ) -> Dict[str, Any]:
         """
         Get complete response from the LLM including both text and tool calls.
@@ -35,6 +36,7 @@ class LLMProvider(ABC):
         Args:
             context: The conversation context manager
             tools: Optional list of tools available for this specific call
+            conversation_id: Optional conversation ID to retrieve specific conversation context
 
         Returns:
             Dictionary containing:

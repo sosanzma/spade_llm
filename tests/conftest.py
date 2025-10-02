@@ -156,19 +156,21 @@ class MockLLMProvider(LLMProvider):
         self.call_count = 0
         self.call_history = []
         
-    async def get_llm_response(self, context: ContextManager, tools: Optional[List[LLMTool]] = None) -> Dict[str, Any]:
+    async def get_llm_response(self, context: ContextManager, tools: Optional[List[LLMTool]] = None,
+                                 conversation_id: Optional[str] = None) -> Dict[str, Any]:
         """Mock implementation that returns predefined responses or tool calls."""
         if self.should_error:
             raise Exception("Mock LLM provider error")
-            
+
         # Store call information for verification
-        prompt = context.get_prompt()
+        prompt = context.get_prompt(conversation_id)
         self.call_history.append({
             "prompt": prompt,
             "tools": [tool.name for tool in (tools or [])],
-            "call_number": self.call_count
+            "call_number": self.call_count,
+            "conversation_id": conversation_id
         })
-        
+
         # Return tool calls if specified, otherwise return text response
         if self.tool_calls and self.call_count < len(self.tool_calls):
             result = {
@@ -181,7 +183,7 @@ class MockLLMProvider(LLMProvider):
                 'text': self.responses[response_index],
                 'tool_calls': []
             }
-        
+
         self.call_count += 1
         return result
 
@@ -223,6 +225,100 @@ def conversation_id():
 def different_conversation_id():
     """Different conversation ID for testing isolation."""
     return "different_conversation_456"
+
+
+# ============================================================================
+# Coordinator-specific fixtures
+# ============================================================================
+
+@pytest.fixture
+def coordination_session_id():
+    """Standard coordination session ID for testing."""
+    return "test_coordination_session"
+
+
+@pytest.fixture
+def subagent_ids():
+    """List of subagent JIDs for testing."""
+    return [
+        "subagent1@localhost",
+        "subagent2@localhost",
+        "subagent3@localhost"
+    ]
+
+
+@pytest.fixture
+def coordination_context_manager(coordination_session_id, subagent_ids):
+    """Create CoordinationContextManager for testing."""
+    from spade_llm.agent.coordinator_agent import CoordinationContextManager
+    return CoordinationContextManager(
+        coordination_session=coordination_session_id,
+        subagent_ids=set(subagent_ids),
+        system_prompt="You are a test coordinator."
+    )
+
+
+@pytest.fixture
+def mock_subagent_message(coordination_session_id):
+    """Create a mock message from a subagent."""
+    msg = Mock(spec=Message)
+    msg.body = "Task completed successfully"
+    msg.sender = "subagent1@localhost"
+    msg.to = "coordinator@localhost"
+    msg.thread = coordination_session_id
+    msg.id = "msg_subagent_123"
+    msg.metadata = {"message_type": "llm"}
+
+    # Mock the make_reply method
+    reply_msg = Mock(spec=Message)
+    reply_msg.to = str(msg.sender)
+    reply_msg.sender = str(msg.to)
+    reply_msg.body = ""
+    reply_msg.thread = msg.thread
+    reply_msg.metadata = {}
+    reply_msg.set_metadata = Mock()
+    msg.make_reply = Mock(return_value=reply_msg)
+
+    return msg
+
+
+@pytest.fixture
+def mock_external_message():
+    """Create a mock message from an external (non-subagent) source."""
+    msg = Mock(spec=Message)
+    msg.body = "External request"
+    msg.sender = "user@localhost"
+    msg.to = "coordinator@localhost"
+    msg.thread = "external_thread_789"
+    msg.id = "msg_external_456"
+    msg.metadata = {}
+
+    # Mock the make_reply method
+    reply_msg = Mock(spec=Message)
+    reply_msg.to = str(msg.sender)
+    reply_msg.sender = str(msg.to)
+    reply_msg.body = ""
+    reply_msg.thread = msg.thread
+    reply_msg.metadata = {}
+    reply_msg.set_metadata = Mock()
+    msg.make_reply = Mock(return_value=reply_msg)
+
+    return msg
+
+
+@pytest.fixture
+def mock_coordinator_provider():
+    """Mock LLM provider for coordinator that returns coordination commands."""
+    tool_calls = [[{
+        "id": "call_coord_1",
+        "name": "send_to_agent",
+        "arguments": {"agent_id": "subagent1@localhost", "command": "do task"}
+    }]]
+
+    return MockLLMProvider(
+        responses=["Coordination complete. <TASK_COMPLETE>"],
+        tool_calls=tool_calls
+    )
 
 
 # Cleanup fixture to ensure tests don't interfere with each other
