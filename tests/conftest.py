@@ -227,6 +227,100 @@ def different_conversation_id():
     return "different_conversation_456"
 
 
+# ============================================================================
+# Coordinator-specific fixtures
+# ============================================================================
+
+@pytest.fixture
+def coordination_session_id():
+    """Standard coordination session ID for testing."""
+    return "test_coordination_session"
+
+
+@pytest.fixture
+def subagent_ids():
+    """List of subagent JIDs for testing."""
+    return [
+        "subagent1@localhost",
+        "subagent2@localhost",
+        "subagent3@localhost"
+    ]
+
+
+@pytest.fixture
+def coordination_context_manager(coordination_session_id, subagent_ids):
+    """Create CoordinationContextManager for testing."""
+    from spade_llm.agent.coordinator_agent import CoordinationContextManager
+    return CoordinationContextManager(
+        coordination_session=coordination_session_id,
+        subagent_ids=set(subagent_ids),
+        system_prompt="You are a test coordinator."
+    )
+
+
+@pytest.fixture
+def mock_subagent_message(coordination_session_id):
+    """Create a mock message from a subagent."""
+    msg = Mock(spec=Message)
+    msg.body = "Task completed successfully"
+    msg.sender = "subagent1@localhost"
+    msg.to = "coordinator@localhost"
+    msg.thread = coordination_session_id
+    msg.id = "msg_subagent_123"
+    msg.metadata = {"message_type": "llm"}
+
+    # Mock the make_reply method
+    reply_msg = Mock(spec=Message)
+    reply_msg.to = str(msg.sender)
+    reply_msg.sender = str(msg.to)
+    reply_msg.body = ""
+    reply_msg.thread = msg.thread
+    reply_msg.metadata = {}
+    reply_msg.set_metadata = Mock()
+    msg.make_reply = Mock(return_value=reply_msg)
+
+    return msg
+
+
+@pytest.fixture
+def mock_external_message():
+    """Create a mock message from an external (non-subagent) source."""
+    msg = Mock(spec=Message)
+    msg.body = "External request"
+    msg.sender = "user@localhost"
+    msg.to = "coordinator@localhost"
+    msg.thread = "external_thread_789"
+    msg.id = "msg_external_456"
+    msg.metadata = {}
+
+    # Mock the make_reply method
+    reply_msg = Mock(spec=Message)
+    reply_msg.to = str(msg.sender)
+    reply_msg.sender = str(msg.to)
+    reply_msg.body = ""
+    reply_msg.thread = msg.thread
+    reply_msg.metadata = {}
+    reply_msg.set_metadata = Mock()
+    msg.make_reply = Mock(return_value=reply_msg)
+
+    return msg
+
+
+@pytest.fixture
+def mock_coordinator_provider():
+    """Mock LLM provider for coordinator that returns coordination commands."""
+    tool_calls = [[{
+        "id": "call_coord_1",
+        "name": "send_to_agent",
+        "arguments": {"agent_id": "subagent1@localhost", "command": "do task"}
+    }]]
+
+    return MockLLMProvider(
+        responses=["Coordination complete. <TASK_COMPLETE>"],
+        tool_calls=tool_calls
+    )
+
+
 # Cleanup fixture to ensure tests don't interfere with each other
 @pytest.fixture(autouse=True)
 def cleanup_after_test():
