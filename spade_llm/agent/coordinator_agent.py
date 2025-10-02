@@ -13,12 +13,18 @@ Architecture:
 
 from typing import List, Optional, Dict, Set, Union, Any
 import time
+import asyncio
+import logging
 from spade.message import Message
 from spade_llm.agent.llm_agent import LLMAgent
 from spade_llm.context.context_manager import ContextManager
 from spade_llm.routing.types import RoutingFunction, RoutingResponse
 from spade_llm.tools.llm_tool import LLMTool
 from spade_llm.context._types import _sanitize_jid_for_name
+
+logger = logging.getLogger("spade_llm.agent.coordinator")
+
+
 class CoordinationContextManager(ContextManager):
     """
     Context manager specialized for coordination scenarios.
@@ -125,20 +131,21 @@ class CoordinatorAgent(LLMAgent):
 
         kwargs['_context_override'] = coordination_context
 
+        # Initialize tracking before calling super().__init__
+        self.agent_status: Dict[str, str] = {
+            agent_id: "unknown" for agent_id in self.subagent_ids
+        }
+        self._original_requester: Optional[str] = None
+        self.termination_markers = ["<TASK_COMPLETE>", "<END>", "<DONE>"]
+        self._response_timeout = 30.0  # Timeout for waiting for subagent responses
+
+        # Call parent init
         super().__init__(
             jid=jid,
             password=password,
             routing_function=routing_function,
             **kwargs
         )
-
-        self.agent_status: Dict[str, str] = {
-            agent_id: "unknown" for agent_id in self.subagent_ids
-        }
-
-        self._original_requester: Optional[str] = None
-
-        self.termination_markers = ["<TASK_COMPLETE>", "<END>", "<DONE>"]
 
     def _default_coordination_prompt(self) -> str:
         """Default system prompt for coordination"""
@@ -149,19 +156,23 @@ COORDINATION RULES:
 1. Work SEQUENTIALLY - wait for each agent to respond before sending the next command
 2. Review the full conversation context to see all agent responses
 3. Only YOU can see the full coordination context - subagents only see their individual tasks
-4. After receiving responses from all required agents, provide a final summary to the user
-5. Use termination markers (<TASK_COMPLETE>, <END>, or <DONE>) ONLY when all work is finished
+4. CRITICAL: When sending commands to subagents, include ALL necessary context and information in the command itself. Subagents cannot see previous messages or responses from other agents.
+5. After receiving responses from all required agents, provide a final summary to the user
+6. Use termination markers (<TASK_COMPLETE>, <END>, or <DONE>) ONLY when all work is finished
 
 Available tools:
 - send_to_agent: Send a command to a specific subagent
 - list_subagents: See available agents and their current status
 
 WORKFLOW:
-1. Send command to first agent
+1. Send command to first agent (include all necessary context)
 2. WAIT for response (it will appear in your context)
-3. Review response, then send to next agent
+3. Review response, then send to next agent (include results from previous steps)
 4. Repeat until all tasks complete
 5. Provide final summary with termination marker
+
+Example: If agent A returns "42", and you need agent B to format it, send:
+"Format the result: 42" (not just "Format the result")
 
 Coordination session: {self.coordination_session}
 """
@@ -205,14 +216,22 @@ Coordination session: {self.coordination_session}
             self.add_tool(tool)
 
     def _create_send_to_agent_tool(self) -> LLMTool:
-        """Create tool for sending commands to subagents"""
+        """Create tool for sending commands to subagents that waits for responses"""
         agent = self
 
         async def send_to_agent(agent_id: str, command: str) -> str:
-            """Send a command to a specific subagent"""
+            """
+            Send a command to a specific subagent and wait for response.
+
+            This tool receives messages directly from the agent's mailbox
+            to detect the response while waiting.
+            """
             if agent_id not in agent.subagent_ids:
                 return f"Error: {agent_id} is not a registered subagent"
 
+            logger.info(f"Sending command to {agent_id} and waiting for response...")
+
+            # Send message to subagent
             msg = Message(to=agent_id)
             msg.set_metadata("message_type", "llm")
             msg.set_metadata("coordination_session", agent.coordination_session)
@@ -220,14 +239,48 @@ Coordination session: {self.coordination_session}
             msg.body = command
 
             await agent.llm_behaviour.send(msg)
-
             agent.agent_status[agent_id] = "sent_command"
 
-            return f"Command sent to {agent_id}: {command}"
+            # Wait for response by directly receiving from the agent's mailbox
+            # This allows us to get the message before LLMBehaviour processes it
+            start_time = asyncio.get_event_loop().time()
+
+            while True:
+                elapsed = asyncio.get_event_loop().time() - start_time
+
+                if elapsed > agent._response_timeout:
+                    logger.warning(f"Timeout waiting for response from {agent_id} (>{agent._response_timeout}s)")
+                    agent.agent_status[agent_id] = "timeout"
+                    return f"Error: {agent_id} did not respond within {agent._response_timeout} seconds"
+
+                # Try to receive a message with short timeout
+                # We use the llm_behaviour's receive method to get from mailbox
+                response_msg = await agent.llm_behaviour.receive(timeout=0.1)
+
+                if response_msg:
+                    sender_str = str(response_msg.sender)
+
+                    # Check if this is from our target agent
+                    if sender_str == agent_id:
+                        agent.agent_status[agent_id] = "responded"
+                        logger.info(f"Received response from {agent_id}: {response_msg.body[:100]}...")
+
+                        # Add the message to context manually since we intercepted it
+                        agent.context.add_message(response_msg, agent.coordination_session)
+
+                        return f"Response from {agent_id}: {response_msg.body}"
+                    else:
+                        # Not from our target agent, this message needs to be processed normally
+                        # We can't put it back easily, so we'll process it through the context
+                        logger.debug(f"Received message from {sender_str} while waiting for {agent_id}, adding to context")
+                        agent.context.add_message(response_msg, response_msg.thread or agent.coordination_session)
+
+                # Small sleep to avoid busy waiting
+                await asyncio.sleep(0.05)
 
         return LLMTool(
             name="send_to_agent",
-            description="Send a command to a specific subagent in the coordination session",
+            description="Send a command to a specific subagent and wait for their response (waits by polling context)",
             parameters={
                 "type": "object",
                 "properties": {
@@ -269,12 +322,3 @@ Coordination session: {self.coordination_session}
             func=list_subagents
         )
 
-    async def _handle_subagent_response(self, msg: Message) -> None:
-        """Handle response from subagent - update status and context"""
-        sender_str = str(msg.sender)
-
-        if sender_str in self.subagent_ids:
-            self.agent_status[sender_str] = "responded"
-
-            # Response will be automatically added to context by LLMBehaviour
-            # due to shared conversation ID from routing
