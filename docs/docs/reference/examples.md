@@ -12,6 +12,7 @@ The [examples](https://github.com/sosanzma/spade_llm/tree/main/examples) directo
 - `valencia_multiagent_trip_planner.py` - Multi-agent workflow
 - `spanish_to_english_translator.py` - Translation agent
 - `human_in_the_loop_example.py` - LLM agent with human expert consultation
+- `simple_coordinator_example.py` - CoordinatorAgent directing multiple SPADE subagents
 
 ## Human-in-the-Loop Example
 
