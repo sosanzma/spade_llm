@@ -8,6 +8,7 @@
 
 [![PyPI Version](https://img.shields.io/pypi/v/spade-llm)](https://pypi.org/project/spade-llm/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/spade-llm?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/spade-llm)
 [![Coverage Status](https://coveralls.io/repos/github/sosanzma/spade_llm/badge.svg?branch=main)](https://coveralls.io/github/sosanzma/spade_llm?branch=main)
 ![Python Version](https://img.shields.io/badge/python-3.10%20to%203.12-orange?logo=python&logoColor=green)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/sosanzma/spade_llm/python-app.yml?label=build)](https://github.com/sosanzma/spade_llm/actions)
