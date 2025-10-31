@@ -124,6 +124,12 @@ keywords: SPADE-LLM, multi-agent systems, large language models, OpenAI, GPT, Ol
     <h3>MCP Integration</h3>
     <p>Model Context Protocol server support for external tool integration and service connectivity.</p>
   </div>
+
+  <div class="feature-card">
+    <div class="feature-icon">🧩</div>
+    <h3>Coordinator Agents</h3>
+    <p>LLM-driven coordinators orchestrate SPADE subagents with shared context, sequential planning, and inter-organization routing.</p>
+  </div>
 </div>
 
 ## Architecture Overview

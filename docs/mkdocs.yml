@@ -114,6 +114,7 @@ nav:
     - Context Management: guides/context-management.md
     - Memory System: guides/memory.md
     - Memory Architecture: guides/memory-architecture.md
+    - Coordinator Agent: guides/coordinator-agent.md
     - Conversations: guides/conversations.md
     - Human-in-the-Loop: guides/human-in-the-loop.md
     - Guardrails: guides/guardrails.md
